@@ -1,6 +1,6 @@
-defmodule EnumTest do
+defmodule Rubenum.Enumerable.NativeTest do
   use ExUnit.Case, async: true
-  doctest Rubenum
+  doctest Rubenum.Enumerable.Native
 
   defp assert_runs_enumeration_only_once(enum_fun) do
     enumerator =

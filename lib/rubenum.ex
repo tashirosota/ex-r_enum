@@ -1,3 +1,5 @@
 defmodule Rubenum do
-  use Rubenum.Enum
+  use Rubenum.Enumerable.Native
+  use Rubenum.Enumerable.Ruby
+  use Rubenum.Enumerable.ActiveSupport
 end
