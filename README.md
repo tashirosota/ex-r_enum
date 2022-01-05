@@ -1,14 +1,14 @@
 <!-- @format -->
 
 [![hex.pm version](https://img.shields.io/hexpm/v/ltsv.svg)](https://hex.pm/packages/rubenum)
-[![CI](https://github.com/tashirosota/ex-rubenum/actions/workflows/ci.yml/badge.svg)](https://github.com/tashirosota/rubenum/actions/workflows/ci.yml)
+[![CI](https://github.com/tashirosota/ex-rubenum/actions/workflows/ci.yml/badge.svg)](https://github.com/tashirosota/ex-rubenum/actions/workflows/ci.yml)
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/tashirosota/ex-rubenum)
 
 # Rubenum
 
 **WIP**
 
-Extensions for Enumerable modules affected by Ruby and Rails.ActiveSupport.
+Extensions for Enumerable modules compatibled with Ruby and Rails.ActiveSupport.
 And it perfect support for native functions too by metaprogramming.
 
 ## Installation

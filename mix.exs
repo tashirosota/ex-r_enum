@@ -2,7 +2,7 @@ defmodule Rubenum.MixProject do
   use Mix.Project
   @versoin "0.1.0"
   @source_url "https://github.com/tashirosota/ex-rubenum"
-  @description "Extensions for Enumerable modules affected by Ruby and Rails.ActiveSupport."
+  @description "Extensions for Enumerable modules compatibled with Ruby and Rails.ActiveSupport."
   def project do
     [
       app: :rubenum,

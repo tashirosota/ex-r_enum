@@ -1,13 +1,6 @@
 defmodule Rubenum.Enumerable.Ruby do
   defmacro __using__(_opts) do
-    #   enum_funs = Enum.module_info()[:exports]
-    #            |> Enum.filter(fn {fun, _} -> fun not in [:__info__, :module_info] end)
-
-    #   for {fun, arity} <- enum_funs do
-    #     quote do
-    #       defdelegate unquote(fun)(unquote_splicing(Rubenum.Utils.make_args(arity))), to: Rubenum.Enumerable.Ruby
-    #     end
-    #   end
+    Rubenum.Utils.define_all_functions!(__MODULE__)
   end
 
   # ruby_enumerable = [:all?, :any?, :chain, :chunk, :chunk_while, :collect, :collect_concat, :compact, :count, :cycle, :detect, :drop, :drop_while, :each_cons, :each_entry, :each_slice, :each_with_index, :each_with_object, :entries, :filter, :filter_map, :find, :find_all, :find_index, :first, :flat_map, :grep, :grep_v, :group_by, :include?, :inject, :lazy, :map, :max, :max_by, :member?, :min, :min_by, :minmax, :minmax_by, :none?, :one?, :partition, :reduce, :reject, :reverse_each, :select, :slice_after, :slice_before, :slice_when, :sort, :sort_by, :sum]
@@ -19,9 +12,9 @@ defmodule Rubenum.Enumerable.Ruby do
   # chain
   # collect
   # collect_concat
-  # compact
+  # ✔compact
   # cycle
-  # detect
+  # ✔detect
   # each_cons
   # each_entry
   # each_slice
@@ -44,5 +37,22 @@ defmodule Rubenum.Enumerable.Ruby do
   # slice_after
   # slice_before
   # slice_when
-  # TODO:
+
+  def compact(enumerable) when is_list(enumerable) do
+    enumerable
+    |> Enum.reject(&(&1 |> is_nil()))
+  end
+
+  def compact(enumerable) when is_map(enumerable) do
+    enumerable
+    |> Enum.reject(fn {key, value} ->
+      is_nil(key) && is_nil(value)
+    end)
+    |> Enum.into(%{})
+  end
+
+  # aliases
+
+  defdelegate detect(enumerable, default, fun), to: Enum, as: :find
+  defdelegate detect(enumerable, fun), to: Enum, as: :find
 end
