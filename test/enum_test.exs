@@ -328,11 +328,11 @@ defmodule EnumTest do
     assert Rubenum.fetch!([2, 4, 6], 2) == 6
     assert Rubenum.fetch!([2, 4, 6], -2) == 4
 
-    assert_raise Rubenum.OutOfBoundsError, fn ->
+    assert_raise Enum.OutOfBoundsError, fn ->
       Rubenum.fetch!([2, 4, 6], 4)
     end
 
-    assert_raise Rubenum.OutOfBoundsError, fn ->
+    assert_raise Enum.OutOfBoundsError, fn ->
       Rubenum.fetch!([2, 4, 6], -4)
     end
   end
@@ -493,7 +493,7 @@ defmodule EnumTest do
     assert Rubenum.max([1, 1.0]) === 1
     assert Rubenum.max([1.0, 1]) === 1.0
 
-    assert_raise Rubenum.EmptyError, fn ->
+    assert_raise Enum.EmptyError, fn ->
       Rubenum.max([])
     end
   end
@@ -524,11 +524,11 @@ defmodule EnumTest do
     assert Rubenum.max_by([1, 1.0], & &1) === 1
     assert Rubenum.max_by([1.0, 1], & &1) === 1.0
 
-    assert_raise Rubenum.EmptyError, fn ->
+    assert_raise Enum.EmptyError, fn ->
       Rubenum.max_by([], fn x -> String.length(x) end)
     end
 
-    assert_raise Rubenum.EmptyError, fn ->
+    assert_raise Enum.EmptyError, fn ->
       Rubenum.max_by(%{}, & &1)
     end
   end
@@ -577,7 +577,7 @@ defmodule EnumTest do
     assert Rubenum.min([1, 1.0]) === 1
     assert Rubenum.min([1.0, 1]) === 1.0
 
-    assert_raise Rubenum.EmptyError, fn ->
+    assert_raise Enum.EmptyError, fn ->
       Rubenum.min([])
     end
   end
@@ -608,11 +608,11 @@ defmodule EnumTest do
     assert Rubenum.min_by([1, 1.0], & &1) === 1
     assert Rubenum.min_by([1.0, 1], & &1) === 1.0
 
-    assert_raise Rubenum.EmptyError, fn ->
+    assert_raise Enum.EmptyError, fn ->
       Rubenum.min_by([], fn x -> String.length(x) end)
     end
 
-    assert_raise Rubenum.EmptyError, fn ->
+    assert_raise Enum.EmptyError, fn ->
       Rubenum.min_by(%{}, & &1)
     end
   end
@@ -655,7 +655,7 @@ defmodule EnumTest do
     assert Rubenum.min_max([1, 1.0]) === {1, 1}
     assert Rubenum.min_max([1.0, 1]) === {1.0, 1.0}
 
-    assert_raise Rubenum.EmptyError, fn ->
+    assert_raise Enum.EmptyError, fn ->
       Rubenum.min_max([])
     end
   end
@@ -675,7 +675,7 @@ defmodule EnumTest do
     assert Rubenum.min_max_by([1, 1.0], & &1) === {1, 1}
     assert Rubenum.min_max_by([1.0, 1], & &1) === {1.0, 1.0}
 
-    assert_raise Rubenum.EmptyError, fn ->
+    assert_raise Enum.EmptyError, fn ->
       Rubenum.min_max_by([], fn x -> String.length(x) end)
     end
   end
@@ -739,7 +739,7 @@ defmodule EnumTest do
 
   test "random/1" do
     # corner cases, independent of the seed
-    assert_raise Rubenum.EmptyError, fn -> Rubenum.random([]) end
+    assert_raise Enum.EmptyError, fn -> Rubenum.random([]) end
     assert Rubenum.random([1]) == 1
 
     # set a fixed seed so the test can be deterministic
@@ -764,11 +764,11 @@ defmodule EnumTest do
   test "reduce/2" do
     assert Rubenum.reduce([1, 2, 3], fn x, acc -> x + acc end) == 6
 
-    assert_raise Rubenum.EmptyError, fn ->
+    assert_raise Enum.EmptyError, fn ->
       Rubenum.reduce([], fn x, acc -> x + acc end)
     end
 
-    assert_raise Rubenum.EmptyError, fn ->
+    assert_raise Enum.EmptyError, fn ->
       Rubenum.reduce(%{}, fn _, acc -> acc end)
     end
   end
@@ -1770,15 +1770,15 @@ defmodule RubenumTest.Range do
     assert Rubenum.fetch!(-2..-6, 0) == -2
     assert Rubenum.fetch!(-2..-6, 4) == -6
 
-    assert_raise Rubenum.OutOfBoundsError, fn ->
+    assert_raise Enum.OutOfBoundsError, fn ->
       Rubenum.fetch!(2..6, 8)
     end
 
-    assert_raise Rubenum.OutOfBoundsError, fn ->
+    assert_raise Enum.OutOfBoundsError, fn ->
       Rubenum.fetch!(-2..-6, 8)
     end
 
-    assert_raise Rubenum.OutOfBoundsError, fn ->
+    assert_raise Enum.OutOfBoundsError, fn ->
       Rubenum.fetch!(2..6, -8)
     end
   end
@@ -1888,7 +1888,7 @@ defmodule RubenumTest.Range do
     assert Rubenum.max(1..10//2) == 9
     assert Rubenum.max(-1..-9//-2) == -1
 
-    assert_raise Rubenum.EmptyError, fn -> Rubenum.max(1..0//1) end
+    assert_raise Enum.EmptyError, fn -> Rubenum.max(1..0//1) end
   end
 
   test "max_by/2" do
@@ -1896,7 +1896,7 @@ defmodule RubenumTest.Range do
     assert Rubenum.max_by(1..3, fn x -> :math.pow(-2, x) end) == 2
 
     assert Rubenum.max_by(1..8//3, fn x -> :math.pow(-2, x) end) == 4
-    assert_raise Rubenum.EmptyError, fn -> Rubenum.max_by(1..0//1, & &1) end
+    assert_raise Enum.EmptyError, fn -> Rubenum.max_by(1..0//1, & &1) end
   end
 
   test "member?/2" do
@@ -1926,7 +1926,7 @@ defmodule RubenumTest.Range do
     assert Rubenum.min(1..10//2) == 1
     assert Rubenum.min(-1..-9//-2) == -9
 
-    assert_raise Rubenum.EmptyError, fn -> Rubenum.min(1..0//1) end
+    assert_raise Enum.EmptyError, fn -> Rubenum.min(1..0//1) end
   end
 
   test "min_by/2" do
@@ -1934,7 +1934,7 @@ defmodule RubenumTest.Range do
     assert Rubenum.min_by(1..3, fn x -> :math.pow(-2, x) end) == 3
 
     assert Rubenum.min_by(1..8//3, fn x -> :math.pow(-2, x) end) == 7
-    assert_raise Rubenum.EmptyError, fn -> Rubenum.min_by(1..0//1, & &1) end
+    assert_raise Enum.EmptyError, fn -> Rubenum.min_by(1..0//1, & &1) end
   end
 
   test "min_max/1" do
@@ -1946,7 +1946,7 @@ defmodule RubenumTest.Range do
     assert Rubenum.min_max(1..10//2) == {1, 9}
     assert Rubenum.min_max(-1..-9//-2) == {-9, -1}
 
-    assert_raise Rubenum.EmptyError, fn -> Rubenum.min_max(1..0//1) end
+    assert_raise Enum.EmptyError, fn -> Rubenum.min_max(1..0//1) end
   end
 
   test "min_max_by/2" do
@@ -1954,7 +1954,7 @@ defmodule RubenumTest.Range do
     assert Rubenum.min_max_by(1..3, fn x -> x end) == {1, 3}
 
     assert Rubenum.min_max_by(1..8//3, fn x -> :math.pow(-2, x) end) == {7, 4}
-    assert_raise Rubenum.EmptyError, fn -> Rubenum.min_max_by(1..0//1, & &1) end
+    assert_raise Enum.EmptyError, fn -> Rubenum.min_max_by(1..0//1, & &1) end
   end
 
   test "split_with/2" do
@@ -1985,7 +1985,7 @@ defmodule RubenumTest.Range do
   test "reduce/2" do
     assert Rubenum.reduce(1..3, fn x, acc -> x + acc end) == 6
     assert Rubenum.reduce(1..10//2, fn x, acc -> x + acc end) == 25
-    assert_raise Rubenum.EmptyError, fn -> Rubenum.reduce(0..1//-1, &+/2) end
+    assert_raise Enum.EmptyError, fn -> Rubenum.reduce(0..1//-1, &+/2) end
   end
 
   test "reduce/3" do
@@ -2105,7 +2105,7 @@ defmodule RubenumTest.Range do
     assert Rubenum.slice(1..10//2, -6..-1) == []
 
     assert_raise ArgumentError,
-                 "Rubenum.slice/2 does not accept ranges with custom steps, got: 1..3//2",
+                 "Enum.slice/2 does not accept ranges with custom steps, got: 1..3//2",
                  fn -> Rubenum.slice(1..5, 1..3//2) end
   end
 

@@ -1,3 +1,3 @@
 defmodule Rubenum do
-  @functions Enum.__info__(:functions)
+  use Rubenum.Enum
 end
