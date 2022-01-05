@@ -1,0 +1,22 @@
+name: CI
+on: [push, pull_request]
+jobs:
+  linux_test:
+    name: OTP ${{matrix.otp}} / Elixir ${{matrix.elixir}}
+    strategy:
+      matrix:
+        otp: ['22.3.4.24', '23.3.4.10', '24.2']
+        elixir: ['1.11.0', 1.12.3', '1.13.1']
+    runs-on: ubuntu-latest
+    env:
+      MIX_ENV: test
+      MIX_TEST_PARTITION: 5
+    steps:
+      - uses: erlef/setup-elixir@v1
+        with:
+          otp-version: ${{matrix.otp}}
+          elixir-version: ${{matrix.elixir}}
+      - uses: actions/checkout@v2
+      - run: mix deps.get
+      - run: mix format --check-formatted
+      - run: mix test

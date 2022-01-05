@@ -1,13 +1,21 @@
 defmodule Rubenum.MixProject do
   use Mix.Project
-
+  @versoin "0.1.0"
+  @source_url "https://github.com/tashirosota/ex-rubenum"
+  @description "Extensions for Enumerable modules affected by Ruby and Rails.ActiveSupport."
   def project do
     [
       app: :rubenum,
-      version: "0.1.0",
-      elixir: "~> 1.13",
+      version: @versoin,
+      elixir: "~> 1.11",
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      description: @description,
+      name: "Rubenum",
+      package: package(),
+      docs: [
+        main: "readme",
+        extras: ["README.md"]
+      ]
     ]
   end
 
@@ -18,11 +26,11 @@ defmodule Rubenum.MixProject do
     ]
   end
 
-  # Run "mix help deps" to learn about dependencies.
-  defp deps do
+  defp package() do
     [
-      # {:dep_from_hexpm, "~> 0.3.0"},
-      # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"}
+      licenses: ["Apache-2.0"],
+      maintainers: ["Sota Tashiro"],
+      links: %{"GitHub" => @source_url}
     ]
   end
 end

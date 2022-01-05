@@ -1,11 +1,17 @@
+<!-- @format -->
+
+[![hex.pm version](https://img.shields.io/hexpm/v/ltsv.svg)](https://hex.pm/packages/rubenum)
+[![CI](https://github.com/tashirosota/ex-rubenum/actions/workflows/ci.yml/badge.svg)](https://github.com/tashirosota/rubenum/actions/workflows/ci.yml)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/tashirosota/ex-rubenum)
+
 # Rubenum
 
-**TODO: Add description**
+**WIP**
+
+Extensions for Enumerable modules affected by Ruby and Rails.ActiveSupport.
+And it perfect support for native functions too by metaprogramming.
 
 ## Installation
-
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `rubenum` to your list of dependencies in `mix.exs`:
 
 ```elixir
 def deps do
@@ -15,7 +21,28 @@ def deps do
 end
 ```
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at <https://hexdocs.pm/rubenum>.
+**[docs](https://hexdocs.pm/rubenum)**
 
+```elixir
+ # TODO:
+```
+
+## Implementation
+
+### Relation
+
+| Rubenum       | Elixir | Ruby       |
+| ------------- | ------ | ---------- |
+| Rubenum       | Enum   | Enumerable |
+| Rubenum.List  | List   | Array      |
+| Rubenum.Map   | Map    | Hash       |
+| Rubenum.Range | Range  | Range      |
+
+### Progress
+
+| Rubenum       | Native Elixir | Ruby | ActiveSupport |
+| ------------- | :-----------: | :--: | :-----------: |
+| Rubenum       |       ◎       |  ×   |       ×       |
+| Rubenum.List  |       ◎       |  ×   |       ×       |
+| Rubenum.Map   |       ◎       |  ×   |       ×       |
+| Rubenum.Range |       ◎       |  ×   |       ×       |
