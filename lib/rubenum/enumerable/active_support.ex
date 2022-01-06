@@ -1,14 +1,27 @@
 defmodule Rubenum.Enumerable.ActiveSupport do
   defmacro __using__(_opts) do
-    #   enum_funs = Enum.module_info()[:exports]
-    #            |> Enum.filter(fn {fun, _} -> fun not in [:__info__, :module_info] end)
-
-    #   for {fun, arity} <- enum_funs do
-    #     quote do
-    #       defdelegate unquote(fun)(unquote_splicing(Rubenum.Utils.make_args(arity))), to: Rubenum.Enumerable.ActiveSupport
-    #     end
-    #   end
+    Rubenum.Utils.define_all_functions!(__MODULE__)
   end
 
-  # TODO:
+  # https://www.rubydoc.info/gems/activesupport/Enumerable
+  # ruby_enumerable = [:as_json, :compact_blank, :exclude?, :excluding, :in_order_of, :including, :index_by, :index_with, :many?, :maximum, :minimum, :pick, :pluck, :sole]
+  # |> Enum.reject(fn method ->
+  #   Enum.module_info()[:exports]
+  #   |> Keyword.keys()
+  #   |> Enum.find(&(&1 == method))
+  # end)
+  # as_json
+  # compact_blank
+  # exclude?
+  # excluding
+  # in_order_of
+  # including
+  # index_by
+  # index_with
+  # many?
+  # maximum
+  # minimum
+  # pick
+  # pluck
+  # sole
 end
