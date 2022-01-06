@@ -31,8 +31,8 @@ defmodule Rubenum.Enumerable.Ruby do
   # lazy
   # minmax
   # minmax_by
-  # none?
-  # one?
+  # ✔ none?
+  # ✔ one?
   # reverse_each
   # ✔ select
   # slice_after
@@ -67,7 +67,6 @@ defmodule Rubenum.Enumerable.Ruby do
 
   def first(enumerable, n) do
     0..(n - 1)
-    |> Enum.to_list()
     |> Enum.with_index(fn _, index ->
       enumerable |> Enum.at(index)
     end)
@@ -75,6 +74,34 @@ defmodule Rubenum.Enumerable.Ruby do
     |> Enum.map(fn el ->
       if(el |> is_tuple, do: el |> Tuple.to_list(), else: el)
     end)
+  end
+
+  def one?(enumerable) do
+    truthy_count(enumerable) == 1
+  end
+
+  def one?(enumerable, func) when is_function(func) do
+    truthy_count(enumerable, func) == 1
+  end
+
+  def none?(enumerable) do
+    truthy_count(enumerable) == 0
+  end
+
+  def none?(enumerable, func) when is_function(func) do
+    truthy_count(enumerable, func) == 0
+  end
+
+  defp truthy_count(enumerable) do
+    enumerable
+    |> Enum.filter(& &1)
+    |> Enum.count()
+  end
+
+  defp truthy_count(enumerable, func) when is_function(func) do
+    enumerable
+    |> Enum.filter(func)
+    |> Enum.count()
   end
 
   # aliases

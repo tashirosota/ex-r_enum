@@ -106,4 +106,39 @@ defmodule Rubenum.Enumerable.RubyTest do
     assert Rubenum.first(%{}, 2) == []
     assert Rubenum.first(%{a: 1, b: 2}, 2) == [[:a, 1], [:b, 2]]
   end
+
+  describe "one?" do
+    test "one?/1" do
+      assert Rubenum.one?(1..1) == true
+      assert Rubenum.one?([1, nil, false]) == true
+      assert Rubenum.one?(1..4) == false
+      assert Rubenum.one?(%{foo: 0}) == true
+      assert Rubenum.one?(%{foo: 0, bar: 1}) == false
+      assert Rubenum.one?([]) == false
+    end
+
+    test "one?/2 when is_function" do
+      assert Rubenum.one?(1..4, &(&1 < 2)) == true
+      assert Rubenum.one?(1..4, &(&1 < 1)) == false
+      assert Rubenum.one?(%{foo: 0, bar: 1, baz: 2}, fn {_, v} -> v < 1 end) == true
+      assert Rubenum.one?(%{foo: 0, bar: 1, baz: 2}, fn {_, v} -> v < 2 end) == false
+    end
+  end
+
+  describe "none?" do
+    test "none?/1" do
+      assert Rubenum.none?(1..4) == false
+      assert Rubenum.none?([nil, false]) == true
+      assert Rubenum.none?(%{foo: 0}) == false
+      assert Rubenum.none?(%{foo: 0, bar: 1}) == false
+      assert Rubenum.none?([]) == true
+    end
+
+    test "none?/2 when is_function" do
+      assert Rubenum.none?(1..4, &(&1 < 1)) == true
+      assert Rubenum.none?(1..4, &(&1 < 2)) == false
+      assert Rubenum.none?(%{foo: 0, bar: 1, baz: 2}, fn {_, v} -> v < 0 end) == true
+      assert Rubenum.none?(%{foo: 0, bar: 1, baz: 2}, fn {_, v} -> v < 1 end) == false
+    end
+  end
 end
