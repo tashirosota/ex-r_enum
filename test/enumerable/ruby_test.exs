@@ -92,4 +92,18 @@ defmodule Rubenum.Enumerable.RubyTest do
     assert Rubenum.collect([], fn x -> x * 2 end) == Enum.map([], fn x -> x * 2 end)
     assert Rubenum.collect([1, 2, 3], fn x -> x * 2 end) == Enum.map([1, 2, 3], fn x -> x * 2 end)
   end
+
+  test "first/1" do
+    assert Rubenum.first([]) == nil
+    assert Rubenum.first([1, 2, 3]) == 1
+    assert Rubenum.first(%{}) == nil
+    assert Rubenum.first(%{a: 1, b: 2}) == [:a, 1]
+  end
+
+  test "first/2" do
+    assert Rubenum.first([], 2) == []
+    assert Rubenum.first([1, 2, 3], 2) == [1, 2]
+    assert Rubenum.first(%{}, 2) == []
+    assert Rubenum.first(%{a: 1, b: 2}, 2) == [[:a, 1], [:b, 2]]
+  end
 end

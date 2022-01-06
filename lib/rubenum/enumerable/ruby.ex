@@ -23,7 +23,7 @@ defmodule Rubenum.Enumerable.Ruby do
   # each_with_object
   # entries
   # ✔ find_all
-  # first
+  # ✔ first
   # grep
   # grep_v
   # include?
@@ -53,6 +53,28 @@ defmodule Rubenum.Enumerable.Ruby do
       is_nil(key) && is_nil(value)
     end)
     |> Enum.into(%{})
+  end
+
+  def first(enumerable) do
+    result = Enum.at(enumerable, 0)
+
+    cond do
+      result |> is_nil() -> nil
+      result |> is_tuple() -> result |> Tuple.to_list()
+      true -> result
+    end
+  end
+
+  def first(enumerable, n) do
+    0..(n - 1)
+    |> Enum.to_list()
+    |> Enum.with_index(fn _, index ->
+      enumerable |> Enum.at(index)
+    end)
+    |> compact()
+    |> Enum.map(fn el ->
+      if(el |> is_tuple, do: el |> Tuple.to_list(), else: el)
+    end)
   end
 
   # aliases
