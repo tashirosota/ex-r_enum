@@ -3,40 +3,44 @@ defmodule Rubenum.Enumerable.Ruby do
     Rubenum.Utils.define_all_functions!(__MODULE__)
   end
 
-  # ruby_enumerable = [:all?, :any?, :chain, :chunk, :chunk_while, :collect, :collect_concat, :compact, :count, :cycle, :detect, :drop, :drop_while, :each_cons, :each_entry, :each_slice, :each_with_index, :each_with_object, :entries, :filter, :filter_map, :find, :find_all, :find_index, :first, :flat_map, :grep, :grep_v, :group_by, :include?, :inject, :lazy, :map, :max, :max_by, :member?, :min, :min_by, :minmax, :minmax_by, :none?, :one?, :partition, :reduce, :reject, :reverse_each, :select, :slice_after, :slice_before, :slice_when, :sort, :sort_by, :sum]
+  # https://ruby-doc.org/core-3.1.0/Enumerable.html
+  # ruby_enumerable = [:all?, :any?, :chain, :chunk, :chunk_while, :collect, :collect_concat, :compact, :count, :cycle, :detect, :drop, :drop_while, :each_cons, :each_entry, :each_slice, :each_with_index, :each_with_object, :entries, :filter, :filter_map, :find, :find_all, :find_index, :first, :flat_map, :grep, :grep_v, :group_by, :include?, :inject, :lazy, :map, :max, :max_by, :member?, :min, :min_by, :minmax, :minmax_by, :none?, :one?, :partition, :reduce, :reject, :reverse_each, :select, :slice_after, :slice_before, :slice_when, :sort, :sort_by, :sum, :take, :take_while, :tally, :to_a, :to_h, :uniq, :zip]
   # |> Enum.reject(fn method ->
   #   Enum.module_info()[:exports]
   #   |> Keyword.keys()
   #   |> Enum.find(&(&1 == method))
   # end)
   # chain
-  # collect
+  # ✔ collect
   # collect_concat
-  # ✔compact
+  # ✔ compact
   # cycle
-  # ✔detect
+  # ✔ detect
   # each_cons
   # each_entry
   # each_slice
   # each_with_index
   # each_with_object
   # entries
-  # find_all
+  # ✔ find_all
   # first
   # grep
   # grep_v
   # include?
-  # inject
+  # ✔ inject
   # lazy
   # minmax
   # minmax_by
   # none?
   # one?
   # reverse_each
-  # select
+  # ✔ select
   # slice_after
   # slice_before
   # slice_when
+  # tally
+  # to_a
+  # to_h
 
   def compact(enumerable) when is_list(enumerable) do
     enumerable
@@ -55,4 +59,9 @@ defmodule Rubenum.Enumerable.Ruby do
 
   defdelegate detect(enumerable, default, fun), to: Enum, as: :find
   defdelegate detect(enumerable, fun), to: Enum, as: :find
+  defdelegate select(enumerable, fun), to: Enum, as: :filter
+  defdelegate find_all(enumerable, fun), to: Enum, as: :filter
+  defdelegate inject(enumerable, acc, fun), to: Enum, as: :reduce
+  defdelegate inject(enumerable, fun), to: Enum, as: :reduce
+  defdelegate collect(enumerable, fun), to: Enum, as: :map
 end

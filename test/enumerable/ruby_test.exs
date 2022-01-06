@@ -36,4 +36,60 @@ defmodule Rubenum.Enumerable.RubyTest do
     assert Rubenum.detect(2..6, fn _ -> false end) == Enum.find(2..6, fn _ -> false end)
     assert Rubenum.detect(2..6, 0, fn _ -> false end) == Enum.find(2..6, 0, fn _ -> false end)
   end
+
+  test "select/2" do
+    assert Rubenum.select(1..3, fn x -> rem(x, 2) == 0 end) ==
+             Enum.filter(1..3, fn x -> rem(x, 2) == 0 end)
+
+    assert Rubenum.select(1..6, fn x -> rem(x, 2) == 0 end) ==
+             Enum.filter(1..6, fn x -> rem(x, 2) == 0 end)
+
+    assert Rubenum.select(1..3, &match?(1, &1)) == Enum.filter(1..3, &match?(1, &1))
+
+    assert Rubenum.select(1..3, &match?(x when x < 3, &1)) ==
+             Enum.filter(1..3, &match?(x when x < 3, &1))
+
+    assert Rubenum.select(1..3, fn _ -> true end) == Enum.filter(1..3, fn _ -> true end)
+  end
+
+  test "find_all/2" do
+    assert Rubenum.find_all(1..3, fn x -> rem(x, 2) == 0 end) ==
+             Enum.filter(1..3, fn x -> rem(x, 2) == 0 end)
+
+    assert Rubenum.find_all(1..6, fn x -> rem(x, 2) == 0 end) ==
+             Enum.filter(1..6, fn x -> rem(x, 2) == 0 end)
+
+    assert Rubenum.find_all(1..3, &match?(1, &1)) == Enum.filter(1..3, &match?(1, &1))
+
+    assert Rubenum.find_all(1..3, &match?(x when x < 3, &1)) ==
+             Enum.filter(1..3, &match?(x when x < 3, &1))
+
+    assert Rubenum.find_all(1..3, fn _ -> true end) == Enum.filter(1..3, fn _ -> true end)
+  end
+
+  test "inject/2" do
+    assert Rubenum.inject([1, 2, 3], fn x, acc -> x + acc end) ==
+             Enum.reduce([1, 2, 3], fn x, acc -> x + acc end)
+
+    assert_raise Enum.EmptyError, fn ->
+      Rubenum.inject([], fn x, acc -> x + acc end)
+    end
+
+    assert_raise Enum.EmptyError, fn ->
+      Rubenum.inject(%{}, fn _, acc -> acc end)
+    end
+  end
+
+  test "inject/3" do
+    assert Rubenum.inject([], 1, fn x, acc -> x + acc end) ==
+             Enum.reduce([], 1, fn x, acc -> x + acc end)
+
+    assert Rubenum.inject([1, 2, 3], 1, fn x, acc -> x + acc end) ==
+             Enum.reduce([1, 2, 3], 1, fn x, acc -> x + acc end)
+  end
+
+  test "collect/2" do
+    assert Rubenum.collect([], fn x -> x * 2 end) == Enum.map([], fn x -> x * 2 end)
+    assert Rubenum.collect([1, 2, 3], fn x -> x * 2 end) == Enum.map([1, 2, 3], fn x -> x * 2 end)
+  end
 end
