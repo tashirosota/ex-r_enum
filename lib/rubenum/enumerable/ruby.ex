@@ -12,9 +12,9 @@ defmodule Rubenum.Enumerable.Ruby do
   # end)
   # chain
   # ✔ collect
-  # collect_concat
+  # ✔ collect_concat
   # ✔ compact
-  # cycle
+  # ✔ cycle
   # ✔ detect
   # each_cons
   # each_entry
@@ -26,7 +26,7 @@ defmodule Rubenum.Enumerable.Ruby do
   # ✔ first
   # grep
   # grep_v
-  # include?
+  # ✔ include?
   # ✔ inject
   # lazy
   # minmax
@@ -104,6 +104,37 @@ defmodule Rubenum.Enumerable.Ruby do
     |> Enum.count()
   end
 
+  def cycle(_, n, _) when n < 1, do: nil
+
+  def cycle(enumerable, n, func) when is_function(func) do
+    enumerable
+    |> Enum.each(fn els ->
+      els
+      |> Enum.each(func)
+    end)
+
+    cycle(enumerable, n - 1, func)
+  end
+
+  def cycle(enumerable, func) when is_function(func) do
+    Stream.iterate(enumerable, & &1)
+    |> Enum.each(fn els ->
+      Enum.each(els, func)
+    end)
+  end
+
+  def cycle(_, n) when n < 1, do: nil
+
+  def cycle(enumerable, _) do
+    enumerable
+    |> Stream.cycle()
+  end
+
+  def cycle(enumerable) do
+    enumerable
+    |> Stream.cycle()
+  end
+
   # aliases
 
   defdelegate detect(enumerable, default, fun), to: Enum, as: :find
@@ -113,4 +144,6 @@ defmodule Rubenum.Enumerable.Ruby do
   defdelegate inject(enumerable, acc, fun), to: Enum, as: :reduce
   defdelegate inject(enumerable, fun), to: Enum, as: :reduce
   defdelegate collect(enumerable, fun), to: Enum, as: :map
+  defdelegate include?(enumerable, fun), to: Enum, as: :member?
+  defdelegate collect_concat(enumerable, fun), to: Enum, as: :flat_map
 end

@@ -1,7 +1,7 @@
-defmodule Rubenum.MapTest do
+defmodule Rubenum.Map.NativeTest do
   use ExUnit.Case, async: true
 
-  doctest Rubenum.Map
+  doctest Rubenum.Map.Native
 
   @sample %{a: 1, b: 2}
 
@@ -271,7 +271,7 @@ defmodule Rubenum.MapTest do
     assert name == "john"
 
     assert_raise BadStructError,
-                 "expected a struct named Rubenum.MapTest.ExternalUser, got: %{}",
+                 "expected a struct named Rubenum.Map.NativeTest.ExternalUser, got: %{}",
                  fn ->
                    %ExternalUser{empty_map() | name: "meg"}
                  end

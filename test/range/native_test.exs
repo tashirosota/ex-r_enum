@@ -1,7 +1,7 @@
-defmodule Rubenum.RangeTest do
+defmodule Rubenum.Range.NativeTest do
   use ExUnit.Case, async: true
 
-  doctest Rubenum.Range
+  doctest Rubenum.Range.Native
 
   defp reverse(first..last) do
     last..first

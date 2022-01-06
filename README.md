@@ -31,18 +31,20 @@ end
 
 ### Relation
 
-| Rubenum       | Elixir | Ruby       |
-| ------------- | ------ | ---------- |
-| Rubenum       | Enum   | Enumerable |
-| Rubenum.List  | List   | Array      |
-| Rubenum.Map   | Map    | Hash       |
-| Rubenum.Range | Range  | Range      |
+| Rubenum        | Elixir | Ruby                           |
+| -------------- | ------ | ------------------------------ |
+| Rubenum        | Enum   | Enumerable                     |
+| Rubenum.List   | List   | Array                          |
+| Rubenum.Map    | Map    | Hash                           |
+| Rubenum.Range  | Range  | Range                          |
+| Rubenum.Stream | Stream | Enumerator（Enumerator::Lazy） |
 
 ### Progress
 
-| Rubenum       | Native Elixir | Ruby | ActiveSupport |
-| ------------- | :-----------: | :--: | :-----------: |
-| Rubenum       |       ◎       |  ×   |       ×       |
-| Rubenum.List  |       ◎       |  ×   |       ×       |
-| Rubenum.Map   |       ◎       |  ×   |       ×       |
-| Rubenum.Range |       ◎       |  ×   |       ×       |
+| Rubenum        | Native Elixir | Ruby | ActiveSupport |
+| -------------- | :-----------: | :--: | :-----------: |
+| Rubenum        |       ◎       |  ×   |       ×       |
+| Rubenum.List   |       ◎       |  ×   |       ×       |
+| Rubenum.Map    |       ◎       |  ×   |       ×       |
+| Rubenum.Range  |       ◎       |  ×   |       ×       |
+| Rubenum.Stream |       ◎       |  ×   |       ×       |
