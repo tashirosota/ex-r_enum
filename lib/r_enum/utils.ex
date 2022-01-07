@@ -1,4 +1,4 @@
-defmodule Rubenum.Utils do
+defmodule REnum.Utils do
   @spec define_all_functions!(module()) :: list
   def define_all_functions!(mod) do
     enum_funs =

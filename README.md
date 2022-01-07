@@ -1,10 +1,10 @@
 <!-- @format -->
 
-[![hex.pm version](https://img.shields.io/hexpm/v/ltsv.svg)](https://hex.pm/packages/rubenum)
-[![CI](https://github.com/tashirosota/ex-rubenum/actions/workflows/ci.yml/badge.svg)](https://github.com/tashirosota/ex-rubenum/actions/workflows/ci.yml)
-![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/tashirosota/ex-rubenum)
+[![hex.pm version](https://img.shields.io/hexpm/v/ltsv.svg)](https://hex.pm/packages/r_enum)
+[![CI](https://github.com/tashirosota/ex-r_enum/actions/workflows/ci.yml/badge.svg)](https://github.com/tashirosota/ex-r_enum/actions/workflows/ci.yml)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/tashirosota/ex-r_enum)
 
-# Rubenum
+# REnum
 
 **WIP**
 
@@ -16,12 +16,12 @@ And it perfect support for native functions too by metaprogramming.
 ```elixir
 def deps do
   [
-    {:rubenum, "~> 0.1.0"}
+    {:r_enum, "~> 0.1.0"}
   ]
 end
 ```
 
-**[docs](https://hexdocs.pm/rubenum)**
+**[docs](https://hexdocs.pm/r_enum)**
 
 ```elixir
  # TODO:
@@ -31,20 +31,20 @@ end
 
 ### Relation
 
-| Rubenum        | Elixir | Ruby                           |
-| -------------- | ------ | ------------------------------ |
-| Rubenum        | Enum   | Enumerable                     |
-| Rubenum.List   | List   | Array                          |
-| Rubenum.Map    | Map    | Hash                           |
-| Rubenum.Range  | Range  | Range                          |
-| Rubenum.Stream | Stream | Enumerator（Enumerator::Lazy） |
+| REnum        | Elixir | Ruby                           |
+| ------------ | ------ | ------------------------------ |
+| REnum        | Enum   | Enumerable                     |
+| REnum.List   | List   | Array                          |
+| REnum.Map    | Map    | Hash                           |
+| REnum.Range  | Range  | Range                          |
+| REnum.Stream | Stream | Enumerator（Enumerator::Lazy） |
 
 ### Progress
 
-| Rubenum        | Native Elixir | Ruby | ActiveSupport |
-| -------------- | :-----------: | :--: | :-----------: |
-| Rubenum        |       ◎       |  ×   |       ×       |
-| Rubenum.List   |       ◎       |  ×   |       ×       |
-| Rubenum.Map    |       ◎       |  ×   |       ×       |
-| Rubenum.Range  |       ◎       |  ×   |       ×       |
-| Rubenum.Stream |       ◎       |  ×   |       ×       |
+| REnum        | Native Elixir | Ruby | ActiveSupport |
+| ------------ | :-----------: | :--: | :-----------: |
+| REnum        |       ◎       |  ×   |       ×       |
+| REnum.List   |       ◎       |  ×   |       ×       |
+| REnum.Map    |       ◎       |  ×   |       ×       |
+| REnum.Range  |       ◎       |  ×   |       ×       |
+| REnum.Stream |       ◎       |  ×   |       ×       |

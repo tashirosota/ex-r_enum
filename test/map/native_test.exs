@@ -1,7 +1,7 @@
-defmodule Rubenum.Map.NativeTest do
+defmodule REnum.Map.NativeTest do
   use ExUnit.Case, async: true
 
-  doctest Rubenum.Map.Native
+  doctest REnum.Map.Native
 
   @sample %{a: 1, b: 2}
 
@@ -74,7 +74,7 @@ defmodule Rubenum.Map.NativeTest do
   end
 
   test "is_map/1" do
-    assert is_map(Rubenum.Map.new())
+    assert is_map(REnum.Map.new())
     refute is_map(Enum.to_list(%{}))
   end
 
@@ -84,37 +84,37 @@ defmodule Rubenum.Map.NativeTest do
   end
 
   # test "new/1" do
-  #   assert Rubenum.Map.new(%{a: 1, b: 2}) == %{a: 1, b: 2}
-  #   assert Rubenum.Map.new(Rubenum.MapSet.new(a: 1, b: 2, a: 3)) == %{b: 2, a: 3}
+  #   assert REnum.Map.new(%{a: 1, b: 2}) == %{a: 1, b: 2}
+  #   assert REnum.Map.new(REnum.MapSet.new(a: 1, b: 2, a: 3)) == %{b: 2, a: 3}
   # end
 
   # test "new/2" do
   #   transformer = fn {key, value} -> {key, value * 2} end
-  #   assert Rubenum.Map.new(%{a: 1, b: 2}, transformer) == %{a: 2, b: 4}
-  #   assert Rubenum.Map.new(Rubenum.MapSet.new(a: 1, b: 2, a: 3), transformer) == %{b: 4, a: 6}
+  #   assert REnum.Map.new(%{a: 1, b: 2}, transformer) == %{a: 2, b: 4}
+  #   assert REnum.Map.new(REnum.MapSet.new(a: 1, b: 2, a: 3), transformer) == %{b: 4, a: 6}
   # end
 
   test "take/2" do
-    assert Rubenum.Map.take(%{a: 1, b: 2, c: 3}, [:b, :c]) == %{b: 2, c: 3}
-    assert Rubenum.Map.take(%{a: 1, b: 2, c: 3}, []) == %{}
-    assert_raise BadMapError, fn -> Rubenum.Map.take(:foo, []) end
+    assert REnum.Map.take(%{a: 1, b: 2, c: 3}, [:b, :c]) == %{b: 2, c: 3}
+    assert REnum.Map.take(%{a: 1, b: 2, c: 3}, []) == %{}
+    assert_raise BadMapError, fn -> REnum.Map.take(:foo, []) end
   end
 
   test "drop/2" do
-    assert Rubenum.Map.drop(%{a: 1, b: 2, c: 3}, [:b, :c]) == %{a: 1}
-    assert_raise BadMapError, fn -> Rubenum.Map.drop(:foo, []) end
+    assert REnum.Map.drop(%{a: 1, b: 2, c: 3}, [:b, :c]) == %{a: 1}
+    assert_raise BadMapError, fn -> REnum.Map.drop(:foo, []) end
   end
 
   test "split/2" do
-    assert Rubenum.Map.split(%{a: 1, b: 2, c: 3}, [:b, :c]) == {%{b: 2, c: 3}, %{a: 1}}
-    assert_raise BadMapError, fn -> Rubenum.Map.split(:foo, []) end
+    assert REnum.Map.split(%{a: 1, b: 2, c: 3}, [:b, :c]) == {%{b: 2, c: 3}, %{a: 1}}
+    assert_raise BadMapError, fn -> REnum.Map.split(:foo, []) end
   end
 
   test "get_and_update/3" do
     message = "the given function must return a two-element tuple or :pop, got: 1"
 
     assert_raise RuntimeError, message, fn ->
-      Rubenum.Map.get_and_update(%{a: 1}, :a, fn value -> value end)
+      REnum.Map.get_and_update(%{a: 1}, :a, fn value -> value end)
     end
   end
 
@@ -122,7 +122,7 @@ defmodule Rubenum.Map.NativeTest do
     message = "the given function must return a two-element tuple or :pop, got: 1"
 
     assert_raise RuntimeError, message, fn ->
-      Rubenum.Map.get_and_update!(%{a: 1}, :a, fn value -> value end)
+      REnum.Map.get_and_update!(%{a: 1}, :a, fn value -> value end)
     end
   end
 
@@ -151,40 +151,40 @@ defmodule Rubenum.Map.NativeTest do
   test "put/3 optimized by the compiler" do
     map = %{a: 1, b: 2}
 
-    assert Rubenum.Map.put(map, :a, 2) == %{a: 2, b: 2}
-    assert Rubenum.Map.put(map, :c, 3) == %{a: 1, b: 2, c: 3}
+    assert REnum.Map.put(map, :a, 2) == %{a: 2, b: 2}
+    assert REnum.Map.put(map, :c, 3) == %{a: 1, b: 2, c: 3}
 
-    assert Rubenum.Map.put(%{map | a: 2}, :a, 3) == %{a: 3, b: 2}
-    assert Rubenum.Map.put(%{map | a: 2}, :b, 3) == %{a: 2, b: 3}
+    assert REnum.Map.put(%{map | a: 2}, :a, 3) == %{a: 3, b: 2}
+    assert REnum.Map.put(%{map | a: 2}, :b, 3) == %{a: 2, b: 3}
 
-    assert Rubenum.Map.put(map, :a, 2) |> Rubenum.Map.put(:a, 3) == %{a: 3, b: 2}
-    assert Rubenum.Map.put(map, :a, 2) |> Rubenum.Map.put(:c, 3) == %{a: 2, b: 2, c: 3}
-    assert Rubenum.Map.put(map, :c, 3) |> Rubenum.Map.put(:a, 2) == %{a: 2, b: 2, c: 3}
-    assert Rubenum.Map.put(map, :c, 3) |> Rubenum.Map.put(:c, 4) == %{a: 1, b: 2, c: 4}
+    assert REnum.Map.put(map, :a, 2) |> REnum.Map.put(:a, 3) == %{a: 3, b: 2}
+    assert REnum.Map.put(map, :a, 2) |> REnum.Map.put(:c, 3) == %{a: 2, b: 2, c: 3}
+    assert REnum.Map.put(map, :c, 3) |> REnum.Map.put(:a, 2) == %{a: 2, b: 2, c: 3}
+    assert REnum.Map.put(map, :c, 3) |> REnum.Map.put(:c, 4) == %{a: 1, b: 2, c: 4}
   end
 
   test "merge/2 with map literals optimized by the compiler" do
     map = %{a: 1, b: 2}
 
-    assert Rubenum.Map.merge(map, %{a: 2}) == %{a: 2, b: 2}
-    assert Rubenum.Map.merge(map, %{c: 3}) == %{a: 1, b: 2, c: 3}
-    assert Rubenum.Map.merge(%{a: 2}, map) == %{a: 1, b: 2}
-    assert Rubenum.Map.merge(%{c: 3}, map) == %{a: 1, b: 2, c: 3}
+    assert REnum.Map.merge(map, %{a: 2}) == %{a: 2, b: 2}
+    assert REnum.Map.merge(map, %{c: 3}) == %{a: 1, b: 2, c: 3}
+    assert REnum.Map.merge(%{a: 2}, map) == %{a: 1, b: 2}
+    assert REnum.Map.merge(%{c: 3}, map) == %{a: 1, b: 2, c: 3}
 
-    assert Rubenum.Map.merge(%{map | a: 2}, %{a: 3}) == %{a: 3, b: 2}
-    assert Rubenum.Map.merge(%{map | a: 2}, %{b: 3}) == %{a: 2, b: 3}
-    assert Rubenum.Map.merge(%{a: 2}, %{map | a: 3}) == %{a: 3, b: 2}
-    assert Rubenum.Map.merge(%{a: 2}, %{map | b: 3}) == %{a: 1, b: 3}
+    assert REnum.Map.merge(%{map | a: 2}, %{a: 3}) == %{a: 3, b: 2}
+    assert REnum.Map.merge(%{map | a: 2}, %{b: 3}) == %{a: 2, b: 3}
+    assert REnum.Map.merge(%{a: 2}, %{map | a: 3}) == %{a: 3, b: 2}
+    assert REnum.Map.merge(%{a: 2}, %{map | b: 3}) == %{a: 1, b: 3}
 
-    assert Rubenum.Map.merge(map, %{a: 2}) |> Rubenum.Map.merge(%{a: 3, c: 3}) == %{
+    assert REnum.Map.merge(map, %{a: 2}) |> REnum.Map.merge(%{a: 3, c: 3}) == %{
              a: 3,
              b: 2,
              c: 3
            }
 
-    assert Rubenum.Map.merge(map, %{c: 3}) |> Rubenum.Map.merge(%{c: 4}) == %{a: 1, b: 2, c: 4}
+    assert REnum.Map.merge(map, %{c: 3}) |> REnum.Map.merge(%{c: 4}) == %{a: 1, b: 2, c: 4}
 
-    assert Rubenum.Map.merge(map, %{a: 3, c: 3}) |> Rubenum.Map.merge(%{a: 2}) == %{
+    assert REnum.Map.merge(map, %{a: 3, c: 3}) |> REnum.Map.merge(%{a: 2}) == %{
              a: 2,
              b: 2,
              c: 3
@@ -193,38 +193,38 @@ defmodule Rubenum.Map.NativeTest do
 
   test "merge/3" do
     # When first map is bigger
-    assert Rubenum.Map.merge(%{a: 1, b: 2, c: 3}, %{c: 4, d: 5}, fn :c, 3, 4 -> :x end) ==
+    assert REnum.Map.merge(%{a: 1, b: 2, c: 3}, %{c: 4, d: 5}, fn :c, 3, 4 -> :x end) ==
              %{a: 1, b: 2, c: :x, d: 5}
 
     # When second map is bigger
-    assert Rubenum.Map.merge(%{b: 2, c: 3}, %{a: 1, c: 4, d: 5}, fn :c, 3, 4 -> :x end) ==
+    assert REnum.Map.merge(%{b: 2, c: 3}, %{a: 1, c: 4, d: 5}, fn :c, 3, 4 -> :x end) ==
              %{a: 1, b: 2, c: :x, d: 5}
   end
 
   test "replace/3" do
     map = %{c: 3, b: 2, a: 1}
-    assert Rubenum.Map.replace(map, :b, 10) == %{c: 3, b: 10, a: 1}
-    assert Rubenum.Map.replace(map, :a, 1) == map
-    assert Rubenum.Map.replace(map, :x, 1) == map
-    assert Rubenum.Map.replace(%{}, :x, 1) == %{}
+    assert REnum.Map.replace(map, :b, 10) == %{c: 3, b: 10, a: 1}
+    assert REnum.Map.replace(map, :a, 1) == map
+    assert REnum.Map.replace(map, :x, 1) == map
+    assert REnum.Map.replace(%{}, :x, 1) == %{}
   end
 
   test "replace!/3" do
     map = %{c: 3, b: 2, a: 1}
-    assert Rubenum.Map.replace!(map, :b, 10) == %{c: 3, b: 10, a: 1}
-    assert Rubenum.Map.replace!(map, :a, 1) == map
+    assert REnum.Map.replace!(map, :b, 10) == %{c: 3, b: 10, a: 1}
+    assert REnum.Map.replace!(map, :a, 1) == map
 
     assert_raise KeyError, "key :x not found in: %{a: 1, b: 2, c: 3}", fn ->
-      Rubenum.Map.replace!(map, :x, 10)
+      REnum.Map.replace!(map, :x, 10)
     end
 
     assert_raise KeyError, "key :x not found in: %{}", fn ->
-      Rubenum.Map.replace!(%{}, :x, 10)
+      REnum.Map.replace!(%{}, :x, 10)
     end
   end
 
   test "implements (almost) all functions in Keyword" do
-    assert Keyword.__info__(:functions) -- Rubenum.Map.__info__(:functions) == [
+    assert Keyword.__info__(:functions) -- REnum.Map.__info__(:functions) == [
              delete: 3,
              delete_first: 2,
              get_values: 2,
@@ -271,7 +271,7 @@ defmodule Rubenum.Map.NativeTest do
     assert name == "john"
 
     assert_raise BadStructError,
-                 "expected a struct named Rubenum.Map.NativeTest.ExternalUser, got: %{}",
+                 "expected a struct named REnum.Map.NativeTest.ExternalUser, got: %{}",
                  fn ->
                    %ExternalUser{empty_map() | name: "meg"}
                  end
@@ -354,7 +354,7 @@ defmodule Rubenum.Map.NativeTest do
   end
 
   test "structs when using dynamic modules" do
-    defmodule Module.concat(Rubenum.MapTest, DynamicUser) do
+    defmodule Module.concat(REnum.MapTest, DynamicUser) do
       defstruct [:name, :age]
 
       def sample do

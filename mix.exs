@@ -1,16 +1,16 @@
-defmodule Rubenum.MixProject do
+defmodule REnum.MixProject do
   use Mix.Project
   @versoin "0.1.0"
-  @source_url "https://github.com/tashirosota/ex-rubenum"
+  @source_url "https://github.com/tashirosota/ex-r_enum"
   @description "Extensions for Enumerable modules compatibled with Ruby and Rails.ActiveSupport."
   def project do
     [
-      app: :rubenum,
+      app: :r_enum,
       version: @versoin,
       elixir: "~> 1.11",
       start_permanent: Mix.env() == :prod,
       description: @description,
-      name: "Rubenum",
+      name: "REnum",
       package: package(),
       docs: [
         main: "readme",

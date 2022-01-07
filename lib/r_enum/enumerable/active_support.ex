@@ -1,6 +1,6 @@
-defmodule Rubenum.Enumerable.ActiveSupport do
+defmodule REnum.Enumerable.ActiveSupport do
   defmacro __using__(_opts) do
-    Rubenum.Utils.define_all_functions!(__MODULE__)
+    REnum.Utils.define_all_functions!(__MODULE__)
   end
 
   # https://www.rubydoc.info/gems/activesupport/Enumerable

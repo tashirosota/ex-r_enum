@@ -1,6 +1,6 @@
-defmodule Rubenum.Enumerable.Ruby do
+defmodule REnum.Enumerable.Ruby do
   defmacro __using__(_opts) do
-    Rubenum.Utils.define_all_functions!(__MODULE__)
+    REnum.Utils.define_all_functions!(__MODULE__)
   end
 
   # https://ruby-doc.org/core-3.1.0/Enumerable.html
