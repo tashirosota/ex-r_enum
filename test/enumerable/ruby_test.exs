@@ -1,5 +1,6 @@
 defmodule REnum.Enumerable.RubyTest do
   use ExUnit.Case
+  import ExUnit.CaptureIO
   doctest REnum.Enumerable.Ruby
 
   describe "compact/1" do
@@ -67,25 +68,27 @@ defmodule REnum.Enumerable.RubyTest do
     assert REnum.find_all(1..3, fn _ -> true end) == Enum.filter(1..3, fn _ -> true end)
   end
 
-  test "inject/2" do
-    assert REnum.inject([1, 2, 3], fn x, acc -> x + acc end) ==
-             Enum.reduce([1, 2, 3], fn x, acc -> x + acc end)
+  describe "inject" do
+    test "inject/2" do
+      assert REnum.inject([1, 2, 3], fn x, acc -> x + acc end) ==
+               Enum.reduce([1, 2, 3], fn x, acc -> x + acc end)
 
-    assert_raise Enum.EmptyError, fn ->
-      REnum.inject([], fn x, acc -> x + acc end)
+      assert_raise Enum.EmptyError, fn ->
+        REnum.inject([], fn x, acc -> x + acc end)
+      end
+
+      assert_raise Enum.EmptyError, fn ->
+        REnum.inject(%{}, fn _, acc -> acc end)
+      end
     end
 
-    assert_raise Enum.EmptyError, fn ->
-      REnum.inject(%{}, fn _, acc -> acc end)
+    test "inject/3" do
+      assert REnum.inject([], 1, fn x, acc -> x + acc end) ==
+               Enum.reduce([], 1, fn x, acc -> x + acc end)
+
+      assert REnum.inject([1, 2, 3], 1, fn x, acc -> x + acc end) ==
+               Enum.reduce([1, 2, 3], 1, fn x, acc -> x + acc end)
     end
-  end
-
-  test "inject/3" do
-    assert REnum.inject([], 1, fn x, acc -> x + acc end) ==
-             Enum.reduce([], 1, fn x, acc -> x + acc end)
-
-    assert REnum.inject([1, 2, 3], 1, fn x, acc -> x + acc end) ==
-             Enum.reduce([1, 2, 3], 1, fn x, acc -> x + acc end)
   end
 
   test "collect/2" do
@@ -93,18 +96,20 @@ defmodule REnum.Enumerable.RubyTest do
     assert REnum.collect([1, 2, 3], fn x -> x * 2 end) == Enum.map([1, 2, 3], fn x -> x * 2 end)
   end
 
-  test "first/1" do
-    assert REnum.first([]) == nil
-    assert REnum.first([1, 2, 3]) == 1
-    assert REnum.first(%{}) == nil
-    assert REnum.first(%{a: 1, b: 2}) == [:a, 1]
-  end
+  describe "first" do
+    test "first/1" do
+      assert REnum.first([]) == nil
+      assert REnum.first([1, 2, 3]) == 1
+      assert REnum.first(%{}) == nil
+      assert REnum.first(%{a: 1, b: 2}) == [:a, 1]
+    end
 
-  test "first/2" do
-    assert REnum.first([], 2) == []
-    assert REnum.first([1, 2, 3], 2) == [1, 2]
-    assert REnum.first(%{}, 2) == []
-    assert REnum.first(%{a: 1, b: 2}, 2) == [[:a, 1], [:b, 2]]
+    test "first/2" do
+      assert REnum.first([], 2) == []
+      assert REnum.first([1, 2, 3], 2) == [1, 2]
+      assert REnum.first(%{}, 2) == []
+      assert REnum.first(%{a: 1, b: 2}, 2) == [[:a, 1], [:b, 2]]
+    end
   end
 
   describe "one?" do
@@ -167,11 +172,39 @@ defmodule REnum.Enumerable.RubyTest do
     assert REnum.collect_concat([1, 2, 3], fn x -> x..(x + 1) end) == [1, 2, 2, 3, 3, 4]
   end
 
-  @tag :skip
-  test "cycle/2" do
-  end
+  describe "cycle" do
+    test "cycle/3" do
+      list = ["a", "b", "c"]
 
-  @tag :skip
-  test "cycle/3" do
+      assert capture_io(fn ->
+               REnum.cycle(list, 3, &IO.puts(&1))
+             end) == "a\nb\nc\na\nb\nc\na\nb\nc\n"
+
+      assert capture_io(fn ->
+               REnum.cycle(list, 0, &IO.puts(&1))
+             end) == ""
+
+      assert capture_io(fn ->
+               REnum.cycle(list, nil, &IO.puts(&1))
+               |> Enum.take(4)
+             end) == "a\nb\nc\na\nb\nc\na\nb\nc\na\nb\nc\n"
+
+      map = %{a: 1, b: 2, c: 3}
+
+      assert capture_io(fn ->
+               REnum.cycle(map, 3, &IO.inspect(&1))
+             end) ==
+               "{:a, 1}\n{:b, 2}\n{:c, 3}\n{:a, 1}\n{:b, 2}\n{:c, 3}\n{:a, 1}\n{:b, 2}\n{:c, 3}\n"
+
+      assert capture_io(fn ->
+               REnum.cycle(map, 0, &IO.inspect(&1))
+             end) == ""
+
+      assert capture_io(fn ->
+               REnum.cycle(map, nil, &IO.inspect(&1))
+               |> Enum.take(4)
+             end) ==
+               "{:a, 1}\n{:b, 2}\n{:c, 3}\n{:a, 1}\n{:b, 2}\n{:c, 3}\n{:a, 1}\n{:b, 2}\n{:c, 3}\n{:a, 1}\n{:b, 2}\n{:c, 3}\n"
+    end
   end
 end

@@ -104,35 +104,21 @@ defmodule REnum.Enumerable.Ruby do
     |> Enum.count()
   end
 
-  def cycle(_, n, _) when n < 1, do: nil
-
-  def cycle(enumerable, n, func) when is_function(func) do
-    enumerable
-    |> Enum.each(fn els ->
-      els
+  def cycle(enumerable, n, func) when is_nil(n) do
+    Stream.repeatedly(fn ->
+      enumerable
       |> Enum.each(func)
     end)
-
-    cycle(enumerable, n - 1, func)
   end
 
-  def cycle(enumerable, func) when is_function(func) do
-    Stream.iterate(enumerable, & &1)
-    |> Enum.each(fn els ->
-      Enum.each(els, func)
-    end)
-  end
+  def cycle(_, n, _) when n < 1, do: :ok
 
-  def cycle(_, n) when n < 1, do: nil
-
-  def cycle(enumerable, _) do
+  def cycle(enumerable, n, func) do
     enumerable
-    |> Stream.cycle()
-  end
+    |> Enum.each(func)
 
-  def cycle(enumerable) do
     enumerable
-    |> Stream.cycle()
+    |> cycle(n - 1, func)
   end
 
   # aliases

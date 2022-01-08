@@ -8,8 +8,8 @@
 
 **WIP**
 
-Extensions for Enumerable modules compatibled with Ruby and Rails.ActiveSupport.
-And it perfect support for native functions too by metaprogramming.
+Extensions for Enumerable modules that aims to be compatible with Ruby and Rails.ActiveSupport.
+It also provides full support for native functionality through metaprogramming.
 
 ## Installation
 
