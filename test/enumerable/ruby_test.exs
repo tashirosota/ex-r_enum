@@ -172,39 +172,57 @@ defmodule REnum.Enumerable.RubyTest do
     assert REnum.collect_concat([1, 2, 3], fn x -> x..(x + 1) end) == [1, 2, 2, 3, 3, 4]
   end
 
-  describe "cycle" do
-    test "cycle/3" do
-      list = ["a", "b", "c"]
+  test "cycle/3" do
+    list = ["a", "b", "c"]
 
-      assert capture_io(fn ->
-               REnum.cycle(list, 3, &IO.puts(&1))
-             end) == "a\nb\nc\na\nb\nc\na\nb\nc\n"
+    assert capture_io(fn ->
+             REnum.cycle(list, 3, &IO.puts(&1))
+           end) == "a\nb\nc\na\nb\nc\na\nb\nc\n"
 
-      assert capture_io(fn ->
-               REnum.cycle(list, 0, &IO.puts(&1))
-             end) == ""
+    assert capture_io(fn ->
+             REnum.cycle(list, 0, &IO.puts(&1))
+           end) == ""
 
-      assert capture_io(fn ->
-               REnum.cycle(list, nil, &IO.puts(&1))
-               |> Enum.take(4)
-             end) == "a\nb\nc\na\nb\nc\na\nb\nc\na\nb\nc\n"
+    assert capture_io(fn ->
+             REnum.cycle(list, nil, &IO.puts(&1))
+             |> Enum.take(4)
+           end) == "a\nb\nc\na\nb\nc\na\nb\nc\na\nb\nc\n"
 
-      map = %{a: 1, b: 2, c: 3}
+    map = %{a: 1, b: 2, c: 3}
 
-      assert capture_io(fn ->
-               REnum.cycle(map, 3, &IO.inspect(&1))
-             end) ==
-               "{:a, 1}\n{:b, 2}\n{:c, 3}\n{:a, 1}\n{:b, 2}\n{:c, 3}\n{:a, 1}\n{:b, 2}\n{:c, 3}\n"
+    assert capture_io(fn ->
+             REnum.cycle(map, 3, &IO.inspect(&1))
+           end) ==
+             "{:a, 1}\n{:b, 2}\n{:c, 3}\n{:a, 1}\n{:b, 2}\n{:c, 3}\n{:a, 1}\n{:b, 2}\n{:c, 3}\n"
 
-      assert capture_io(fn ->
-               REnum.cycle(map, 0, &IO.inspect(&1))
-             end) == ""
+    assert capture_io(fn ->
+             REnum.cycle(map, 0, &IO.inspect(&1))
+           end) == ""
 
-      assert capture_io(fn ->
-               REnum.cycle(map, nil, &IO.inspect(&1))
-               |> Enum.take(4)
-             end) ==
-               "{:a, 1}\n{:b, 2}\n{:c, 3}\n{:a, 1}\n{:b, 2}\n{:c, 3}\n{:a, 1}\n{:b, 2}\n{:c, 3}\n{:a, 1}\n{:b, 2}\n{:c, 3}\n"
-    end
+    assert capture_io(fn ->
+             REnum.cycle(map, nil, &IO.inspect(&1))
+             |> Enum.take(4)
+           end) ==
+             "{:a, 1}\n{:b, 2}\n{:c, 3}\n{:a, 1}\n{:b, 2}\n{:c, 3}\n{:a, 1}\n{:b, 2}\n{:c, 3}\n{:a, 1}\n{:b, 2}\n{:c, 3}\n"
+  end
+
+  test "each_cons/3" do
+    assert capture_io(fn ->
+             ["a", "b", "c", "d", "e", "f", "g", "h", "i"]
+             |> REnum.each_cons(4, &IO.inspect(&1))
+           end) ==
+             "[\"a\", \"b\", \"c\", \"d\"]\n[\"b\", \"c\", \"d\", \"e\"]\n[\"c\", \"d\", \"e\", \"f\"]\n[\"d\", \"e\", \"f\", \"g\"]\n[\"e\", \"f\", \"g\", \"h\"]\n[\"f\", \"g\", \"h\", \"i\"]\n"
+
+    assert capture_io(fn ->
+             %{a: 1, b: 2, c: 3, d: 4, e: 5, f: 6}
+             |> REnum.each_cons(4, &IO.inspect(&1))
+           end) ==
+             "[a: 1, b: 2, c: 3, d: 4]\n[b: 2, c: 3, d: 4, e: 5]\n[c: 3, d: 4, e: 5, f: 6]\n"
+
+    assert capture_io(fn ->
+             1..10
+             |> REnum.each_cons(3, &(&1 |> to_string() |> IO.inspect()))
+           end) ==
+             "<<1, 2, 3>>\n<<2, 3, 4>>\n<<3, 4, 5>>\n<<4, 5, 6>>\n<<5, 6, 7>>\n<<6, 7, 8>>\n\"\\a\\b\\t\"\n\"\\b\\t\\n\"\n"
   end
 end

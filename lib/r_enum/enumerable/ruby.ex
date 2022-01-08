@@ -16,7 +16,7 @@ defmodule REnum.Enumerable.Ruby do
   # ✔ compact
   # ✔ cycle
   # ✔ detect
-  # each_cons
+  # ✔ each_cons
   # each_entry
   # each_slice
   # each_with_index
@@ -121,15 +121,31 @@ defmodule REnum.Enumerable.Ruby do
     |> cycle(n - 1, func)
   end
 
+  def each_cons(_, n, _) when n < 1, do: :ok
+
+  def each_cons(enumerable, n, func) do
+    if Enum.count(enumerable) >= n do
+      [_ | next_els] = enumerable |> Enum.to_list()
+
+      enumerable
+      |> Enum.take(n)
+      |> func.()
+
+      each_cons(next_els, n, func)
+    end
+
+    :ok
+  end
+
   # aliases
 
-  defdelegate detect(enumerable, default, fun), to: Enum, as: :find
-  defdelegate detect(enumerable, fun), to: Enum, as: :find
-  defdelegate select(enumerable, fun), to: Enum, as: :filter
-  defdelegate find_all(enumerable, fun), to: Enum, as: :filter
-  defdelegate inject(enumerable, acc, fun), to: Enum, as: :reduce
-  defdelegate inject(enumerable, fun), to: Enum, as: :reduce
-  defdelegate collect(enumerable, fun), to: Enum, as: :map
-  defdelegate include?(enumerable, fun), to: Enum, as: :member?
-  defdelegate collect_concat(enumerable, fun), to: Enum, as: :flat_map
+  defdelegate detect(enumerable, default, func), to: Enum, as: :find
+  defdelegate detect(enumerable, func), to: Enum, as: :find
+  defdelegate select(enumerable, func), to: Enum, as: :filter
+  defdelegate find_all(enumerable, func), to: Enum, as: :filter
+  defdelegate inject(enumerable, acc, func), to: Enum, as: :reduce
+  defdelegate inject(enumerable, func), to: Enum, as: :reduce
+  defdelegate collect(enumerable, func), to: Enum, as: :map
+  defdelegate include?(enumerable, func), to: Enum, as: :member?
+  defdelegate collect_concat(enumerable, func), to: Enum, as: :flat_map
 end
