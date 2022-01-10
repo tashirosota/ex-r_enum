@@ -30,7 +30,7 @@ defmodule REnum.Enumerable.Ruby do
   # grep_v
   # ✔ include?
   # ✔ inject
-  # lazy
+  # ✔ lazy
   # ✔ minmax
   # ✔ minmax_by
   # ✔ none?
@@ -195,6 +195,12 @@ defmodule REnum.Enumerable.Ruby do
     if(Enum.count(enumerable) > next_start_index) do
       each_slice(enumerable, next_start_index, amount, func)
     end
+  end
+
+  def lazy(enumerable) do
+    enumerable
+    |> chain([])
+    |> Stream.take(Enum.count(enumerable))
   end
 
   # aliases

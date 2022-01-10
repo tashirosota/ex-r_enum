@@ -435,4 +435,12 @@ defmodule REnum.Enumerable.RubyTest do
                {:no_min, :no_max}
              end)
   end
+
+  test "lazy/1" do
+    assert REnum.lazy([1, 2, 3]) |> Enum.to_list() == [1, 2, 3]
+    assert REnum.lazy(1..3) |> Enum.to_list() == [1, 2, 3]
+    assert REnum.lazy(1..3) |> Enum.to_list() == [1, 2, 3]
+    assert REnum.lazy(%{a: 1, b: 2}) |> Enum.to_list() == [{:a, 1}, {:b, 2}]
+    assert REnum.lazy([1, 2, 3]).__struct__ == Stream
+  end
 end
