@@ -10,16 +10,16 @@ defmodule REnum.Enumerable.Ruby do
   #   |> Keyword.keys()
   #   |> Enum.find(&(&1 == method))
   # end)
-  # chain
+  # ✔ chain
   # ✔ collect
   # ✔ collect_concat
   # ✔ compact
   # ✔ cycle
   # ✔ detect
   # ✔ each_cons
-  # each_entry
-  # each_slice
-  # each_with_index
+  # ✔ each_entry
+  # ✔ each_slice
+  # ✔ each_with_index
   # ✔ each_with_object
   # ✔ entries
   # ✔ find_all
@@ -92,18 +92,6 @@ defmodule REnum.Enumerable.Ruby do
     truthy_count(enumerable, func) == 0
   end
 
-  defp truthy_count(enumerable) do
-    enumerable
-    |> Enum.filter(& &1)
-    |> Enum.count()
-  end
-
-  defp truthy_count(enumerable, func) when is_function(func) do
-    enumerable
-    |> Enum.filter(func)
-    |> Enum.count()
-  end
-
   def cycle(enumerable, n, func) when is_nil(n) do
     Stream.repeatedly(fn ->
       enumerable
@@ -173,6 +161,40 @@ defmodule REnum.Enumerable.Ruby do
     Map.new(enumerable, func)
   end
 
+  def chain(enumerable_1, enumerable_2) do
+    Stream.concat([enumerable_1, enumerable_2])
+  end
+
+  def each_entry(enumerable, func) do
+    enumerable
+    |> Enum.each(func)
+
+    enumerable
+  end
+
+  def each_slice(enumerable, amount, func) do
+    enumerable
+    |> each_slice(
+      0,
+      amount,
+      func
+    )
+
+    enumerable
+  end
+
+  defp each_slice(enumerable, start_index, amount, func) do
+    enumerable
+    |> Enum.slice(start_index, amount)
+    |> func.()
+
+    next_start_index = start_index + amount
+
+    if(Enum.count(enumerable) > next_start_index) do
+      each_slice(enumerable, next_start_index, amount, func)
+    end
+  end
+
   # aliases
 
   defdelegate detect(enumerable, default, func), to: Enum, as: :find
@@ -187,6 +209,8 @@ defmodule REnum.Enumerable.Ruby do
   defdelegate entries(enumerable), to: __MODULE__, as: :to_a
   # TODO: add info
   defdelegate each_with_object(enumerable, object, func), to: Enum, as: :reduce
+  defdelegate each_with_index(enumerable, func), to: Enum, as: :with_index
+  defdelegate each_with_index(enumerable), to: Enum, as: :with_index
 
   # support
   def range?(_.._), do: true
@@ -194,5 +218,17 @@ defmodule REnum.Enumerable.Ruby do
 
   def is_list_and_not_keyword?(enumerable) do
     !Keyword.keyword?(enumerable) && is_list(enumerable)
+  end
+
+  def truthy_count(enumerable) do
+    enumerable
+    |> Enum.filter(& &1)
+    |> Enum.count()
+  end
+
+  def truthy_count(enumerable, func) when is_function(func) do
+    enumerable
+    |> Enum.filter(func)
+    |> Enum.count()
   end
 end

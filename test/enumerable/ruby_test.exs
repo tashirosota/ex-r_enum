@@ -317,4 +317,48 @@ defmodule REnum.Enumerable.RubyTest do
     assert REnum.is_list_and_not_keyword?(a: 1, b: 2) == false
     assert REnum.is_list_and_not_keyword?([1, 2, 3]) == true
   end
+
+  test "chain/2" do
+    assert REnum.chain([1, 2, 3], [4, 5]) |> Enum.to_list() == [1, 2, 3, 4, 5]
+    assert REnum.chain(1..3, [4, 5]) |> Enum.to_list() == [1, 2, 3, 4, 5]
+    assert REnum.chain(1..3, 1..3) |> Enum.to_list() == [1, 2, 3, 1, 2, 3]
+    assert REnum.chain(%{a: 1, b: 2}, 1..3) |> Enum.to_list() == [{:a, 1}, {:b, 2}, 1, 2, 3]
+  end
+
+  test "each_entry/1" do
+    list = ["a", "b", "c"]
+
+    assert capture_io(fn ->
+             REnum.each_entry(list, &IO.puts(&1))
+           end) == "a\nb\nc\n"
+
+    assert REnum.each_entry(list, &to_string(&1)) == list
+  end
+
+  test "each_slice/1" do
+    list = ["a", "b", "c", "d", "e", "f", "g"]
+
+    assert capture_io(fn ->
+             REnum.each_slice(list, 3, &IO.inspect(&1))
+           end) == "[\"a\", \"b\", \"c\"]\n[\"d\", \"e\", \"f\"]\n[\"g\"]\n"
+
+    assert REnum.each_slice(list, 3, &to_string(&1)) == list
+
+    map = %{a: 1, b: 2, c: 3, d: 4, e: 5, f: 6}
+
+    assert capture_io(fn ->
+             REnum.each_slice(map, 2, &IO.inspect(&1))
+           end) == "[a: 1, b: 2]\n[c: 3, d: 4]\n[e: 5, f: 6]\n"
+
+    assert REnum.each_slice(map, 3, &Enum.to_list(&1)) == map
+  end
+
+  test "with_index/2" do
+    assert REnum.each_with_index([]) == Enum.with_index([])
+    assert REnum.each_with_index([1, 2, 3]) == Enum.with_index([1, 2, 3])
+    assert REnum.each_with_index([1, 2, 3], 10) == Enum.with_index([1, 2, 3], 10)
+
+    assert REnum.each_with_index([1, 2, 3], fn element, index -> {index, element} end) ==
+             Enum.with_index([1, 2, 3], fn element, index -> {index, element} end)
+  end
 end
