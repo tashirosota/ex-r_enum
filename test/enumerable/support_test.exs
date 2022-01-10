@@ -1,6 +1,5 @@
 defmodule REnum.Enumerable.SupportTest do
   use ExUnit.Case
-  import ExUnit.CaptureIO
   doctest REnum.Enumerable.Support
 
   test "range?/1" do

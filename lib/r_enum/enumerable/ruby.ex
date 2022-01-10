@@ -37,7 +37,7 @@ defmodule REnum.Enumerable.Ruby do
   # ✔ one?
   # ✔ reverse_each
   # ✔ select
-  # slice_after
+  # ✔ slice_after
   # slice_before
   # slice_when
   # tally
@@ -201,6 +201,33 @@ defmodule REnum.Enumerable.Ruby do
     enumerable
     |> chain([])
     |> Stream.take(Enum.count(enumerable))
+  end
+
+  def slice_after(enumerable, func) when is_function(func) do
+    if(Enum.count(enumerable) < 1) do
+      enumerable
+    else
+      index =
+        enumerable
+        |> Enum.find_index(func) ||
+          Enum.count(enumerable)
+
+      [Enum.slice(enumerable, 0..index)] ++
+        slice_after(
+          Enum.slice(enumerable, (index + 1)..Enum.count(enumerable)),
+          func
+        )
+    end
+  end
+
+  def slice_after(enumerable, object) do
+    if(Regex.regex?(object)) do
+      func = &(&1 =~ object)
+      slice_after(enumerable, func)
+    else
+      func = &(&1 == object)
+      slice_after(enumerable, func)
+    end
   end
 
   # aliases

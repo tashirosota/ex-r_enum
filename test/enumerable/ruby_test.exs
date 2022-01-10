@@ -443,4 +443,21 @@ defmodule REnum.Enumerable.RubyTest do
     assert REnum.lazy(%{a: 1, b: 2}) |> Enum.to_list() == [{:a, 1}, {:b, 2}]
     assert REnum.lazy([1, 2, 3]).__struct__ == Stream
   end
+
+  test "slice_after/2" do
+    assert REnum.slice_after([0, 2, 4, 1, 2, 4, 5, 3, 1, 4, 2], &(rem(&1, 2) == 0)) ==
+             [[0], [2], [4], [1, 2], [4], [5, 3, 1, 4], [2]]
+
+    assert REnum.slice_after([0, 2, 4, 1, 2, 4, 5, 3, 1, 4, 2], &(rem(&1, 2) != 0)) ==
+             [[0, 2, 4, 1], [2, 4, 5], [3], [1], [4, 2]]
+
+    assert REnum.slice_after(%{a: 1, b: 2, c: 3}, &(&1 == {:b, 2})) ==
+             [[a: 1, b: 2], [c: 3]]
+
+    assert REnum.slice_after([a: 1, b: 2, c: 3], &(&1 != {:a, 1})) ==
+             [[{:a, 1}, {:b, 2}], [{:c, 3}]]
+
+    assert REnum.slice_after(["1", "2", "3"], ~r/2/) == [["1", "2"], ["3"]]
+    assert REnum.slice_after([1, 2, 3], 2) == [[1, 2], [3]]
+  end
 end
