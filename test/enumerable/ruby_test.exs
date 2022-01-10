@@ -225,4 +225,96 @@ defmodule REnum.Enumerable.RubyTest do
            end) ==
              "<<1, 2, 3>>\n<<2, 3, 4>>\n<<3, 4, 5>>\n<<4, 5, 6>>\n<<5, 6, 7>>\n<<6, 7, 8>>\n\"\\a\\b\\t\"\n\"\\b\\t\\n\"\n"
   end
+
+  test "to_a/1" do
+    assert REnum.to_a([1, 2, 3]) == [1, 2, 3]
+
+    assert REnum.to_a(%{:a => 1, 1 => :a, 3 => :b, :b => 5}) == [
+             [1, :a],
+             [3, :b],
+             [:a, 1],
+             [:b, 5]
+           ]
+
+    assert REnum.to_a(%{a: 1, b: 2, c: 2, d: 4}) == [[:a, 1], [:b, 2], [:c, 2], [:d, 4]]
+    assert REnum.to_a(a: 1, b: 2, c: 2, d: 4) == [{:a, 1}, {:b, 2}, {:c, 2}, {:d, 4}]
+    range = 0..5
+    assert REnum.to_a(range) == [0, 1, 2, 3, 4, 5]
+  end
+
+  test "entries/1" do
+    assert REnum.entries([1, 2, 3]) == REnum.to_a([1, 2, 3])
+
+    assert REnum.entries(%{:a => 1, 1 => :a, 3 => :b, :b => 5}) ==
+             REnum.to_a(%{:a => 1, 1 => :a, 3 => :b, :b => 5})
+
+    assert REnum.entries(%{a: 1, b: 2, c: 2, d: 4}) == REnum.to_a(%{a: 1, b: 2, c: 2, d: 4})
+    assert REnum.entries(a: 1, b: 2, c: 2, d: 4) == REnum.to_a(a: 1, b: 2, c: 2, d: 4)
+    range = 0..5
+    assert REnum.entries(range) == REnum.to_a(range)
+  end
+
+  test "range?/1" do
+    assert REnum.range?([1, 2, 3]) == false
+    assert REnum.range?(0..5) == true
+    assert REnum.range?(%{a: 1, b: 2, c: 2, d: 4}) == false
+  end
+
+  test "reverse_each/2" do
+    assert capture_io(fn ->
+             ["a", "b", "c", "d", "e", "f", "g", "h", "i"]
+             |> REnum.reverse_each(&IO.inspect(&1))
+           end) ==
+             "\"i\"\n\"h\"\n\"g\"\n\"f\"\n\"e\"\n\"d\"\n\"c\"\n\"b\"\n\"a\"\n"
+
+    assert capture_io(fn ->
+             %{a: 1, b: 2, c: 3, d: 4, e: 5, f: 6}
+             |> REnum.reverse_each(&IO.inspect(&1))
+           end) ==
+             "{:f, 6}\n{:e, 5}\n{:d, 4}\n{:c, 3}\n{:b, 2}\n{:a, 1}\n"
+
+    assert capture_io(fn ->
+             1..10
+             |> REnum.reverse_each(&(&1 |> to_string() |> IO.inspect()))
+           end) ==
+             "\"10\"\n\"9\"\n\"8\"\n\"7\"\n\"6\"\n\"5\"\n\"4\"\n\"3\"\n\"2\"\n\"1\"\n"
+  end
+
+  test "each_with_object/3" do
+    assert REnum.each_with_object([1, 2, 3], 0, fn n, num -> num + n end) == 6
+
+    assert REnum.each_with_object([1, 2, 3], %{}, fn n, map -> Map.put(map, n, n) end) == %{
+             1 => 1,
+             2 => 2,
+             3 => 3
+           }
+
+    assert REnum.each_with_object([1, 2, 3], [], fn n, list -> list ++ [n * 2] end) == [2, 4, 6]
+  end
+
+  describe "to_h" do
+    test "to_h/1" do
+      assert REnum.to_h([[:a, 1], [:b, 2]]) == %{a: 1, b: 2}
+      assert REnum.to_h(a: 1, b: 2) == %{a: 1, b: 2}
+      assert REnum.to_h(%{a: 1, b: 2}) == %{a: 1, b: 2}
+      assert REnum.to_h(MapSet.new(a: 1, b: 2, a: 3)) == %{b: 2, a: 3}
+    end
+
+    test "to_h/2" do
+      assert REnum.to_h([[:a, 1], [:b, 2]], fn el ->
+               {Enum.at(el, 0), Enum.at(el, 1)}
+             end) == %{a: 1, b: 2}
+
+      transformer = fn {key, value} -> {key, value * 2} end
+      assert REnum.to_h(%{a: 1, b: 2}, transformer) == %{a: 2, b: 4}
+      assert REnum.to_h(MapSet.new(a: 1, b: 2, a: 3), transformer) == %{b: 4, a: 6}
+    end
+  end
+
+  test "is_list_and_not_keyword?/1" do
+    assert REnum.is_list_and_not_keyword?(%{a: 1, b: 2}) == false
+    assert REnum.is_list_and_not_keyword?(0..5) == false
+    assert REnum.is_list_and_not_keyword?(a: 1, b: 2) == false
+    assert REnum.is_list_and_not_keyword?([1, 2, 3]) == true
+  end
 end

@@ -20,8 +20,8 @@ defmodule REnum.Enumerable.Ruby do
   # each_entry
   # each_slice
   # each_with_index
-  # each_with_object
-  # entries
+  # ✔ each_with_object
+  # ✔ entries
   # ✔ find_all
   # ✔ first
   # grep
@@ -33,14 +33,14 @@ defmodule REnum.Enumerable.Ruby do
   # minmax_by
   # ✔ none?
   # ✔ one?
-  # reverse_each
+  # ✔ reverse_each
   # ✔ select
   # slice_after
   # slice_before
   # slice_when
   # tally
-  # to_a
-  # to_h
+  # ✔ to_a
+  # ✔ to_h
 
   def compact(enumerable) when is_list(enumerable) do
     enumerable
@@ -137,6 +137,42 @@ defmodule REnum.Enumerable.Ruby do
     :ok
   end
 
+  def to_a(enumerable) do
+    cond do
+      range?(enumerable) ->
+        enumerable |> Enum.to_list()
+
+      is_map(enumerable) ->
+        enumerable
+        |> Enum.map(fn {k, v} ->
+          [k, v]
+        end)
+
+      true ->
+        enumerable |> Enum.to_list()
+    end
+  end
+
+  def reverse_each(enumerable, func) do
+    enumerable
+    |> Enum.reverse()
+    |> Enum.each(func)
+  end
+
+  def to_h(enumerable) do
+    if(is_list_and_not_keyword?(enumerable)) do
+      enumerable
+      |> Enum.map(&{Enum.at(&1, 0), Enum.at(&1, 1)})
+      |> Map.new()
+    else
+      Map.new(enumerable)
+    end
+  end
+
+  def to_h(enumerable, func) do
+    Map.new(enumerable, func)
+  end
+
   # aliases
 
   defdelegate detect(enumerable, default, func), to: Enum, as: :find
@@ -148,4 +184,15 @@ defmodule REnum.Enumerable.Ruby do
   defdelegate collect(enumerable, func), to: Enum, as: :map
   defdelegate include?(enumerable, func), to: Enum, as: :member?
   defdelegate collect_concat(enumerable, func), to: Enum, as: :flat_map
+  defdelegate entries(enumerable), to: __MODULE__, as: :to_a
+  # TODO: add info
+  defdelegate each_with_object(enumerable, object, func), to: Enum, as: :reduce
+
+  # support
+  def range?(_.._), do: true
+  def range?(_), do: false
+
+  def is_list_and_not_keyword?(enumerable) do
+    !Keyword.keyword?(enumerable) && is_list(enumerable)
+  end
 end
