@@ -31,8 +31,8 @@ defmodule REnum.Enumerable.Ruby do
   # ✔ include?
   # ✔ inject
   # lazy
-  # minmax
-  # minmax_by
+  # ✔ minmax
+  # ✔ minmax_by
   # ✔ none?
   # ✔ one?
   # ✔ reverse_each
@@ -213,4 +213,9 @@ defmodule REnum.Enumerable.Ruby do
   defdelegate each_with_object(enumerable, object, func), to: Enum, as: :reduce
   defdelegate each_with_index(enumerable, func), to: Enum, as: :with_index
   defdelegate each_with_index(enumerable), to: Enum, as: :with_index
+  defdelegate minmax(enumerable), to: Enum, as: :min_max
+  defdelegate minmax(enumerable, func), to: Enum, as: :min_max
+  defdelegate minmax_by(enumerable, func), to: Enum, as: :min_max_by
+  defdelegate minmax_by(enumerable, func1, func2), to: Enum, as: :min_max_by
+  defdelegate minmax_by(enumerable, func1, func2, func3), to: Enum, as: :min_max_by
 end
