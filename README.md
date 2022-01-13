@@ -50,6 +50,33 @@ And more functions. [See also](https://hexdocs.pm/r_enum)
 
 See **[hexdocs](https://hexdocs.pm/r_enum)**.
 
+## Roadmap
+
+- [x] 0.1.0
+  - REnum.Enumerable.Native
+  - REnum.Enumerable.Ruby
+  - REnum.Enumerable.Support
+  - REnum.List.Native
+  - REnum.Map.Native
+  - REnum.Range.Native
+  - REnum.Stream.Native
+  - REnum.Utils
+- [ ] 0.2.0
+  - REnum.Enumerable.ActiveSupport
+- [ ] 0.3.0
+  - REnum.List.Ruby
+- [ ] 0.4.0
+  - REnum.List.ActiveSupport
+- [ ] 0.5.0
+  - REnum.Map.Ruby
+  - REnum.Map.ActiveSupport
+- [ ] 0.6.0
+  - REnum.Range.Ruby
+  - REnum.Range.ActiveSupport
+- [ ] 0.7.0
+  - REnum.Stream.Ruby
+  - REnum.Stream.ActiveSupport
+
 ## Implementation Progress
 
 | REnum        | Elixir Module | Ruby Class       | Elixir | Ruby | ActiveSupport |
