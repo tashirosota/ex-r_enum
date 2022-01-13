@@ -224,18 +224,18 @@ defmodule REnum.Enumerable.Ruby do
   @doc """
   Calls the function with each successive overlapped n-list of elements; returns given enumerable.
   ## Examples
-      iex> list = ["a", "b", "c", "d", "e"]
+      iex> ["a", "b", "c", "d", "e"]
       iex> |> REnum.each_cons(3, &IO.inspect(&1))
       # ["a", "b", "c"]
       # ["b", "c", "d"]
       # ["c", "d", "e"]
-      list
-      iex> map = %{a: 1, b: 2, c: 3, d: 4, e: 5, f: 6}
+      ["a", "b", "c", "d", "e"]
+      iex> %{a: 1, b: 2, c: 3, d: 4, e: 5, f: 6}
       iex> |> REnum.each_cons(4, &IO.inspect(&1))
       # [a: 1, b: 2, c: 3, d: 4]
       # [b: 2, c: 3, d: 4, e: 5]
       # [c: 3, d: 4, e: 5, f: 6]
-      map
+      %{a: 1, b: 2, c: 3, d: 4, e: 5, f: 6}
   """
   @spec each_cons(type_enumerable, integer(), function()) :: type_enumerable
   def each_cons(enumerable, n, _) when n < 1, do: enumerable

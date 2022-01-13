@@ -1,4 +1,4 @@
-defmodule REnum.StreamTest do
+defmodule REnum.Stream.NativeTest do
   use ExUnit.Case, async: true
 
   doctest REnum.Stream.Native

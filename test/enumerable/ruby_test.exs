@@ -149,22 +149,8 @@ defmodule REnum.Enumerable.RubyTest do
   end
 
   test "include?/2" do
-    assert REnum.include?(1..3, 2)
-    refute REnum.include?(1..3, 0)
-
-    assert REnum.include?(1..9//2, 1)
-    assert REnum.include?(1..9//2, 9)
-    refute REnum.include?(1..9//2, 10)
-    refute REnum.include?(1..10//2, 10)
-    assert REnum.include?(1..2//2, 1)
-    refute REnum.include?(1..2//2, 2)
-
-    assert REnum.include?(-1..-9//-2, -1)
-    assert REnum.include?(-1..-9//-2, -9)
-    refute REnum.include?(-1..-9//-2, -8)
-
-    refute REnum.include?(1..0//1, 1)
-    refute REnum.include?(0..1//-1, 1)
+    assert REnum.include?(1..3, 2) == REnum.member?(1..3, 2)
+    assert REnum.include?(1..3, 0) == REnum.member?(1..3, 0)
   end
 
   test "collect_concat/2" do

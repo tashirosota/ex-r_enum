@@ -7,7 +7,7 @@ defmodule REnum.MixProject do
     [
       app: :r_enum,
       version: @versoin,
-      elixir: "~> 1.11",
+      elixir: "~> 1.10",
       start_permanent: Mix.env() == :prod,
       description: @description,
       name: "REnum",
