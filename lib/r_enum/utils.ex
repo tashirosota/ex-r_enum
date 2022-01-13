@@ -1,4 +1,5 @@
 defmodule REnum.Utils do
+  @default_undelegate_functions [:__info__, :module_info, :"MACRO-__using__"]
   @moduledoc """
   Utils for REnum.
   """
@@ -6,10 +7,12 @@ defmodule REnum.Utils do
   Defines in the module that called all the functions of the argument module.
   """
   @spec define_all_functions!(module()) :: list
-  def define_all_functions!(mod) do
+  def define_all_functions!(mod, undelegate_functions \\ []) do
     enum_funs =
       mod.module_info()[:exports]
-      |> Enum.filter(fn {fun, _} -> fun not in [:__info__, :module_info, :"MACRO-__using__"] end)
+      |> Enum.filter(fn {fun, _} ->
+        fun not in (@default_undelegate_functions ++ undelegate_functions)
+      end)
 
     for {fun, arity} <- enum_funs do
       quote do

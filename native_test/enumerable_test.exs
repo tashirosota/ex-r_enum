@@ -97,16 +97,6 @@ defmodule REnum.Enumerable.NativeTest do
     assert REnum.at([2, 4, 6], -4) == nil
   end
 
-  test "chunk/3" do
-    enum = REnum
-    assert enum.chunk(1..5, 2, 1) == REnum.chunk_every(1..5, 2, 1, :discard)
-  end
-
-  test "chunk/4" do
-    enum = REnum
-    assert enum.chunk(1..5, 2, 1, nil) == REnum.chunk_every(1..5, 2, 1, :discard)
-  end
-
   test "chunk_every/2" do
     assert REnum.chunk_every([1, 2, 3, 4, 5], 2) == [[1, 2], [3, 4], [5]]
   end

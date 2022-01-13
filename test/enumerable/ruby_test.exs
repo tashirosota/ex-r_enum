@@ -16,12 +16,10 @@ defmodule REnum.Enumerable.RubyTest do
                :truthy => true,
                false => false,
                nil => nil,
-               nil => true,
                :map => %{key: :value}
              }) == %{
                :truthy => true,
                false => false,
-               nil => true,
                :map => %{key: :value}
              }
     end
