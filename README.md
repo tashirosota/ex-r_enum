@@ -6,7 +6,7 @@
 
 # REnum
 
-Extensions for and aliases Enumerable modules inspired by Ruby and Rails.ActiveSupport.
+Extensions and aliases for Enumerable modules inspired by Ruby and Rails.ActiveSupport.
 It also provides full support for native functions through metaprogramming.
 
 ## Installation
