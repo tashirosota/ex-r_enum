@@ -38,7 +38,7 @@ defmodule REnum.Enumerable.Ruby do
   # ✔ reverse_each
   # ✔ select
   # ✔ slice_after
-  # slice_before
+  # ✔ slice_before
   # slice_when
   # tally
   # ✔ to_a
@@ -225,6 +225,22 @@ defmodule REnum.Enumerable.Ruby do
       enumerable,
       match_function(pattern)
     )
+  end
+
+  def slice_before(enumerable, func) when is_function(func) do
+    enumerable
+    |> Enum.reverse()
+    |> slice_after(func)
+    |> Enum.reverse()
+    |> Enum.map(&Enum.reverse(&1))
+  end
+
+  def slice_before(enumerable, pattern) do
+    enumerable
+    |> Enum.reverse()
+    |> slice_after(match_function(pattern))
+    |> Enum.reverse()
+    |> Enum.map(&Enum.reverse(&1))
   end
 
   def grep(enumerable, func) when is_function(func) do
