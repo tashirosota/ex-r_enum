@@ -362,78 +362,86 @@ defmodule REnum.Enumerable.RubyTest do
              Enum.with_index([1, 2, 3], fn element, index -> {index, element} end)
   end
 
-  test "minmax/1" do
-    assert REnum.minmax([1]) == Enum.min_max([1])
-    assert REnum.minmax([2, 3, 1]) == Enum.min_max([2, 3, 1])
-    assert REnum.minmax([[], :a, {}]) == Enum.min_max([[], :a, {}])
+  describe "minmax" do
+    test "minmax/1" do
+      assert REnum.minmax([1]) == Enum.min_max([1])
+      assert REnum.minmax([2, 3, 1]) == Enum.min_max([2, 3, 1])
+      assert REnum.minmax([[], :a, {}]) == Enum.min_max([[], :a, {}])
 
-    assert REnum.minmax([1, 1.0]) === Enum.min_max([1, 1.0])
-    assert REnum.minmax([1.0, 1]) === Enum.min_max([1.0, 1])
+      assert REnum.minmax([1, 1.0]) === Enum.min_max([1, 1.0])
+      assert REnum.minmax([1.0, 1]) === Enum.min_max([1.0, 1])
 
-    assert_raise Enum.EmptyError, fn ->
-      REnum.min_max([])
+      assert_raise Enum.EmptyError, fn ->
+        REnum.min_max([])
+      end
+    end
+
+    test "minmax/2" do
+      assert REnum.minmax([1], fn -> nil end) == Enum.min_max([1], fn -> nil end)
+      assert REnum.minmax([2, 3, 1], fn -> nil end) == Enum.min_max([2, 3, 1], fn -> nil end)
+
+      assert REnum.minmax([[], :a, {}], fn -> nil end) ==
+               Enum.min_max([[], :a, {}], fn -> nil end)
+
+      assert REnum.min_max([], fn -> {:empty_min, :empty_max} end) ==
+               Enum.min_max([], fn -> {:empty_min, :empty_max} end)
+
+      assert REnum.min_max(%{}, fn -> {:empty_min, :empty_max} end) ==
+               Enum.min_max(%{}, fn -> {:empty_min, :empty_max} end)
     end
   end
 
-  test "minmax/2" do
-    assert REnum.minmax([1], fn -> nil end) == Enum.min_max([1], fn -> nil end)
-    assert REnum.minmax([2, 3, 1], fn -> nil end) == Enum.min_max([2, 3, 1], fn -> nil end)
-    assert REnum.minmax([[], :a, {}], fn -> nil end) == Enum.min_max([[], :a, {}], fn -> nil end)
+  describe "minmax_by" do
+    test "minmax_by/2" do
+      assert REnum.minmax_by(["aaa", "a", "aa"], fn x -> String.length(x) end) ==
+               Enum.min_max_by(["aaa", "a", "aa"], fn x -> String.length(x) end)
 
-    assert REnum.min_max([], fn -> {:empty_min, :empty_max} end) ==
-             Enum.min_max([], fn -> {:empty_min, :empty_max} end)
+      assert REnum.minmax_by([1, 1.0], & &1) === Enum.min_max_by([1, 1.0], & &1)
+      assert REnum.minmax_by([1.0, 1], & &1) === Enum.min_max_by([1.0, 1], & &1)
 
-    assert REnum.min_max(%{}, fn -> {:empty_min, :empty_max} end) ==
-             Enum.min_max(%{}, fn -> {:empty_min, :empty_max} end)
-  end
-
-  test "minmax_by/2" do
-    assert REnum.minmax_by(["aaa", "a", "aa"], fn x -> String.length(x) end) ==
-             Enum.min_max_by(["aaa", "a", "aa"], fn x -> String.length(x) end)
-
-    assert REnum.minmax_by([1, 1.0], & &1) === Enum.min_max_by([1, 1.0], & &1)
-    assert REnum.minmax_by([1.0, 1], & &1) === Enum.min_max_by([1.0, 1], & &1)
-
-    assert_raise Enum.EmptyError, fn ->
-      REnum.minmax_by([], fn x -> String.length(x) end)
+      assert_raise Enum.EmptyError, fn ->
+        REnum.minmax_by([], fn x -> String.length(x) end)
+      end
     end
-  end
 
-  test "min_max_by/3" do
-    assert REnum.minmax_by(["aaa", "a", "aa"], fn x -> String.length(x) end, fn -> nil end) ==
-             Enum.min_max_by(["aaa", "a", "aa"], fn x -> String.length(x) end, fn -> nil end)
+    test "min_max_by/3" do
+      assert REnum.minmax_by(["aaa", "a", "aa"], fn x -> String.length(x) end, fn -> nil end) ==
+               Enum.min_max_by(["aaa", "a", "aa"], fn x -> String.length(x) end, fn -> nil end)
 
-    assert REnum.minmax_by([], fn x -> String.length(x) end, fn -> {:no_min, :no_max} end) ==
-             Enum.min_max_by([], fn x -> String.length(x) end, fn -> {:no_min, :no_max} end)
+      assert REnum.minmax_by([], fn x -> String.length(x) end, fn -> {:no_min, :no_max} end) ==
+               Enum.min_max_by([], fn x -> String.length(x) end, fn -> {:no_min, :no_max} end)
 
-    assert REnum.minmax_by(%{}, fn x -> String.length(x) end, fn -> {:no_min, :no_max} end) ==
-             Enum.min_max_by(%{}, fn x -> String.length(x) end, fn -> {:no_min, :no_max} end)
+      assert REnum.minmax_by(%{}, fn x -> String.length(x) end, fn -> {:no_min, :no_max} end) ==
+               Enum.min_max_by(%{}, fn x -> String.length(x) end, fn -> {:no_min, :no_max} end)
 
-    assert REnum.minmax_by(["aaa", "a", "aa"], fn x -> String.length(x) end, &>/2) ==
-             Enum.min_max_by(["aaa", "a", "aa"], fn x -> String.length(x) end, &>/2)
-  end
+      assert REnum.minmax_by(["aaa", "a", "aa"], fn x -> String.length(x) end, &>/2) ==
+               Enum.min_max_by(["aaa", "a", "aa"], fn x -> String.length(x) end, &>/2)
+    end
 
-  test "min_max_by/4" do
-    users = [%{id: 1, date: ~D[2019-01-01]}, %{id: 2, date: ~D[2020-01-01]}]
+    test "min_max_by/4" do
+      users = [%{id: 1, date: ~D[2019-01-01]}, %{id: 2, date: ~D[2020-01-01]}]
 
-    assert REnum.minmax_by(users, & &1.date, Date) == Enum.min_max_by(users, & &1.date, Date)
+      assert REnum.minmax_by(users, & &1.date, Date) == Enum.min_max_by(users, & &1.date, Date)
 
-    assert REnum.minmax_by(["aaa", "a", "aa"], fn x -> String.length(x) end, &>/2, fn ->
-             nil
-           end) ==
-             Enum.min_max_by(["aaa", "a", "aa"], fn x -> String.length(x) end, &>/2, fn ->
+      assert REnum.minmax_by(["aaa", "a", "aa"], fn x -> String.length(x) end, &>/2, fn ->
                nil
-             end)
+             end) ==
+               Enum.min_max_by(["aaa", "a", "aa"], fn x -> String.length(x) end, &>/2, fn ->
+                 nil
+               end)
 
-    assert REnum.minmax_by([], fn x -> String.length(x) end, &>/2, fn -> {:no_min, :no_max} end) ==
-             Enum.min_max_by([], fn x -> String.length(x) end, &>/2, fn -> {:no_min, :no_max} end)
+      assert REnum.minmax_by([], fn x -> String.length(x) end, &>/2, fn -> {:no_min, :no_max} end) ==
+               Enum.min_max_by([], fn x -> String.length(x) end, &>/2, fn ->
+                 {:no_min, :no_max}
+               end)
 
-    assert REnum.minmax_by(%{}, fn x -> String.length(x) end, &>/2, fn ->
-             {:no_min, :no_max}
-           end) ==
-             Enum.min_max_by(%{}, fn x -> String.length(x) end, &>/2, fn ->
+      assert REnum.minmax_by(%{}, fn x -> String.length(x) end, &>/2, fn ->
                {:no_min, :no_max}
-             end)
+             end) ==
+               Enum.min_max_by(%{}, fn x -> String.length(x) end, &>/2, fn ->
+                 {:no_min, :no_max}
+               end)
+    end
   end
 
   test "lazy/1" do
@@ -459,5 +467,53 @@ defmodule REnum.Enumerable.RubyTest do
 
     assert REnum.slice_after(["1", "2", "3"], ~r/2/) == [["1", "2"], ["3"]]
     assert REnum.slice_after([1, 2, 3], 2) == [[1, 2], [3]]
+  end
+
+  describe "grep" do
+    test "grep/2" do
+      assert REnum.grep([0, 2, 4, 1, 2, 4, 5, 3, 1, 4, 2], 1) ==
+               [1, 1]
+
+      assert REnum.grep(1..10, 3..8) ==
+               [3, 4, 5, 6, 7, 8]
+
+      assert REnum.grep(["foo", "bar", "car", "moo"], ~r/ar/) ==
+               ["bar", "car"]
+    end
+
+    test "grep/3" do
+      assert REnum.grep([0, 2, 4, 1, 2, 4, 5, 3, 1, 4, 2], 1, &to_string(&1)) ==
+               ["1", "1"]
+
+      assert REnum.grep(1..10, 3..8, &to_string(&1)) ==
+               ["3", "4", "5", "6", "7", "8"]
+
+      assert REnum.grep(["foo", "bar", "car", "moo"], ~r/ar/, &String.upcase(&1)) ==
+               ["BAR", "CAR"]
+    end
+  end
+
+  describe "grep_v" do
+    test "grep_v/2" do
+      assert REnum.grep_v([0, 2, 4, 1, 2, 4, 5, 3, 1, 4, 2], 1) ==
+               [0, 2, 4, 2, 4, 5, 3, 4, 2]
+
+      assert REnum.grep_v(1..10, 3..8) ==
+               [1, 2, 9, 10]
+
+      assert REnum.grep_v(["foo", "bar", "car", "moo"], ~r/ar/) ==
+               ["foo", "moo"]
+    end
+
+    test "grep_v/3" do
+      assert REnum.grep_v([0, 2, 4, 1, 2, 4, 5, 3, 1, 4, 2], 1, &to_string(&1)) ==
+               ["0", "2", "4", "2", "4", "5", "3", "4", "2"]
+
+      assert REnum.grep_v(1..10, 3..8, &to_string(&1)) ==
+               ["1", "2", "9", "10"]
+
+      assert REnum.grep_v(["foo", "bar", "car", "moo"], ~r/ar/, &String.upcase(&1)) ==
+               ["FOO", "MOO"]
+    end
   end
 end

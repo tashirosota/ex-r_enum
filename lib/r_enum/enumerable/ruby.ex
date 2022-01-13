@@ -26,8 +26,8 @@ defmodule REnum.Enumerable.Ruby do
   # ✔ entries
   # ✔ find_all
   # ✔ first
-  # grep
-  # grep_v
+  # ✔ grep
+  # ✔ grep_v
   # ✔ include?
   # ✔ inject
   # ✔ lazy
@@ -228,6 +228,38 @@ defmodule REnum.Enumerable.Ruby do
       func = &(&1 == object)
       slice_after(enumerable, func)
     end
+  end
+
+  def grep(enumerable, func) when is_function(func) do
+    enumerable
+    |> select(func)
+  end
+
+  def grep(enumerable, pattern) do
+    cond do
+      Regex.regex?(pattern) -> grep(enumerable, &(&1 =~ pattern))
+      range?(pattern) -> grep(enumerable, &(&1 in pattern))
+      true -> grep(enumerable, &(&1 == pattern))
+    end
+  end
+
+  def grep(enumerable, pattern, func) do
+    enumerable
+    |> grep(pattern)
+    |> Enum.map(func)
+  end
+
+  def grep_v(enumerable, pattern) do
+    greped = enumerable |> grep(pattern)
+
+    enumerable
+    |> Enum.reject(&(&1 in greped))
+  end
+
+  def grep_v(enumerable, pattern, func) do
+    enumerable
+    |> grep_v(pattern)
+    |> Enum.map(func)
   end
 
   # aliases
