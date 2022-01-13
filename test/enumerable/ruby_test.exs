@@ -466,6 +466,7 @@ defmodule REnum.Enumerable.RubyTest do
              [[{:a, 1}, {:b, 2}], [{:c, 3}]]
 
     assert REnum.slice_after(["1", "2", "3"], ~r/2/) == [["1", "2"], ["3"]]
+    assert REnum.slice_after([1, 2, 3], 2..3) == [[1, 2], [3]]
     assert REnum.slice_after([1, 2, 3], 2) == [[1, 2], [3]]
   end
 

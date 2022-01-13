@@ -220,14 +220,11 @@ defmodule REnum.Enumerable.Ruby do
     end
   end
 
-  def slice_after(enumerable, object) do
-    if(Regex.regex?(object)) do
-      func = &(&1 =~ object)
-      slice_after(enumerable, func)
-    else
-      func = &(&1 == object)
-      slice_after(enumerable, func)
-    end
+  def slice_after(enumerable, pattern) do
+    slice_after(
+      enumerable,
+      match_function(pattern)
+    )
   end
 
   def grep(enumerable, func) when is_function(func) do
@@ -236,11 +233,10 @@ defmodule REnum.Enumerable.Ruby do
   end
 
   def grep(enumerable, pattern) do
-    cond do
-      Regex.regex?(pattern) -> grep(enumerable, &(&1 =~ pattern))
-      range?(pattern) -> grep(enumerable, &(&1 in pattern))
-      true -> grep(enumerable, &(&1 == pattern))
-    end
+    grep(
+      enumerable,
+      match_function(pattern)
+    )
   end
 
   def grep(enumerable, pattern, func) do

@@ -14,4 +14,13 @@ defmodule REnum.Enumerable.SupportTest do
     assert REnum.is_list_and_not_keyword?(a: 1, b: 2) == false
     assert REnum.is_list_and_not_keyword?([1, 2, 3]) == true
   end
+
+  test "match_function" do
+    assert REnum.match_function(1..3).(2) == true
+    assert REnum.match_function(1..3).(4) == false
+    assert REnum.match_function(3).(3) == true
+    assert REnum.match_function(3).(4) == false
+    assert REnum.match_function(~r/a/).("abc") == true
+    assert REnum.match_function(~r/a/).("bcd") == false
+  end
 end

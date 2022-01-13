@@ -21,4 +21,12 @@ defmodule REnum.Enumerable.Support do
     |> Enum.filter(func)
     |> Enum.count()
   end
+
+  def match_function(pattern) do
+    cond do
+      Regex.regex?(pattern) -> &(&1 =~ pattern)
+      range?(pattern) -> &(&1 in pattern)
+      true -> &(&1 == pattern)
+    end
+  end
 end
