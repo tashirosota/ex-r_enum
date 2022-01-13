@@ -22,8 +22,29 @@ end
 ## Usage
 
 ```elixir
- # TODO:
+# Many useful functions.
+iex> REnum.compact([1, nil, 2, 3])
+[1, 2, 3]
+iex> REnum.tally(~w(a c d b c a))
+%{"a" => 2, "c" => 2, "d" => 1, "b" => 1}
+iex> |> REnum.grep(["foo", "bar", "car", "moo"], ~r/ar/)
+["bar", "car"]
+iex> REnum.reverse_each([1, 2, 3], &IO.inspect(&1))
+# 3
+# 2
+# 1
+[1, 2, 3]
+# Aliases.
+iex> REnum.select([1, 2, 3], fn x -> rem(x, 2) == 0 end) == Enum.filter([1, 2, 3], fn x -> rem(x, 2) == 0 end)
+true
+# Can use Elixir's Enum functions too.
+iex> REnum.find([2, 3, 4], fn x -> rem(x, 2) == 1 end)
+3
+iex> REnum.sort([3, 2, 1])
+[1, 2, 3]
 ```
+
+And more functions. [See also](https://hexdocs.pm/r_enum)
 
 ## Docs
 
