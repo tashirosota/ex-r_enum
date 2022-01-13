@@ -77,12 +77,12 @@ See **[hexdocs](https://hexdocs.pm/r_enum)**.
   - REnum.Stream.Ruby
   - REnum.Stream.ActiveSupport
 
-## Implementation Progress
+## Progress
 
 | REnum        | Elixir Module | Ruby Class       | Elixir | Ruby | ActiveSupport |
 | ------------ | ------------- | ---------------- | :----: | :--: | :-----------: |
 | REnum        | Enum          | Enumerable       |   ◎    |  ◎   |       ×       |
-| REnum.List   | List          | Hash             |   ◎    |  ×   |       ×       |
-| REnum.Map    | Map           | List             |   ◎    |  ×   |       ×       |
+| REnum.List   | List          | Array            |   ◎    |  ×   |       ×       |
+| REnum.Map    | Map           | Hash             |   ◎    |  ×   |       ×       |
 | REnum.Range  | Range         | Range            |   ◎    |  ×   |       ×       |
 | REnum.Stream | Stream        | Enumerator::Lazy |   ◎    |  ×   |       ×       |
