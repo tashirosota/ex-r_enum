@@ -1,4 +1,9 @@
 defmodule REnum.Enumerable.Support do
+  @moduledoc """
+  Summarized other useful functions related to enumerable.
+  Defines all of here functions when `use REnum.Enumerable.Support`.
+  """
+  @spec __using__(any) :: list
   defmacro __using__(_opts) do
     REnum.Utils.define_all_functions!(__MODULE__)
   end
@@ -22,6 +27,11 @@ defmodule REnum.Enumerable.Support do
     |> Enum.count()
   end
 
+  def truthy_count(enumerable, pattern) do
+    enumerable
+    |> truthy_count(match_function(pattern))
+  end
+
   def match_function(pattern) do
     cond do
       Regex.regex?(pattern) -> &(&1 =~ pattern)
@@ -36,9 +46,9 @@ defmodule REnum.Enumerable.Support do
     |> find_index_with_index(func, 0)
   end
 
-  def find_index_with_index([], _, _), do: nil
+  defp find_index_with_index([], _, _), do: nil
 
-  def find_index_with_index([head | tail], func, index) do
+  defp find_index_with_index([head | tail], func, index) do
     if(func.(head, index)) do
       index
     else

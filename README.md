@@ -6,9 +6,7 @@
 
 # REnum
 
-**WIP**
-
-Extensions for Enumerable modules inspired by Ruby and Rails.ActiveSupport.
+Extensions for and aliases Enumerable modules inspired by Ruby and Rails.ActiveSupport.
 It also provides full support for native functions through metaprogramming.
 
 ## Installation
@@ -21,30 +19,22 @@ def deps do
 end
 ```
 
-**[docs](https://hexdocs.pm/r_enum)**
+## Usage
 
 ```elixir
  # TODO:
 ```
 
-## Implementation
+## Docs
 
-### Relation
+See **[hexdocs](https://hexdocs.pm/r_enum)**.
 
-| REnum        | Elixir | Ruby                           |
-| ------------ | ------ | ------------------------------ |
-| REnum        | Enum   | Enumerable                     |
-| REnum.List   | List   | Array                          |
-| REnum.Map    | Map    | Hash                           |
-| REnum.Range  | Range  | Range                          |
-| REnum.Stream | Stream | Enumerator（Enumerator::Lazy） |
+## Implementation Progress
 
-### Progress
-
-| REnum        | Native Elixir | Ruby | ActiveSupport |
-| ------------ | :-----------: | :--: | :-----------: |
-| REnum        |       ◎       |  ×   |       ×       |
-| REnum.List   |       ◎       |  ×   |       ×       |
-| REnum.Map    |       ◎       |  ×   |       ×       |
-| REnum.Range  |       ◎       |  ×   |       ×       |
-| REnum.Stream |       ◎       |  ×   |       ×       |
+| REnum        | Elixir Module | Ruby Class       | Elixir | Ruby | ActiveSupport |
+| ------------ | ------------- | ---------------- | :----: | :--: | :-----------: |
+| REnum        | Enum          | Enumerable       |   ◎    |  ◎   |       ×       |
+| REnum.List   | List          | Hash             |   ◎    |  ×   |       ×       |
+| REnum.Map    | Map           | List             |   ◎    |  ×   |       ×       |
+| REnum.Range  | Range         | Range            |   ◎    |  ×   |       ×       |
+| REnum.Stream | Stream        | Enumerator::Lazy |   ◎    |  ×   |       ×       |

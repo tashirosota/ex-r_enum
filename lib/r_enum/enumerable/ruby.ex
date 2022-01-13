@@ -1,4 +1,11 @@
 defmodule REnum.Enumerable.Ruby do
+  @moduledoc """
+  Summarized all of Ruby functions.
+  If a function with the same name already exists in Elixir, that is not implemented.
+  Also, the function that returns Enumerator in Ruby is customized each behavior on the characteristics.
+  Defines all of here functions when `use REnum.Enumerable.Ruby`.
+  """
+  @spec __using__(any) :: list
   defmacro __using__(_opts) do
     REnum.Utils.define_all_functions!(__MODULE__)
   end
@@ -44,6 +51,25 @@ defmodule REnum.Enumerable.Ruby do
   # ✔ to_a
   # ✔ to_h
 
+  @doc """
+  Returns an list of all non-nil elements.
+  ## Examples
+      iex> REnum.compact([1, nil, 2, 3])
+      [1, 2, 3]
+      iex> REnum.compact(%{
+      ...>        :truthy => true,
+      ...>        false => false,
+      ...>        nil => nil,
+      ...>        nil => true,
+      ...>        :map => %{key: :value}
+      ...>      })
+      %{
+          :truthy => true,
+          false => false,
+          nil => true,
+          :map => %{key: :value}
+        }
+  """
   def compact(enumerable) when is_list(enumerable) do
     enumerable
     |> Enum.reject(&(&1 |> is_nil()))
@@ -57,6 +83,14 @@ defmodule REnum.Enumerable.Ruby do
     |> Enum.into(%{})
   end
 
+  @doc """
+  Returns the first element.
+  ## Examples
+      iex> REnum.first([1, 2, 3])
+      1
+      iex> REnum.first(%{a: 1, b: 2})
+      [:a, 1]
+  """
   def first(enumerable) do
     result = Enum.at(enumerable, 0)
 
@@ -67,6 +101,14 @@ defmodule REnum.Enumerable.Ruby do
     end
   end
 
+  @doc """
+  Returns leading elements.
+  ## Examples
+      iex> REnum.first([1, 2, 3], 2)
+      [1, 2]
+      iex> REnum.first(%{a: 1, b: 2}, 2)
+      [[:a, 1], [:b, 2]]
+  """
   def first(enumerable, n) do
     0..(n - 1)
     |> Enum.with_index(fn _, index ->
@@ -82,16 +124,16 @@ defmodule REnum.Enumerable.Ruby do
     truthy_count(enumerable) == 1
   end
 
-  def one?(enumerable, func) when is_function(func) do
-    truthy_count(enumerable, func) == 1
+  def one?(enumerable, pattern_or_func) do
+    truthy_count(enumerable, pattern_or_func) == 1
   end
 
   def none?(enumerable) do
     truthy_count(enumerable) == 0
   end
 
-  def none?(enumerable, func) when is_function(func) do
-    truthy_count(enumerable, func) == 0
+  def none?(enumerable, pattern_or_func) do
+    truthy_count(enumerable, pattern_or_func) == 0
   end
 
   def cycle(enumerable, n, func) when is_nil(n) do

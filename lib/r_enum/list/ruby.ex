@@ -1,14 +1,9 @@
 defmodule REnum.List.Ruby do
+  @moduledoc """
+  Unimplemented.
+  """
+  @spec __using__(any) :: list
   defmacro __using__(_opts) do
-    #   enum_funs = Enum.module_info()[:exports]
-    #            |> Enum.filter(fn {fun, _} -> fun not in [:__info__, :module_info] end)
-
-    #   for {fun, arity} <- enum_funs do
-    #     quote do
-    #       defdelegate unquote(fun)(unquote_splicing(REnum.Utils.make_args(arity))), to: REnum.List.Ruby
-    #     end
-    #   end
+    REnum.Utils.define_all_functions!(__MODULE__)
   end
-
-  # TODO:
 end
