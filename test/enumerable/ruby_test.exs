@@ -122,9 +122,10 @@ defmodule REnum.Enumerable.RubyTest do
       assert REnum.one?([]) == false
     end
 
-    test "one?/2 when is_function" do
+    test "one?/2" do
       assert REnum.one?(1..4, &(&1 < 2)) == true
       assert REnum.one?(1..4, &(&1 < 1)) == false
+      assert REnum.one?(1..4, 1..2) == false
       assert REnum.one?(%{foo: 0, bar: 1, baz: 2}, fn {_, v} -> v < 1 end) == true
       assert REnum.one?(%{foo: 0, bar: 1, baz: 2}, fn {_, v} -> v < 2 end) == false
     end

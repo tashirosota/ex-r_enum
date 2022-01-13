@@ -10,6 +10,9 @@ defmodule REnum.Enumerable.Ruby do
     REnum.Utils.define_all_functions!(__MODULE__)
   end
 
+  @type type_enumerable :: Enumerable.t()
+  @type type_pattern :: number() | String.t() | Range.t() | Regex.t()
+
   import REnum.Enumerable.Support
 
   # https://ruby-doc.org/core-3.1.0/Enumerable.html
@@ -70,6 +73,7 @@ defmodule REnum.Enumerable.Ruby do
           :map => %{key: :value}
         }
   """
+  @spec compact(type_enumerable) :: type_enumerable
   def compact(enumerable) when is_list(enumerable) do
     enumerable
     |> Enum.reject(&(&1 |> is_nil()))
@@ -91,6 +95,7 @@ defmodule REnum.Enumerable.Ruby do
       iex> REnum.first(%{a: 1, b: 2})
       [:a, 1]
   """
+  @spec first(type_enumerable) :: any()
   def first(enumerable) do
     result = Enum.at(enumerable, 0)
 
@@ -109,6 +114,7 @@ defmodule REnum.Enumerable.Ruby do
       iex> REnum.first(%{a: 1, b: 2}, 2)
       [[:a, 1], [:b, 2]]
   """
+  @spec first(type_enumerable) :: type_enumerable()
   def first(enumerable, n) do
     0..(n - 1)
     |> Enum.with_index(fn _, index ->
@@ -120,22 +126,84 @@ defmodule REnum.Enumerable.Ruby do
     end)
   end
 
+  @doc """
+  Return true if enumerable has only one truthy element; false otherwise.
+  ## Examples
+      iex> REnum.one?([1, nil, false])
+      true
+      iex> REnum.one?(1..4)
+      false
+  """
+  @spec one?(type_enumerable) :: boolean()
   def one?(enumerable) do
     truthy_count(enumerable) == 1
   end
 
+  @doc """
+  Returns true if exactly one element meets a specified criterion; false otherwise.
+  ## Examples
+      iex> REnum.one?(1..4, 1..2)
+      false
+      iex> REnum.one?(1..4, &(&1 < 2))
+      true
+      iex> REnum.one?(1..4, 1)
+      true
+  """
+  @spec one?(type_enumerable, function() | type_pattern) :: boolean()
   def one?(enumerable, pattern_or_func) do
     truthy_count(enumerable, pattern_or_func) == 1
   end
 
+  @doc """
+  Returns true if enumerable does not include truthy value; false otherwise.
+  ## Examples
+      iex> REnum.none?(1..4)
+      false
+      iex> REnum.none?([nil, false])
+      true
+      iex> REnum.none?([foo: 0, bar: 1])
+      false
+  """
+  @spec none?(type_enumerable) :: boolean()
   def none?(enumerable) do
     truthy_count(enumerable) == 0
   end
 
+  @doc """
+  Returns whether no element meets a given criterion.
+  ## Examples
+      iex> REnum.none?(1..4, &(&1 < 1))
+      true
+      iex> REnum.none?(%{foo: 0, bar: 1, baz: 2}, fn {_, v} -> v < 0 end)
+      true
+      iex> REnum.none?(1..4, 5)
+      true
+      iex> REnum.none?(1..4, 2..3)
+      false
+  """
+  @spec none?(type_enumerable, function() | type_pattern) :: boolean()
   def none?(enumerable, pattern_or_func) do
     truthy_count(enumerable, pattern_or_func) == 0
   end
 
+  @doc """
+  When called with positive integer argument n and a function, calls the block with each element, then does so again, until it has done so n times; returns given enumerable
+  When called with a function and n is nil, returns Stream cycled forever.
+  ## Examples
+      iex> REnum.cycle(["a", "b"], 2, &IO.puts(&1))
+      # a
+      # b
+      # a
+      # b
+      ["a", "b"]
+      iex> REnum.cycle(%{a: 1, b: 2}, nil, &IO.inspect(&1)) |> Enum.take(2)
+      # {:a, 1}
+      # {:b, 2}
+      # {:a, 1}
+      # {:b, 2}
+      [:ok, :ok]
+  """
+  @spec cycle(type_enumerable, non_neg_integer(), function()) :: Stream | type_enumerable
   def cycle(enumerable, n, func) when is_nil(n) do
     Stream.repeatedly(fn ->
       enumerable
@@ -143,7 +211,7 @@ defmodule REnum.Enumerable.Ruby do
     end)
   end
 
-  def cycle(_, n, _) when n < 1, do: :ok
+  def cycle(enumerable, n, _) when n < 1, do: enumerable
 
   def cycle(enumerable, n, func) do
     enumerable
@@ -153,7 +221,24 @@ defmodule REnum.Enumerable.Ruby do
     |> cycle(n - 1, func)
   end
 
-  def each_cons(_, n, _) when n < 1, do: :ok
+  @doc """
+  Calls the function with each successive overlapped n-list of elements; returns given enumerable.
+  ## Examples
+      iex> list = ["a", "b", "c", "d", "e"]
+      iex> |> REnum.each_cons(3, &IO.inspect(&1))
+      # ["a", "b", "c"]
+      # ["b", "c", "d"]
+      # ["c", "d", "e"]
+      list
+      iex> map = %{a: 1, b: 2, c: 3, d: 4, e: 5, f: 6}
+      iex> |> REnum.each_cons(4, &IO.inspect(&1))
+      # [a: 1, b: 2, c: 3, d: 4]
+      # [b: 2, c: 3, d: 4, e: 5]
+      # [c: 3, d: 4, e: 5, f: 6]
+      map
+  """
+  @spec each_cons(type_enumerable, integer(), function()) :: type_enumerable
+  def each_cons(enumerable, n, _) when n < 1, do: enumerable
 
   def each_cons(enumerable, n, func) do
     if Enum.count(enumerable) >= n do
@@ -166,9 +251,27 @@ defmodule REnum.Enumerable.Ruby do
       each_cons(next_els, n, func)
     end
 
-    :ok
+    enumerable
   end
 
+  @doc """
+  Returns all elements.
+  ## Examples
+      iex> REnum.to_a([1, 2, 3])
+      [1, 2, 3]
+      iex> REnum.to_a(%{:a => 1, 1 => :a, 3 => :b, :b => 5})
+      [
+        [1, :a],
+        [3, :b],
+        [:a, 1],
+        [:b, 5]
+      ]
+      iex> REnum.to_a(0..5)
+      [0, 1, 2, 3, 4, 5]
+      iex> REnum.to_a(a: 1, b: 2, c: 2, d: 4)
+      [{:a, 1}, {:b, 2}, {:c, 2}, {:d, 4}]
+  """
+  @spec to_a(type_enumerable()) :: list()
   def to_a(enumerable) do
     cond do
       range?(enumerable) ->
@@ -185,12 +288,33 @@ defmodule REnum.Enumerable.Ruby do
     end
   end
 
+  @doc """
+  Calls the function with each element, but in reverse order; returns given enumerable.
+  ## Examples
+      iex> REnum.reverse_each([1, 2, 3], &IO.inspect(&1))
+      # 3
+      # 2
+      # 1
+      [1, 2, 3]
+  """
+  @spec reverse_each(type_enumerable(), function()) :: type_enumerable()
   def reverse_each(enumerable, func) do
     enumerable
     |> Enum.reverse()
     |> Enum.each(func)
+
+    enumerable
   end
 
+  @doc """
+  Returns a map each of whose entries is the key-value pair formed from one of those list.
+  ## Examples
+      iex> REnum.to_h([[:a, 1], [:b, 2]])
+      %{a: 1, b: 2}
+      iex> REnum.to_h(a: 1, b: 2)
+      %{a: 1, b: 2}
+  """
+  @spec to_h(type_enumerable()) :: map()
   def to_h(enumerable) do
     if(is_list_and_not_keyword?(enumerable)) do
       enumerable
@@ -201,14 +325,55 @@ defmodule REnum.Enumerable.Ruby do
     end
   end
 
+  @doc """
+  The function is called with each element.
+  The function should return a 2-element tuple which becomes a key-value pair in the returned map.
+  ## Examples
+      iex> REnum.to_h([[:a, 1], [:b, 2]], fn el ->
+      ...>     {REnum.at(el, 0), REnum.at(el, 1)}
+      ...>   end)
+      %{a: 1, b: 2}
+      iex>  REnum.to_h(%{a: 1, b: 2}, fn {key, value} -> {key, value * 2} end)
+      %{a: 2, b: 4}
+  """
+  @spec to_h(type_enumerable(), function()) :: map()
   def to_h(enumerable, func) do
     Map.new(enumerable, func)
   end
 
+  @doc """
+  Returns an Stream generated from given enumerables.
+  ## Examples
+      iex> ["a", "b", "c"]
+      iex> |> REnum.chain(["d", "e"])
+      iex> |> REnum.to_list()
+      ["a", "b", "c", "d", "e"]
+      iex> %{a: 1, b: 2}
+      iex> |> REnum.chain(1..3)
+      iex> |> REnum.to_list()
+      [{:a, 1}, {:b, 2}, 1, 2, 3]
+  """
+  @spec chain(type_enumerable(), type_enumerable()) :: Stream
   def chain(enumerable_1, enumerable_2) do
     Stream.concat([enumerable_1, enumerable_2])
   end
 
+  @doc """
+  Calls the given function with each element, returns given enumerable:
+  ## Examples
+      iex> ["a", "b", "c"]
+      iex> |> REnum.each_entry(&IO.inspect(&1))
+      # "a"
+      # "b"
+      # "c"
+      ["a", "b", "c"]
+      iex> %{a: 1, b: 2}
+      iex> |> REnum.each_entry(&IO.inspect(&1))
+      # {:a, 1}
+      # {:b, 2}
+      %{a: 1, b: 2}
+  """
+  @spec each_entry(type_enumerable(), function()) :: type_enumerable()
   def each_entry(enumerable, func) do
     enumerable
     |> Enum.each(func)
@@ -216,6 +381,22 @@ defmodule REnum.Enumerable.Ruby do
     enumerable
   end
 
+  @doc """
+  Calls the given function with each element, returns given enumerable:
+  ## Examples
+      iex> ["a", "b", "c", "d", "e"]
+      iex> |> REnum.each_slice(2, &IO.inspect(&1))
+      # ["a", "b"]
+      # ["c", "d"]
+      # ["e"]
+      ["a", "b", "c", "d", "e"]
+      iex> %{a: 1, b: 2, c: 3}
+      iex> |> REnum.each_slice(2, &IO.inspect(&1))
+      # [a: 1, b: 2]
+      # [c: 3]
+      %{a: 1, b: 2, c: 3}
+  """
+  @spec each_slice(type_enumerable(), non_neg_integer(), function()) :: type_enumerable()
   def each_slice(enumerable, amount, func) do
     enumerable
     |> each_slice(
@@ -239,12 +420,35 @@ defmodule REnum.Enumerable.Ruby do
     end
   end
 
+  @doc """
+  Returns an Stream, which redefines most Enumerable functions to postpone enumeration and enumerate values only on an as-needed basis.
+  ## Examples
+      iex> [1, 2, 3]
+      iex> |> REnum.lazy()
+      iex> |> REnum.to_list()
+  """
+  @spec lazy(type_enumerable()) :: Stream
+
   def lazy(enumerable) do
     enumerable
     |> chain([])
     |> Stream.take(Enum.count(enumerable))
   end
 
+  @doc """
+  With argument pattern, returns an elements that uses the pattern to partition elements into lists (“slices”).
+  An element ends the current slice if element matches pattern.
+  With a function, returns an elements that uses the function to partition elements into list.
+  An element ends the current slice if its function return is a truthy value.
+  ## Examples
+      iex> [0, 2, 4, 1, 2, 4, 5, 3, 1, 4, 2]
+      iex> |> REnum.slice_after(&(rem(&1, 2) == 0))
+      [[0], [2], [4], [1, 2], [4], [5, 3, 1, 4], [2]]
+      iex> ["a", "b", "c"]
+      iex> |> REnum.slice_after(~r/b/)
+      [["a", "b"], ["c"]]
+  """
+  @spec slice_after(type_enumerable(), function() | type_pattern()) :: type_enumerable()
   def slice_after(enumerable, func) when is_function(func) do
     if(Enum.count(enumerable) < 1) do
       enumerable
@@ -269,6 +473,20 @@ defmodule REnum.Enumerable.Ruby do
     )
   end
 
+  @doc """
+  With argument pattern, returns an elements that uses the pattern to partition elements into lists (“slices”).
+  An element begins a new slice if element matches pattern. (or if it is the first element).
+  With a function, returns an elements that uses the function to partition elements into list.
+  An element ends the current slice if its function return is a truthy value.
+  ## Examples
+      iex> [0, 2, 4, 1, 2, 4, 5, 3, 1, 4, 2]
+      iex> |> REnum.slice_before(&(rem(&1, 2) == 0))
+      [[0], [2], [4, 1], [2], [4, 5, 3, 1], [4], [2]]
+      iex> ["a", "b", "c"]
+      iex> |> REnum.slice_before(~r/b/)
+      [["a"], ["b", "c"]]
+  """
+  @spec slice_before(type_enumerable(), function() | type_pattern()) :: type_enumerable()
   def slice_before(enumerable, func) when is_function(func) do
     enumerable
     |> Enum.reverse()
@@ -284,6 +502,18 @@ defmodule REnum.Enumerable.Ruby do
     |> Enum.reverse()
     |> Enum.map(&Enum.reverse(&1))
   end
+
+  @doc """
+  The returned elements uses the function to partition elements into lists (“slices”).
+  It calls the function with each element and its successor.
+  Begins a new slice if and only if the function returns a truthy value.
+  &1 is current_element and &2 is next_element in function arguments.
+  ## Examples
+      iex> [1, 2, 4, 9, 10, 11, 12, 15, 16, 19, 20, 21]
+      iex> |> REnum.slice_when(&(&1 + 1 != &2))
+      [[1, 2], [4], [9, 10, 11, 12], [15, 16], [19, 20, 21]]
+  """
+  @spec slice_when(type_enumerable(), function() | type_pattern()) :: type_enumerable()
 
   def slice_when(enumerable, func) do
     if(Enum.count(enumerable) < 1) do
@@ -305,6 +535,18 @@ defmodule REnum.Enumerable.Ruby do
     end
   end
 
+  @doc """
+  Returns elements selected by a given pattern or function.
+  ## Examples
+      iex> ["foo", "bar", "car", "moo"]
+      iex> |> REnum.grep(~r/ar/)
+      ["bar", "car"]
+      iex> 1..10
+      iex> |> REnum.grep(3..8)
+      [3, 4, 5, 6, 7, 8]
+  """
+  @spec grep(type_enumerable(), function() | type_pattern()) :: type_enumerable()
+
   def grep(enumerable, func) when is_function(func) do
     enumerable
     |> select(func)
@@ -317,11 +559,34 @@ defmodule REnum.Enumerable.Ruby do
     )
   end
 
+  @doc """
+  Calls the function with each matching element and returned.
+  ## Examples
+      iex> ["foo", "bar", "car", "moo"]
+      iex> |> REnum.grep(~r/ar/, &String.upcase(&1))
+      ["BAR", "CAR"]
+      iex> 1..10
+      iex> |> REnum.grep(3..8, &to_string(&1))
+      ["3", "4", "5", "6", "7", "8"]
+  """
+  @spec grep(type_enumerable(), function() | type_pattern(), function()) :: type_enumerable()
   def grep(enumerable, pattern, func) do
     enumerable
     |> grep(pattern)
     |> Enum.map(func)
   end
+
+  @doc """
+  Returns elements rejected by a given pattern or function.
+  ## Examples
+      iex> ["foo", "bar", "car", "moo"]
+      iex> |> REnum.grep_v(~r/ar/)
+      ["foo", "moo"]
+      iex> 1..10
+      iex> |> REnum.grep_v(3..8)
+      [1, 2, 9, 10]
+  """
+  @spec grep_v(type_enumerable(), function() | type_pattern()) :: type_enumerable()
 
   def grep_v(enumerable, pattern) do
     greped = enumerable |> grep(pattern)
@@ -330,12 +595,34 @@ defmodule REnum.Enumerable.Ruby do
     |> Enum.reject(&(&1 in greped))
   end
 
+  @doc """
+  Calls the function with each unmatching element and returned.
+  ## Examples
+      iex> ["foo", "bar", "car", "moo"]
+      iex> |> REnum.grep_v(~r/ar/, &String.upcase(&1))
+      ["FOO", "MOO"]
+      iex> 1..10
+      iex> |> REnum.grep_v(3..8, &to_string(&1))
+      ["1", "2", "9", "10"]
+  """
+  @spec grep_v(type_enumerable(), function() | type_pattern(), function()) :: type_enumerable()
+
   def grep_v(enumerable, pattern, func) do
     enumerable
     |> grep_v(pattern)
     |> Enum.map(func)
   end
 
+  @doc """
+  Returns a map containing the counts of equal elements.
+  ## Examples
+      iex> ~w(a c d b c a)
+      iex> |> REnum.tally()
+      %{"a" => 2, "c" => 2, "d" => 1, "b" => 1}
+      iex> [a: 1, b: 2, c: 3, c: 3]
+      iex> |> REnum.tally()
+      %{{:a, 1} => 1, {:b, 2} => 1, {:c, 3} => 2}
+  """
   def tally(enumerable) do
     enumerable
     |> Enum.group_by(& &1)
