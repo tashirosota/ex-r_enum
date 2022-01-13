@@ -1,6 +1,7 @@
 defmodule REnum.Enumerable.SupportTest do
   use ExUnit.Case
   doctest REnum.Enumerable.Support
+  import ExUnit.CaptureIO
 
   test "range?/1" do
     assert REnum.range?([1, 2, 3]) == false
@@ -15,12 +16,25 @@ defmodule REnum.Enumerable.SupportTest do
     assert REnum.is_list_and_not_keyword?([1, 2, 3]) == true
   end
 
-  test "match_function" do
+  test "match_function/1" do
     assert REnum.match_function(1..3).(2) == true
     assert REnum.match_function(1..3).(4) == false
     assert REnum.match_function(3).(3) == true
     assert REnum.match_function(3).(4) == false
     assert REnum.match_function(~r/a/).("abc") == true
     assert REnum.match_function(~r/a/).("bcd") == false
+  end
+
+  test "find_index_with_index/2" do
+    assert REnum.find_index_with_index(1..3, fn el, _ ->
+             el == 2
+           end) == 1
+
+    assert capture_io(fn ->
+             REnum.find_index_with_index(1..3, fn el, index ->
+               IO.inspect(index)
+               el == 2
+             end)
+           end) == "0\n1\n"
   end
 end

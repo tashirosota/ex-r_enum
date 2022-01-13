@@ -29,4 +29,20 @@ defmodule REnum.Enumerable.Support do
       true -> &(&1 == pattern)
     end
   end
+
+  def find_index_with_index(enumerable, func) do
+    enumerable
+    |> Enum.to_list()
+    |> find_index_with_index(func, 0)
+  end
+
+  def find_index_with_index([], _, _), do: nil
+
+  def find_index_with_index([head | tail], func, index) do
+    if(func.(head, index)) do
+      index
+    else
+      find_index_with_index(tail, func, index + 1)
+    end
+  end
 end

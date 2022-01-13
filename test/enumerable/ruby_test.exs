@@ -488,6 +488,17 @@ defmodule REnum.Enumerable.RubyTest do
     assert REnum.slice_before([1, 2, 3], 2) == [[1], [2, 3]]
   end
 
+  test "slice_when" do
+    assert REnum.slice_when([1, 2, 4, 9, 10, 11, 12, 15, 16, 19, 20, 21], &(&1 + 1 != &2)) ==
+             [[1, 2], [4], [9, 10, 11, 12], [15, 16], [19, 20, 21]]
+
+    assert REnum.slice_when(
+             ["foo\n", "bar\n", "\n", "baz\n", "qux\n"],
+             &(&1 =~ ~r/\A\s*\z/ && &2 =~ ~r/\S/)
+           ) ==
+             [["foo\n", "bar\n", "\n"], ["baz\n", "qux\n"]]
+  end
+
   describe "grep" do
     test "grep/2" do
       assert REnum.grep([0, 2, 4, 1, 2, 4, 5, 3, 1, 4, 2], 1) ==

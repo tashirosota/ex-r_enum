@@ -39,7 +39,7 @@ defmodule REnum.Enumerable.Ruby do
   # ✔ select
   # ✔ slice_after
   # ✔ slice_before
-  # slice_when
+  # ✔ slice_when
   # tally
   # ✔ to_a
   # ✔ to_h
@@ -241,6 +241,26 @@ defmodule REnum.Enumerable.Ruby do
     |> slice_after(match_function(pattern))
     |> Enum.reverse()
     |> Enum.map(&Enum.reverse(&1))
+  end
+
+  def slice_when(enumerable, func) do
+    if(Enum.count(enumerable) < 1) do
+      enumerable
+    else
+      index =
+        enumerable
+        |> find_index_with_index(fn el, index ->
+          next_el = Enum.at(enumerable, index + 1)
+          func.(el, next_el)
+        end) ||
+          Enum.count(enumerable)
+
+      [Enum.slice(enumerable, 0..index)] ++
+        slice_when(
+          Enum.slice(enumerable, (index + 1)..Enum.count(enumerable)),
+          func
+        )
+    end
   end
 
   def grep(enumerable, func) when is_function(func) do
