@@ -546,4 +546,21 @@ defmodule REnum.Enumerable.RubyTest do
                ["FOO", "MOO"]
     end
   end
+
+  test "tally/1" do
+    assert REnum.tally(~w(a c d b c a)) ==
+             %{"a" => 2, "c" => 2, "d" => 1, "b" => 1}
+
+    assert REnum.tally([1, 1, 2, 2, 3]) ==
+             %{1 => 2, 2 => 2, 3 => 1}
+
+    assert REnum.tally(1..3) ==
+             %{1 => 1, 2 => 1, 3 => 1}
+
+    assert REnum.tally(%{a: 1, b: 2, c: 3}) ==
+             %{{:a, 1} => 1, {:b, 2} => 1, {:c, 3} => 1}
+
+    assert REnum.tally(a: 1, b: 2, c: 3, c: 3) ==
+             %{{:a, 1} => 1, {:b, 2} => 1, {:c, 3} => 2}
+  end
 end

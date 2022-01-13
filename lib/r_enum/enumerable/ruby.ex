@@ -40,7 +40,7 @@ defmodule REnum.Enumerable.Ruby do
   # ✔ slice_after
   # ✔ slice_before
   # ✔ slice_when
-  # tally
+  # ✔ tally
   # ✔ to_a
   # ✔ to_h
 
@@ -292,6 +292,15 @@ defmodule REnum.Enumerable.Ruby do
     enumerable
     |> grep_v(pattern)
     |> Enum.map(func)
+  end
+
+  def tally(enumerable) do
+    enumerable
+    |> Enum.group_by(& &1)
+    |> Enum.map(fn el ->
+      {elem(el, 0), elem(el, 1) |> Enum.count()}
+    end)
+    |> Map.new()
   end
 
   # aliases
