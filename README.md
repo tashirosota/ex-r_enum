@@ -23,24 +23,44 @@ end
 
 ```elixir
 # Many useful functions.
-iex> REnum.compact([1, nil, 2, 3])
+# REnum.Enumerable.Ruby.compact()
+iex> [1, nil, 2, 3]
+iex> |> REnum.compact()
 [1, 2, 3]
-iex> REnum.tally(~w(a c d b c a))
-%{"a" => 2, "c" => 2, "d" => 1, "b" => 1}
-iex> |> REnum.grep(["foo", "bar", "car", "moo"], ~r/ar/)
+# REnum.Enumerable.Ruby.tally()
+iex> ~w(a c d b c a)
+iex> |> REnum.tally()
+%{
+  "a" => 2,
+  "c" => 2,
+  "d" => 1,
+  "b" => 1
+}
+# REnum.Enumerable.Ruby.grep()
+iex> ["foo", "bar", "car", "moo"]
+iex> |> REnum.grep(~r/ar/)
 ["bar", "car"]
-iex> REnum.reverse_each([1, 2, 3], &IO.inspect(&1))
+# REnum.Enumerable.Ruby.reverse_each()
+iex> [1, 2, 3]
+iex> |> REnum.reverse_each(&IO.inspect(&1))
 # 3
 # 2
 # 1
 [1, 2, 3]
 # Aliases.
-iex> REnum.select([1, 2, 3], fn x -> rem(x, 2) == 0 end) == Enum.filter([1, 2, 3], fn x -> rem(x, 2) == 0 end)
+# REnum.Enumerable.Ruby.select()
+iex> [1, 2, 3]
+iex> |> REnum.select(fn x -> rem(x, 2) == 0 end) ==
+iex>   Enum.filter([1, 2, 3], fn x -> rem(x, 2) == 0 end)
 true
 # Can use Elixir's Enum functions too.
-iex> REnum.find([2, 3, 4], fn x -> rem(x, 2) == 1 end)
+# REnum.Enumerable.Ruby.find()
+iex> [1, 2, 3]
+iex> |> REnum.find(fn x -> rem(x, 2) == 1 end)
 3
-iex> REnum.sort([3, 2, 1])
+# REnum.Enumerable.Ruby.sort()
+iex> [1, 2, 3]
+iex> REnum.sort()
 [1, 2, 3]
 ```
 

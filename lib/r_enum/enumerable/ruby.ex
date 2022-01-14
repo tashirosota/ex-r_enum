@@ -59,6 +59,7 @@ defmodule REnum.Enumerable.Ruby do
   ## Examples
       iex> REnum.compact([1, nil, 2, 3])
       [1, 2, 3]
+
       iex> REnum.compact(%{
       ...>        :truthy => true,
       ...>        false => false,
@@ -66,10 +67,10 @@ defmodule REnum.Enumerable.Ruby do
       ...>        :map => %{key: :value}
       ...>      })
       %{
-          :truthy => true,
-          false => false,
-          :map => %{key: :value}
-        }
+        :truthy => true,
+        false => false,
+        :map => %{key: :value}
+      }
   """
   @spec compact(type_enumerable) :: type_enumerable
   def compact(enumerable) when is_list(enumerable) do
@@ -90,6 +91,7 @@ defmodule REnum.Enumerable.Ruby do
   ## Examples
       iex> REnum.first([1, 2, 3])
       1
+
       iex> REnum.first(%{a: 1, b: 2})
       [:a, 1]
   """
@@ -109,6 +111,7 @@ defmodule REnum.Enumerable.Ruby do
   ## Examples
       iex> REnum.first([1, 2, 3], 2)
       [1, 2]
+
       iex> REnum.first(%{a: 1, b: 2}, 2)
       [[:a, 1], [:b, 2]]
   """
@@ -129,6 +132,7 @@ defmodule REnum.Enumerable.Ruby do
   ## Examples
       iex> REnum.one?([1, nil, false])
       true
+
       iex> REnum.one?(1..4)
       false
   """
@@ -142,8 +146,10 @@ defmodule REnum.Enumerable.Ruby do
   ## Examples
       iex> REnum.one?(1..4, 1..2)
       false
+
       iex> REnum.one?(1..4, &(&1 < 2))
       true
+
       iex> REnum.one?(1..4, 1)
       true
   """
@@ -157,8 +163,10 @@ defmodule REnum.Enumerable.Ruby do
   ## Examples
       iex> REnum.none?(1..4)
       false
+
       iex> REnum.none?([nil, false])
       true
+
       iex> REnum.none?([foo: 0, bar: 1])
       false
   """
@@ -172,10 +180,13 @@ defmodule REnum.Enumerable.Ruby do
   ## Examples
       iex> REnum.none?(1..4, &(&1 < 1))
       true
+
       iex> REnum.none?(%{foo: 0, bar: 1, baz: 2}, fn {_, v} -> v < 0 end)
       true
+
       iex> REnum.none?(1..4, 5)
       true
+
       iex> REnum.none?(1..4, 2..3)
       false
   """
@@ -194,6 +205,7 @@ defmodule REnum.Enumerable.Ruby do
       # a
       # b
       ["a", "b"]
+
       iex> REnum.cycle(%{a: 1, b: 2}, nil, &IO.inspect(&1)) |> Enum.take(2)
       # {:a, 1}
       # {:b, 2}
@@ -228,6 +240,7 @@ defmodule REnum.Enumerable.Ruby do
       # ["b", "c", "d"]
       # ["c", "d", "e"]
       ["a", "b", "c", "d", "e"]
+
       iex> %{a: 1, b: 2, c: 3, d: 4, e: 5, f: 6}
       iex> |> REnum.each_cons(4, &IO.inspect(&1))
       # [a: 1, b: 2, c: 3, d: 4]
@@ -257,6 +270,7 @@ defmodule REnum.Enumerable.Ruby do
   ## Examples
       iex> REnum.to_a([1, 2, 3])
       [1, 2, 3]
+
       iex> REnum.to_a(%{:a => 1, 1 => :a, 3 => :b, :b => 5})
       [
         [1, :a],
@@ -264,8 +278,10 @@ defmodule REnum.Enumerable.Ruby do
         [:a, 1],
         [:b, 5]
       ]
+
       iex> REnum.to_a(0..5)
       [0, 1, 2, 3, 4, 5]
+
       iex> REnum.to_a(a: 1, b: 2, c: 2, d: 4)
       [{:a, 1}, {:b, 2}, {:c, 2}, {:d, 4}]
   """
@@ -309,6 +325,7 @@ defmodule REnum.Enumerable.Ruby do
   ## Examples
       iex> REnum.to_h([[:a, 1], [:b, 2]])
       %{a: 1, b: 2}
+
       iex> REnum.to_h(a: 1, b: 2)
       %{a: 1, b: 2}
   """
@@ -331,6 +348,7 @@ defmodule REnum.Enumerable.Ruby do
       ...>     {REnum.at(el, 0), REnum.at(el, 1)}
       ...>   end)
       %{a: 1, b: 2}
+
       iex>  REnum.to_h(%{a: 1, b: 2}, fn {key, value} -> {key, value * 2} end)
       %{a: 2, b: 4}
   """
@@ -346,6 +364,7 @@ defmodule REnum.Enumerable.Ruby do
       iex> |> REnum.chain(["d", "e"])
       iex> |> REnum.to_list()
       ["a", "b", "c", "d", "e"]
+
       iex> %{a: 1, b: 2}
       iex> |> REnum.chain(1..3)
       iex> |> REnum.to_list()
@@ -365,6 +384,7 @@ defmodule REnum.Enumerable.Ruby do
       # "b"
       # "c"
       ["a", "b", "c"]
+
       iex> %{a: 1, b: 2}
       iex> |> REnum.each_entry(&IO.inspect(&1))
       # {:a, 1}
@@ -388,6 +408,7 @@ defmodule REnum.Enumerable.Ruby do
       # ["c", "d"]
       # ["e"]
       ["a", "b", "c", "d", "e"]
+
       iex> %{a: 1, b: 2, c: 3}
       iex> |> REnum.each_slice(2, &IO.inspect(&1))
       # [a: 1, b: 2]
@@ -424,9 +445,9 @@ defmodule REnum.Enumerable.Ruby do
       iex> [1, 2, 3]
       iex> |> REnum.lazy()
       iex> |> REnum.to_list()
+      [1, 2, 3]
   """
   @spec lazy(type_enumerable()) :: Stream
-
   def lazy(enumerable) do
     enumerable
     |> chain([])
@@ -442,6 +463,7 @@ defmodule REnum.Enumerable.Ruby do
       iex> [0, 2, 4, 1, 2, 4, 5, 3, 1, 4, 2]
       iex> |> REnum.slice_after(&(rem(&1, 2) == 0))
       [[0], [2], [4], [1, 2], [4], [5, 3, 1, 4], [2]]
+
       iex> ["a", "b", "c"]
       iex> |> REnum.slice_after(~r/b/)
       [["a", "b"], ["c"]]
@@ -480,6 +502,7 @@ defmodule REnum.Enumerable.Ruby do
       iex> [0, 2, 4, 1, 2, 4, 5, 3, 1, 4, 2]
       iex> |> REnum.slice_before(&(rem(&1, 2) == 0))
       [[0], [2], [4, 1], [2], [4, 5, 3, 1], [4], [2]]
+
       iex> ["a", "b", "c"]
       iex> |> REnum.slice_before(~r/b/)
       [["a"], ["b", "c"]]
@@ -512,7 +535,6 @@ defmodule REnum.Enumerable.Ruby do
       [[1, 2], [4], [9, 10, 11, 12], [15, 16], [19, 20, 21]]
   """
   @spec slice_when(type_enumerable(), function() | type_pattern()) :: type_enumerable()
-
   def slice_when(enumerable, func) do
     if(Enum.count(enumerable) < 1) do
       enumerable
@@ -539,12 +561,12 @@ defmodule REnum.Enumerable.Ruby do
       iex> ["foo", "bar", "car", "moo"]
       iex> |> REnum.grep(~r/ar/)
       ["bar", "car"]
+
       iex> 1..10
       iex> |> REnum.grep(3..8)
       [3, 4, 5, 6, 7, 8]
   """
   @spec grep(type_enumerable(), function() | type_pattern()) :: type_enumerable()
-
   def grep(enumerable, func) when is_function(func) do
     enumerable
     |> select(func)
@@ -563,6 +585,7 @@ defmodule REnum.Enumerable.Ruby do
       iex> ["foo", "bar", "car", "moo"]
       iex> |> REnum.grep(~r/ar/, &String.upcase(&1))
       ["BAR", "CAR"]
+
       iex> 1..10
       iex> |> REnum.grep(3..8, &to_string(&1))
       ["3", "4", "5", "6", "7", "8"]
@@ -580,12 +603,12 @@ defmodule REnum.Enumerable.Ruby do
       iex> ["foo", "bar", "car", "moo"]
       iex> |> REnum.grep_v(~r/ar/)
       ["foo", "moo"]
+
       iex> 1..10
       iex> |> REnum.grep_v(3..8)
       [1, 2, 9, 10]
   """
   @spec grep_v(type_enumerable(), function() | type_pattern()) :: type_enumerable()
-
   def grep_v(enumerable, pattern) do
     greped = enumerable |> grep(pattern)
 
@@ -599,12 +622,12 @@ defmodule REnum.Enumerable.Ruby do
       iex> ["foo", "bar", "car", "moo"]
       iex> |> REnum.grep_v(~r/ar/, &String.upcase(&1))
       ["FOO", "MOO"]
+
       iex> 1..10
       iex> |> REnum.grep_v(3..8, &to_string(&1))
       ["1", "2", "9", "10"]
   """
   @spec grep_v(type_enumerable(), function() | type_pattern(), function()) :: type_enumerable()
-
   def grep_v(enumerable, pattern, func) do
     enumerable
     |> grep_v(pattern)
@@ -617,6 +640,7 @@ defmodule REnum.Enumerable.Ruby do
       iex> ~w(a c d b c a)
       iex> |> REnum.tally()
       %{"a" => 2, "c" => 2, "d" => 1, "b" => 1}
+
       iex> [a: 1, b: 2, c: 3, c: 3]
       iex> |> REnum.tally()
       %{{:a, 1} => 1, {:b, 2} => 1, {:c, 3} => 2}
@@ -642,7 +666,6 @@ defmodule REnum.Enumerable.Ruby do
   defdelegate include?(enumerable, func), to: Enum, as: :member?
   defdelegate collect_concat(enumerable, func), to: Enum, as: :flat_map
   defdelegate entries(enumerable), to: __MODULE__, as: :to_a
-  # TODO: add info
   defdelegate each_with_object(enumerable, object, func), to: Enum, as: :reduce
   defdelegate each_with_index(enumerable, func), to: Enum, as: :with_index
   defdelegate each_with_index(enumerable), to: Enum, as: :with_index
