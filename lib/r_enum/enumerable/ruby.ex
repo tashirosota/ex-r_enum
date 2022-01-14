@@ -663,10 +663,10 @@ defmodule REnum.Enumerable.Ruby do
   defdelegate inject(enumerable, acc, func), to: Enum, as: :reduce
   defdelegate inject(enumerable, func), to: Enum, as: :reduce
   defdelegate collect(enumerable, func), to: Enum, as: :map
-  defdelegate include?(enumerable, func), to: Enum, as: :member?
+  defdelegate include?(enumerable, element), to: Enum, as: :member?
   defdelegate collect_concat(enumerable, func), to: Enum, as: :flat_map
   defdelegate entries(enumerable), to: __MODULE__, as: :to_a
-  defdelegate each_with_object(enumerable, object, func), to: Enum, as: :reduce
+  defdelegate each_with_object(enumerable, collectable, func), to: Enum, as: :reduce
   defdelegate each_with_index(enumerable, func), to: Enum, as: :with_index
   defdelegate each_with_index(enumerable), to: Enum, as: :with_index
   defdelegate minmax(enumerable), to: Enum, as: :min_max

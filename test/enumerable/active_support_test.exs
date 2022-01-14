@@ -15,4 +15,9 @@ defmodule REnum.Enumerable.ActiveSupportTest do
              }
     end
   end
+
+  test "exclude?" do
+    assert REnum.exclude?([2], 1)
+    refute REnum.exclude?([2], 2)
+  end
 end
