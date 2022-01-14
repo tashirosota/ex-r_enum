@@ -1,4 +1,5 @@
 defmodule REnum.Utils do
+  @brank_regex ~r/\A[[:space:]]*\z/
   @default_undelegate_functions [:__info__, :module_info, :"MACRO-__using__"]
   @moduledoc """
   Utils for REnum.
@@ -29,5 +30,21 @@ defmodule REnum.Utils do
 
   def make_args(n) do
     Enum.map(1..n, fn n -> {String.to_atom("arg#{n}"), [], Elixir} end)
+  end
+
+  def blank?(map) when map == %{}, do: true
+  def blank?([]), do: true
+  def blank?(nil), do: true
+  def blank?(false), do: true
+
+  def blank?(str) when is_bitstring(str) do
+    str
+    |> String.match?(@brank_regex)
+  end
+
+  def blank?(_), do: false
+
+  def present?(obj) do
+    !blank?(obj)
   end
 end
