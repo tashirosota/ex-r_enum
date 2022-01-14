@@ -81,7 +81,7 @@ See **[hexdocs](https://hexdocs.pm/r_enum)**.
   - REnum.Range.Native
   - REnum.Stream.Native
   - REnum.Utils
-- [ ] 0.2.0
+- [x] 0.2.0
   - REnum.Enumerable.ActiveSupport
 - [ ] 0.3.0
   - REnum.List.Ruby
@@ -101,7 +101,7 @@ See **[hexdocs](https://hexdocs.pm/r_enum)**.
 
 | REnum        | Elixir Module | Ruby Class       | Elixir | Ruby | ActiveSupport |
 | ------------ | ------------- | ---------------- | :----: | :--: | :-----------: |
-| REnum        | Enum          | Enumerable       |   ◎    |  ◎   |       ×       |
+| REnum        | Enum          | Enumerable       |   ◎    |  ◎   |       ◎       |
 | REnum.List   | List          | Array            |   ◎    |  ×   |       ×       |
 | REnum.Map    | Map           | Hash             |   ◎    |  ×   |       ×       |
 | REnum.Range  | Range         | Range            |   ◎    |  ×   |       ×       |

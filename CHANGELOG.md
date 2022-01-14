@@ -2,7 +2,11 @@
 
 # Changelog
 
-## v0.1.0 (2022-1-10)
+## v0.2.0 (2022-1-1x)
+
+- REnum.Enumerable.ActiveSupport
+
+## v0.1.0 (2022-1-14)
 
 - Initial release.
 - Support all native enumerable functions.
