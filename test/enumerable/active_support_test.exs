@@ -20,4 +20,31 @@ defmodule REnum.Enumerable.ActiveSupportTest do
     assert REnum.exclude?([2], 1)
     refute REnum.exclude?([2], 2)
   end
+
+  test "excluding" do
+    assert REnum.excluding(1..5, [1, 5]) == [2, 3, 4]
+    assert REnum.excluding(1..5, [1, 2]) == [3, 4, 5]
+    assert REnum.excluding([[0, 1], [1, 0]], [[1, 0]]) == [[0, 1]]
+    assert REnum.excluding(%{foo: 1, bar: 2, baz: 3}, [:bar]) == %{foo: 1, baz: 3}
+  end
+
+  test "without" do
+    assert REnum.without(1..5, [1, 5]) == [2, 3, 4]
+    assert REnum.without(1..5, [1, 2]) == [3, 4, 5]
+    assert REnum.without([[0, 1], [1, 0]], [[1, 0]]) == [[0, 1]]
+    assert REnum.without(%{foo: 1, bar: 2, baz: 3}, [:bar]) == %{foo: 1, baz: 3}
+  end
+
+  test "including" do
+    assert REnum.including([1, 2, 3], [4, 5]) == [1, 2, 3, 4, 5]
+    assert REnum.including(1..3, 4..6) == [1, 2, 3, 4, 5, 6]
+
+    assert REnum.including(%{foo: 1, bar: 2, baz: 3}, %{hoge: 4, page: 5}) == [
+             {:bar, 2},
+             {:baz, 3},
+             {:foo, 1},
+             {:hoge, 4},
+             {:page, 5}
+           ]
+  end
 end

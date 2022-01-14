@@ -1,5 +1,6 @@
 defmodule REnum.Enumerable.ActiveSupport do
   import REnum.Utils
+  import REnum.Enumerable.Support
 
   @moduledoc """
   Unimplemented.
@@ -13,7 +14,7 @@ defmodule REnum.Enumerable.ActiveSupport do
   @type type_pattern :: number() | String.t() | Range.t() | Regex.t()
 
   # https://www.rubydoc.info/gems/activesupport/Enumerable
-  # ruby_enumerable = [:as_json, :compact_blank, :exclude?, :excluding, :in_order_of, :including, :index_by, :index_with, :many?, :maximum, :minimum, :pick, :pluck, :sole]
+  # ruby_enumerable = [:as_json, :compact_blank, :exclude?, :excluding, :in_order_of, :including, :index_by, :index_with, :many?, :maximum, :minimum, :pick, :pluck, :sole, :without]
   # |> Enum.reject(fn method ->
   #   Enum.module_info()[:exports]
   #   |> Keyword.keys()
@@ -22,9 +23,9 @@ defmodule REnum.Enumerable.ActiveSupport do
   # as_json
   # ✔ compact_blank
   # ✔ exclude?
-  # excluding
+  # ✔ excluding
   # in_order_of
-  # including
+  # ✔ including
   # index_by
   # index_with
   # many?
@@ -33,6 +34,7 @@ defmodule REnum.Enumerable.ActiveSupport do
   # pick
   # pluck
   # sole
+  # ✔ without
 
   @spec compact_blank(type_enumerable) :: type_enumerable
   def compact_blank(enumerable) when is_list(enumerable) do
@@ -49,7 +51,33 @@ defmodule REnum.Enumerable.ActiveSupport do
   end
 
   @spec exclude?(type_enumerable, any()) :: type_enumerable
-  def exclude?(enumerable, obj) do
-    !Enum.member?(enumerable, obj)
+  def exclude?(enumerable, element) do
+    !Enum.member?(enumerable, element)
   end
+
+  @spec excluding(type_enumerable, type_enumerable) :: type_enumerable
+  def excluding(enumerable, elements) do
+    cond do
+      map_and_not_range?(enumerable) ->
+        enumerable
+        |> Enum.filter(fn {key, _} ->
+          exclude?(elements, key)
+        end)
+        |> Map.new()
+
+      true ->
+        enumerable
+        |> Enum.filter(fn el ->
+          elements
+          |> exclude?(el)
+        end)
+    end
+  end
+
+  @spec including(type_enumerable, type_enumerable) :: type_enumerable
+  def including(enumerable, elements) do
+    (enumerable |> Enum.to_list()) ++ (elements |> Enum.to_list())
+  end
+
+  defdelegate without(enumerable, elements), to: __MODULE__, as: :excluding
 end

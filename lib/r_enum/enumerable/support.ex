@@ -23,6 +23,11 @@ defmodule REnum.Enumerable.Support do
   def range?(_.._), do: true
   def range?(_), do: false
 
+  @spec map_and_not_range?(type_enumerable) :: boolean
+  def map_and_not_range?(enumerable) do
+    is_map(enumerable) && !range?(enumerable)
+  end
+
   @doc """
   Returns true if argument is list and not keyword list.
   ## Examples

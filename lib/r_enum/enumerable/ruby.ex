@@ -115,7 +115,7 @@ defmodule REnum.Enumerable.Ruby do
       iex> REnum.first(%{a: 1, b: 2}, 2)
       [[:a, 1], [:b, 2]]
   """
-  @spec first(type_enumerable) :: type_enumerable()
+  @spec first(type_enumerable, non_neg_integer()) :: type_enumerable()
   def first(enumerable, n) do
     0..(n - 1)
     |> Enum.with_index(fn _, index ->
@@ -288,10 +288,7 @@ defmodule REnum.Enumerable.Ruby do
   @spec to_a(type_enumerable()) :: list()
   def to_a(enumerable) do
     cond do
-      range?(enumerable) ->
-        enumerable |> Enum.to_list()
-
-      is_map(enumerable) ->
+      map_and_not_range?(enumerable) ->
         enumerable
         |> Enum.map(fn {k, v} ->
           [k, v]
