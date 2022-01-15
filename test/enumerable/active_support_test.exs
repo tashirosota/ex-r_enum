@@ -106,4 +106,41 @@ defmodule REnum.Enumerable.ActiveSupportTest do
     assert REnum.minimum([], :price) == nil
     assert REnum.minimum([], :dollars) == nil
   end
+
+  test "index_by/2" do
+    assert REnum.index_by(@payments, fn el -> el.cents end) == %{
+             0 => %Payment{cents: 0, dollars: 10},
+             5 => %Payment{cents: 5, dollars: 0},
+             99 => %Payment{cents: 99, dollars: 5}
+           }
+
+    assert REnum.index_by(@payments, fn el -> el.dollars end) == %{
+             0 => %Payment{cents: 5, dollars: 0},
+             5 => %Payment{cents: 99, dollars: 5},
+             10 => %Payment{cents: 0, dollars: 10}
+           }
+
+    assert REnum.index_by(@payments, :cents) == %{
+             0 => %Payment{cents: 0, dollars: 10},
+             5 => %Payment{cents: 5, dollars: 0},
+             99 => %Payment{cents: 99, dollars: 5}
+           }
+
+    assert REnum.index_by(@payments, :dollars) == %{
+             0 => %Payment{cents: 5, dollars: 0},
+             5 => %Payment{cents: 99, dollars: 5},
+             10 => %Payment{cents: 0, dollars: 10}
+           }
+  end
+
+  test "index_with/2" do
+    assert REnum.index_with(@payments, fn el -> el.cents end) == %{
+             %Payment{cents: 0, dollars: 10} => 0,
+             %Payment{cents: 5, dollars: 0} => 5,
+             %Payment{cents: 99, dollars: 5} => 99
+           }
+
+    assert REnum.index_with(~w(a, b, c), 3) == %{"a," => 3, "b," => 3, "c" => 3}
+    assert REnum.index_with(~w(foo bar bat)a, nil) == %{bar: nil, bat: nil, foo: nil}
+  end
 end

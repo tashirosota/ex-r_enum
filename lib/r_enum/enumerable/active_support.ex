@@ -12,6 +12,7 @@ defmodule REnum.Enumerable.ActiveSupport do
 
   @type type_enumerable :: Enumerable.t()
   @type type_pattern :: number() | String.t() | Range.t() | Regex.t()
+  @type type_map_list :: list(struct() | map())
 
   # https://www.rubydoc.info/gems/activesupport/Enumerable
   # ruby_enumerable = [:as_json, :compact_blank, :exclude?, :excluding, :in_order_of, :including, :index_by, :index_with, :many?, :maximum, :minimum, :pick, :pluck, :sole, :without]
@@ -26,8 +27,8 @@ defmodule REnum.Enumerable.ActiveSupport do
   # ✔ excluding
   # in_order_of
   # ✔ including
-  # index_by
-  # index_with
+  # ✔ index_by
+  # ✔ index_with
   # ✔ many?
   # ✔ maximum
   # ✔ minimum
@@ -50,7 +51,7 @@ defmodule REnum.Enumerable.ActiveSupport do
     |> Enum.into(%{})
   end
 
-  @spec exclude?(type_enumerable, any()) :: type_enumerable
+  @spec exclude?(type_enumerable, any()) :: boolean()
   def exclude?(enumerable, element) do
     !Enum.member?(enumerable, element)
   end
@@ -74,7 +75,7 @@ defmodule REnum.Enumerable.ActiveSupport do
     end
   end
 
-  @spec including(type_enumerable, type_enumerable) :: type_enumerable
+  @spec including(type_enumerable, type_enumerable) :: list()
   def including(enumerable, elements) do
     (enumerable |> Enum.to_list()) ++ (elements |> Enum.to_list())
   end
@@ -90,7 +91,7 @@ defmodule REnum.Enumerable.ActiveSupport do
     truthy_count(enumerable, pattern_or_func) > 1
   end
 
-  @spec pick(list(map()), list(atom()) | atom()) :: any
+  @spec pick(type_map_list(), list(atom()) | atom()) :: any
   def pick([], _keys), do: nil
 
   def pick(map_list, keys) when is_list(keys) do
@@ -112,7 +113,7 @@ defmodule REnum.Enumerable.ActiveSupport do
     Map.get(head, key)
   end
 
-  @spec pluck(list(map()), list(atom()) | atom()) :: any
+  @spec pluck(type_map_list(), list(atom()) | atom()) :: list(any())
   def pluck(map_list, keys) when is_list(keys) do
     if(many?(keys)) do
       map_list
@@ -139,18 +140,55 @@ defmodule REnum.Enumerable.ActiveSupport do
     end)
   end
 
-  @spec maximum(list(map()), atom()) :: any
+  @spec maximum(type_map_list(), atom()) :: any
   def maximum(map_list, key) do
     map_list
     |> pluck(key)
     |> Enum.max(fn -> nil end)
   end
 
-  @spec minimum(list(map()), atom()) :: any
+  @spec minimum(type_map_list(), atom()) :: any
   def minimum(map_list, key) do
     map_list
     |> pluck(key)
     |> Enum.min(fn -> nil end)
+  end
+
+  @spec index_by(type_map_list(), function() | atom()) :: map
+  def index_by(enumerable, key) when is_atom(key) do
+    enumerable
+    |> Enum.reduce(%{}, fn el, acc ->
+      acc
+      |> Map.put(
+        Map.get(el, key),
+        el
+      )
+    end)
+  end
+
+  def index_by(enumerable, func) do
+    enumerable
+    |> Enum.reduce(%{}, fn el, acc ->
+      acc
+      |> Map.put(func.(el), el)
+    end)
+  end
+
+  @spec index_with(list(any()), function()) :: map
+  def index_with(keys, func) when is_function(func) do
+    keys
+    |> Enum.map(fn key ->
+      {key, func.(key)}
+    end)
+    |> Map.new()
+  end
+
+  def index_with(keys, value) do
+    keys
+    |> Enum.map(fn key ->
+      {key, value}
+    end)
+    |> Map.new()
   end
 
   defdelegate without(enumerable, elements), to: __MODULE__, as: :excluding
