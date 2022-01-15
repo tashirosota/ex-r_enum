@@ -328,7 +328,7 @@ defmodule REnum.Enumerable.Ruby do
   """
   @spec to_h(type_enumerable()) :: map()
   def to_h(enumerable) do
-    if(is_list_and_not_keyword?(enumerable)) do
+    if(list_and_not_keyword?(enumerable)) do
       enumerable
       |> Enum.map(&{Enum.at(&1, 0), Enum.at(&1, 1)})
       |> Map.new()

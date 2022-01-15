@@ -41,14 +41,14 @@ defmodule REnum.Enumerable.Support do
   @doc """
   Returns true if argument is list and not keyword list.
   ## Examples
-      iex> REnum.is_list_and_not_keyword?([1, 2, 3])
+      iex> REnum.list_and_not_keyword?([1, 2, 3])
       true
 
-      iex> REnum.is_list_and_not_keyword?([a: 1, b: 2])
+      iex> REnum.list_and_not_keyword?([a: 1, b: 2])
       false
   """
-  @spec is_list_and_not_keyword?(type_enumerable) :: boolean()
-  def is_list_and_not_keyword?(enumerable) do
+  @spec list_and_not_keyword?(type_enumerable) :: boolean()
+  def list_and_not_keyword?(enumerable) do
     !Keyword.keyword?(enumerable) && is_list(enumerable)
   end
 
