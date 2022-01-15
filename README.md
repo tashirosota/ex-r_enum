@@ -6,7 +6,8 @@
 
 # REnum
 
-Extensions and aliases for Enumerable modules inspired by Ruby and Rails.ActiveSupport.
+**Many useful functions implemented.**
+Renum is Extensions and aliases for Enumerable modules inspired by Ruby and Rails.ActiveSupport.
 It also provides full support for native functions through metaprogramming.
 
 ## Installation
@@ -21,8 +22,10 @@ end
 
 ## Usage
 
+You can use all of `Enum.Enumerable.*` functions through REnum Module.
+
 ```elixir
-# Many useful functions.
+# Examples.
 # REnum.Enumerable.Ruby.compact()
 iex> [1, nil, 2, 3]
 iex> |> REnum.compact()
@@ -47,6 +50,22 @@ iex> |> REnum.reverse_each(&IO.inspect(&1))
 # 2
 # 1
 [1, 2, 3]
+# REnum.Enumerable.ActiveSupport.pluck()
+iex> payments = [
+...>   %Payment{dollars: 5, cents: 99},
+...>   %Payment{dollars: 10, cents: 0},
+...>   %Payment{dollars: 0, cents: 5}
+...> ]
+iex> |> REnum.pluck(:dollars)
+[5, 10, 0]
+# REnum.Enumerable.ActiveSupport.maximum()
+iex> REnum.maximum(payments, :dollars)
+10
+# REnum.Enumerable.ActiveSupport.without()
+iex> 1..5
+iex> |> REnum.without([1, 5])
+[2, 3, 4]
+
 # Aliases.
 # REnum.Enumerable.Ruby.select()
 iex> [1, 2, 3]
@@ -81,7 +100,7 @@ See **[hexdocs](https://hexdocs.pm/r_enum)**.
   - REnum.Range.Native
   - REnum.Stream.Native
   - REnum.Utils
-- [ ] 0.2.0
+- [x] 0.2.0
   - REnum.Enumerable.ActiveSupport
 - [ ] 0.3.0
   - REnum.List.Ruby
@@ -101,7 +120,7 @@ See **[hexdocs](https://hexdocs.pm/r_enum)**.
 
 | REnum        | Elixir Module | Ruby Class       | Elixir | Ruby | ActiveSupport |
 | ------------ | ------------- | ---------------- | :----: | :--: | :-----------: |
-| REnum        | Enum          | Enumerable       |   ◎    |  ◎   |       ×       |
+| REnum        | Enum          | Enumerable       |   ◎    |  ◎   |       ◎       |
 | REnum.List   | List          | Array            |   ◎    |  ×   |       ×       |
 | REnum.Map    | Map           | Hash             |   ◎    |  ×   |       ×       |
 | REnum.Range  | Range         | Range            |   ◎    |  ×   |       ×       |

@@ -296,11 +296,11 @@ defmodule REnum.Enumerable.RubyTest do
     end
   end
 
-  test "is_list_and_not_keyword?/1" do
-    assert REnum.is_list_and_not_keyword?(%{a: 1, b: 2}) == false
-    assert REnum.is_list_and_not_keyword?(0..5) == false
-    assert REnum.is_list_and_not_keyword?(a: 1, b: 2) == false
-    assert REnum.is_list_and_not_keyword?([1, 2, 3]) == true
+  test "list_and_not_keyword?/1" do
+    assert REnum.list_and_not_keyword?(%{a: 1, b: 2}) == false
+    assert REnum.list_and_not_keyword?(0..5) == false
+    assert REnum.list_and_not_keyword?(a: 1, b: 2) == false
+    assert REnum.list_and_not_keyword?([1, 2, 3]) == true
   end
 
   test "chain/2" do

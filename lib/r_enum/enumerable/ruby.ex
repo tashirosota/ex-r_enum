@@ -115,7 +115,7 @@ defmodule REnum.Enumerable.Ruby do
       iex> REnum.first(%{a: 1, b: 2}, 2)
       [[:a, 1], [:b, 2]]
   """
-  @spec first(type_enumerable) :: type_enumerable()
+  @spec first(type_enumerable, non_neg_integer()) :: type_enumerable()
   def first(enumerable, n) do
     0..(n - 1)
     |> Enum.with_index(fn _, index ->
@@ -288,10 +288,7 @@ defmodule REnum.Enumerable.Ruby do
   @spec to_a(type_enumerable()) :: list()
   def to_a(enumerable) do
     cond do
-      range?(enumerable) ->
-        enumerable |> Enum.to_list()
-
-      is_map(enumerable) ->
+      map_and_not_range?(enumerable) ->
         enumerable
         |> Enum.map(fn {k, v} ->
           [k, v]
@@ -331,7 +328,7 @@ defmodule REnum.Enumerable.Ruby do
   """
   @spec to_h(type_enumerable()) :: map()
   def to_h(enumerable) do
-    if(is_list_and_not_keyword?(enumerable)) do
+    if(list_and_not_keyword?(enumerable)) do
       enumerable
       |> Enum.map(&{Enum.at(&1, 0), Enum.at(&1, 1)})
       |> Map.new()
@@ -663,10 +660,10 @@ defmodule REnum.Enumerable.Ruby do
   defdelegate inject(enumerable, acc, func), to: Enum, as: :reduce
   defdelegate inject(enumerable, func), to: Enum, as: :reduce
   defdelegate collect(enumerable, func), to: Enum, as: :map
-  defdelegate include?(enumerable, func), to: Enum, as: :member?
+  defdelegate include?(enumerable, element), to: Enum, as: :member?
   defdelegate collect_concat(enumerable, func), to: Enum, as: :flat_map
   defdelegate entries(enumerable), to: __MODULE__, as: :to_a
-  defdelegate each_with_object(enumerable, object, func), to: Enum, as: :reduce
+  defdelegate each_with_object(enumerable, collectable, func), to: Enum, as: :reduce
   defdelegate each_with_index(enumerable, func), to: Enum, as: :with_index
   defdelegate each_with_index(enumerable), to: Enum, as: :with_index
   defdelegate minmax(enumerable), to: Enum, as: :min_max

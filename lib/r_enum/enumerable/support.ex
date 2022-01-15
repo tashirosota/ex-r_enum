@@ -16,6 +16,7 @@ defmodule REnum.Enumerable.Support do
   ## Examples
       iex> REnum.range?([1, 2, 3])
       false
+
       iex> REnum.range?(2..3)
       true
   """
@@ -24,15 +25,30 @@ defmodule REnum.Enumerable.Support do
   def range?(_), do: false
 
   @doc """
-  Returns true if argument is list and not keyword list.
+  Returns true if argument is map and not range.
   ## Examples
-      iex> REnum.is_list_and_not_keyword?([1, 2, 3])
+      iex> REnum.map_and_not_range?(%{})
       true
-      iex> REnum.is_list_and_not_keyword?([a: 1, b: 2])
+
+      iex> REnum.map_and_not_range?(1..3)
       false
   """
-  @spec is_list_and_not_keyword?(type_enumerable) :: boolean()
-  def is_list_and_not_keyword?(enumerable) do
+  @spec map_and_not_range?(type_enumerable) :: boolean
+  def map_and_not_range?(enumerable) do
+    is_map(enumerable) && !range?(enumerable)
+  end
+
+  @doc """
+  Returns true if argument is list and not keyword list.
+  ## Examples
+      iex> REnum.list_and_not_keyword?([1, 2, 3])
+      true
+
+      iex> REnum.list_and_not_keyword?([a: 1, b: 2])
+      false
+  """
+  @spec list_and_not_keyword?(type_enumerable) :: boolean()
+  def list_and_not_keyword?(enumerable) do
     !Keyword.keyword?(enumerable) && is_list(enumerable)
   end
 
@@ -41,6 +57,7 @@ defmodule REnum.Enumerable.Support do
   ## Examples
       iex> REnum.truthy_count([1, 2, 3])
       3
+
       iex> REnum.truthy_count([1, nil, false])
       1
   """
@@ -56,8 +73,12 @@ defmodule REnum.Enumerable.Support do
   ## Examples
       iex> REnum.truthy_count([1, 2, 3], &(&1 < 3))
       2
+
       iex> REnum.truthy_count([1, nil, false], &(is_nil(&1)))
       1
+
+      iex> REnum.truthy_count(["bar", "baz", "foo"], ~r/a/)
+      2
   """
   @spec truthy_count(type_enumerable, function()) :: non_neg_integer()
   def truthy_count(enumerable, func) when is_function(func) do
@@ -76,6 +97,7 @@ defmodule REnum.Enumerable.Support do
   ## Examples
       iex> REnum.match_function(1..3).(2)
       true
+
       iex> REnum.match_function(~r/a/).("bcd")
       false
   """
