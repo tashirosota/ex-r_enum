@@ -35,7 +35,7 @@ defmodule REnum.Enumerable.ActiveSupport do
   # ✔ minimum
   # ✔ pick
   # ✔ pluck
-  # sole
+  # ✔ sole
   # ✔ without
 
   @spec compact_blank(type_enumerable) :: type_enumerable
