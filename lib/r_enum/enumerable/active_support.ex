@@ -203,5 +203,18 @@ defmodule REnum.Enumerable.ActiveSupport do
     |> compact()
   end
 
+  @spec sole(type_enumerable()) :: boolean()
+  def sole(enumerable) do
+    case Enum.count(enumerable) do
+      1 -> first(enumerable)
+      0 -> raise SoleItemExpectedError, "no item found"
+      _ -> raise SoleItemExpectedError, "multiple items found"
+    end
+  end
+
   defdelegate without(enumerable, elements), to: __MODULE__, as: :excluding
+end
+
+defmodule SoleItemExpectedError do
+  defexception [:message]
 end

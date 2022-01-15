@@ -156,4 +156,16 @@ defmodule REnum.Enumerable.ActiveSupportTest do
              %Payment{cents: 5, dollars: 0}
            ]
   end
+
+  test "sole/1" do
+    assert REnum.sole([1]) == 1
+
+    assert_raise SoleItemExpectedError, "multiple items found", fn ->
+      REnum.sole(@payments)
+    end
+
+    assert_raise SoleItemExpectedError, "no item found", fn ->
+      REnum.sole([])
+    end
+  end
 end
