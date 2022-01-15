@@ -1,6 +1,5 @@
 defmodule REnum.Enumerable.ActiveSupportTest do
   use ExUnit.Case
-  import ExUnit.CaptureIO
   doctest REnum.Enumerable.ActiveSupport
 
   @payments [
@@ -140,8 +139,8 @@ defmodule REnum.Enumerable.ActiveSupportTest do
              %Payment{cents: 99, dollars: 5} => 99
            }
 
-    assert REnum.index_with(~w(a, b, c), 3) == %{"a," => 3, "b," => 3, "c" => 3}
-    assert REnum.index_with(~w(foo bar bat)a, nil) == %{bar: nil, bat: nil, foo: nil}
+    assert REnum.index_with(~w[a b c], 3) == %{"a" => 3, "b" => 3, "c" => 3}
+    assert REnum.index_with(~w[foo bar bat]a, nil) == %{bar: nil, bat: nil, foo: nil}
   end
 
   test "in_order_of/3" do

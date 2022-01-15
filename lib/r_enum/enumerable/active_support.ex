@@ -162,6 +162,21 @@ defmodule REnum.Enumerable.ActiveSupport do
     |> Enum.count() > 1
   end
 
+  @doc """
+  Returns true if the enumerable has more than 1 element matched given function result or pattern.
+  ## Examples
+      iex>  REnum.many?([1, 2, 3], &(&1 < 2))
+      false
+
+      iex> REnum.many?([1, 2, 3], &(&1 < 3))
+      true
+
+      iex> REnum.many?(["bar", "baz", "foo"], "bar")
+      false
+
+      iex>   REnum.many?(["bar", "baz", "foo"], ~r/a/)
+      true
+  """
   @spec many?(type_enumerable(), type_pattern() | function()) :: boolean
   def many?(enumerable, pattern_or_func) do
     truthy_count(enumerable, pattern_or_func) > 1
@@ -347,8 +362,8 @@ defmodule REnum.Enumerable.ActiveSupport do
         %Payment{cents: 99, dollars: 5} => 99
       }
 
-      iex> REnum.index_with(~w(a, b, c), 3)
-      %{"a," => 3, "b," => 3, "c" => 3}
+      iex> REnum.index_with(~w(a b c), 3)
+      %{"a" => 3, "b" => 3, "c" => 3}
 
   """
   @spec index_with(list(any()), function()) :: map
