@@ -143,4 +143,17 @@ defmodule REnum.Enumerable.ActiveSupportTest do
     assert REnum.index_with(~w(a, b, c), 3) == %{"a," => 3, "b," => 3, "c" => 3}
     assert REnum.index_with(~w(foo bar bat)a, nil) == %{bar: nil, bat: nil, foo: nil}
   end
+
+  test "in_order_of/3" do
+    assert REnum.in_order_of(@payments, :cents, [99, 5, 0]) == [
+             %Payment{cents: 99, dollars: 5},
+             %Payment{cents: 5, dollars: 0},
+             %Payment{cents: 0, dollars: 10}
+           ]
+
+    assert REnum.in_order_of(@payments, :cents, [0, 5]) == [
+             %Payment{cents: 0, dollars: 10},
+             %Payment{cents: 5, dollars: 0}
+           ]
+  end
 end

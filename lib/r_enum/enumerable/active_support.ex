@@ -1,6 +1,7 @@
 defmodule REnum.Enumerable.ActiveSupport do
   import REnum.Utils
   import REnum.Enumerable.Support
+  import REnum.Enumerable.Ruby
 
   @moduledoc """
   Unimplemented.
@@ -25,7 +26,7 @@ defmodule REnum.Enumerable.ActiveSupport do
   # ✔ compact_blank
   # ✔ exclude?
   # ✔ excluding
-  # in_order_of
+  # ✔ in_order_of
   # ✔ including
   # ✔ index_by
   # ✔ index_with
@@ -189,6 +190,17 @@ defmodule REnum.Enumerable.ActiveSupport do
       {key, value}
     end)
     |> Map.new()
+  end
+
+  @spec in_order_of(type_map_list(), atom(), list()) :: list()
+  def in_order_of(enumerable, key, series) do
+    map = enumerable |> index_by(key)
+
+    series
+    |> Enum.map(fn s ->
+      map[s]
+    end)
+    |> compact()
   end
 
   defdelegate without(enumerable, elements), to: __MODULE__, as: :excluding
