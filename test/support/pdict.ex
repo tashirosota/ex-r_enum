@@ -1,4 +1,3 @@
-# # TODO: move test dir
 defmodule Pdict do
   defstruct []
 

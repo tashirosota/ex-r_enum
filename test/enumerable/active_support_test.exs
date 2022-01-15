@@ -3,6 +3,8 @@ defmodule REnum.Enumerable.ActiveSupportTest do
   import ExUnit.CaptureIO
   doctest REnum.Enumerable.ActiveSupport
 
+  @payments [%Payment{dollars: 5, cents: 99}, %Payment{dollars: 10, cents: 0}]
+
   describe "compact_blank/1" do
     test "when list" do
       assert REnum.compact_blank([1, "", nil, 2, " ", [], %{}, false, true]) == [1, 2, true]
@@ -68,12 +70,20 @@ defmodule REnum.Enumerable.ActiveSupportTest do
   end
 
   test "pick/2" do
-    payments = [%{dollars: 5, cents: 99}, %{dollars: 10, cents: 0}]
-    assert REnum.pick(payments, [:dollars, :cents]) == [5, 99]
-    assert REnum.pick(payments, [:dollars]) == 5
-    assert REnum.pick(payments, :dollars) == 5
+    assert REnum.pick(@payments, [:dollars, :cents]) == [5, 99]
+    assert REnum.pick(@payments, [:dollars]) == 5
+    assert REnum.pick(@payments, :dollars) == 5
 
     assert REnum.pick([], :price) == nil
     assert REnum.pick([], [:dollars, :cents]) == nil
+  end
+
+  test "pluck/2" do
+    assert REnum.pluck(@payments, [:dollars, :cents]) == [[5, 99], [10, 0]]
+    assert REnum.pluck(@payments, [:dollars]) == [5, 10]
+    assert REnum.pluck(@payments, :dollars) == [5, 10]
+
+    assert REnum.pluck([], :price) == []
+    assert REnum.pluck([], [:dollars, :cents]) == []
   end
 end

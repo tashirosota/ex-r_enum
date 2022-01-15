@@ -31,8 +31,8 @@ defmodule REnum.Enumerable.ActiveSupport do
   # ✔ many?
   # maximum
   # minimum
-  # pick
-  # pluck
+  # ✔ pick
+  # ✔ pluck
   # sole
   # ✔ without
 
@@ -99,17 +99,44 @@ defmodule REnum.Enumerable.ActiveSupport do
     if(many?(keys)) do
       keys
       |> Enum.map(fn key ->
-        head[key]
+        Map.get(head, key)
       end)
     else
       [key | _] = keys
-      head[key]
+      Map.get(head, key)
     end
   end
 
   def pick(map_list, key) when is_atom(key) do
     [head, _] = map_list
-    head[key]
+    Map.get(head, key)
+  end
+
+  @spec pluck(list(map()), list(atom()) | atom()) :: any
+  def pluck(map_list, keys) when is_list(keys) do
+    if(many?(keys)) do
+      map_list
+      |> Enum.map(fn el ->
+        keys
+        |> Enum.map(fn key ->
+          Map.get(el, key)
+        end)
+      end)
+    else
+      [key | _] = keys
+
+      map_list
+      |> Enum.map(fn el ->
+        Map.get(el, key)
+      end)
+    end
+  end
+
+  def pluck(map_list, key) do
+    map_list
+    |> Enum.map(fn el ->
+      Map.get(el, key)
+    end)
   end
 
   defdelegate without(enumerable, elements), to: __MODULE__, as: :excluding

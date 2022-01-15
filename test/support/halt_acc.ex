@@ -1,4 +1,3 @@
-# TODO: moves test dir
 defmodule HaltAcc do
   defstruct [:acc]
 
