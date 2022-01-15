@@ -6,6 +6,21 @@ defmodule REnum.Utils do
   """
   @doc """
   Defines in the module that called all the functions of the argument module.
+  ## Examples
+      iex> defmodule A do
+      ...>   defmacro __using__(_opts) do
+      ...>     REnum.Utils.define_all_functions!(__MODULE__)
+      ...>   end
+      ...>
+      ...>   def test do
+      ...>     :test
+      ...>   end
+      ...> end
+      iex> defmodule B do
+      ...>   use A
+      ...> end
+      iex> B.test
+      :test
   """
   @spec define_all_functions!(module()) :: list
   def define_all_functions!(mod, undelegate_functions \\ []) do
@@ -32,6 +47,20 @@ defmodule REnum.Utils do
     Enum.map(1..n, fn n -> {String.to_atom("arg#{n}"), [], Elixir} end)
   end
 
+  @doc """
+  Return true if object is blank if it's false, empty, or a whitespace string.
+  For example, +nil+, '', '   ', [], {}, and +false+ are all blank.
+  ## Examples
+      iex>  REnum.Utils.blank?(%{})
+      true
+
+      iex> REnum.Utils.blank?([1])
+      false
+
+      iex> REnum.Utils.blank?("  ")
+      true
+  """
+  @spec blank?(any()) :: boolean()
   def blank?(map) when map == %{}, do: true
   def blank?([]), do: true
   def blank?(nil), do: true
@@ -44,6 +73,19 @@ defmodule REnum.Utils do
 
   def blank?(_), do: false
 
+  @doc """
+  Returns true if not `REnum.Utils.blank?`
+  ## Examples
+      iex>  REnum.Utils.present?(%{})
+      false
+
+      iex> REnum.Utils.present?([1])
+      true
+
+      iex> REnum.Utils.present?("  ")
+      false
+  """
+  @spec present?(any()) :: boolean()
   def present?(obj) do
     !blank?(obj)
   end
