@@ -2,7 +2,7 @@ defmodule REnum.MixProject do
   use Mix.Project
   @versoin "0.2.0"
   @source_url "https://github.com/tashirosota/ex-r_enum"
-  @description "Extensions and aliases for Enumerable modules inspired by Ruby and Rails.ActiveSupport."
+  @description "**Many useful functions implemented.** Renum is extensions and aliases for Enumerable modules inspired by Ruby and Rails.ActiveSupport."
   def project do
     [
       app: :r_enum,

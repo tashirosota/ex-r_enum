@@ -2,7 +2,7 @@
 
 # Changelog
 
-## v0.2.0 (2022-1-1x)
+## v0.2.0 (2022-1-15)
 
 - REnum.Enumerable.ActiveSupport
 
