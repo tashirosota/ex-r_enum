@@ -3,7 +3,11 @@ defmodule REnum.Enumerable.ActiveSupportTest do
   import ExUnit.CaptureIO
   doctest REnum.Enumerable.ActiveSupport
 
-  @payments [%Payment{dollars: 5, cents: 99}, %Payment{dollars: 10, cents: 0}]
+  @payments [
+    %Payment{dollars: 5, cents: 99},
+    %Payment{dollars: 10, cents: 0},
+    %Payment{dollars: 0, cents: 5}
+  ]
 
   describe "compact_blank/1" do
     test "when list" do
@@ -79,11 +83,27 @@ defmodule REnum.Enumerable.ActiveSupportTest do
   end
 
   test "pluck/2" do
-    assert REnum.pluck(@payments, [:dollars, :cents]) == [[5, 99], [10, 0]]
-    assert REnum.pluck(@payments, [:dollars]) == [5, 10]
-    assert REnum.pluck(@payments, :dollars) == [5, 10]
+    assert REnum.pluck(@payments, [:dollars, :cents]) == [[5, 99], [10, 0], [0, 5]]
+    assert REnum.pluck(@payments, [:dollars]) == [5, 10, 0]
+    assert REnum.pluck(@payments, :dollars) == [5, 10, 0]
 
     assert REnum.pluck([], :price) == []
     assert REnum.pluck([], [:dollars, :cents]) == []
+  end
+
+  test "maximum/2" do
+    assert REnum.maximum(@payments, :cents) == 99
+    assert REnum.maximum(@payments, :dollars) == 10
+
+    assert REnum.maximum([], :price) == nil
+    assert REnum.maximum([], :dollars) == nil
+  end
+
+  test "minimum/2" do
+    assert REnum.minimum(@payments, :cents) == 0
+    assert REnum.minimum(@payments, :dollars) == 0
+
+    assert REnum.minimum([], :price) == nil
+    assert REnum.minimum([], :dollars) == nil
   end
 end
