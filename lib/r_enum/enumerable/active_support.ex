@@ -28,7 +28,7 @@ defmodule REnum.Enumerable.ActiveSupport do
   # ✔ including
   # index_by
   # index_with
-  # many?
+  # ✔ many?
   # maximum
   # minimum
   # pick
@@ -77,6 +77,17 @@ defmodule REnum.Enumerable.ActiveSupport do
   @spec including(type_enumerable, type_enumerable) :: type_enumerable
   def including(enumerable, elements) do
     (enumerable |> Enum.to_list()) ++ (elements |> Enum.to_list())
+  end
+
+  @spec many?(type_enumerable()) :: boolean
+  def many?(enumerable) do
+    enumerable
+    |> Enum.count() > 1
+  end
+
+  @spec many?(type_enumerable(), type_pattern() | function()) :: boolean
+  def many?(enumerable, pattern_or_func) do
+    truthy_count(enumerable, pattern_or_func) > 1
   end
 
   defdelegate without(enumerable, elements), to: __MODULE__, as: :excluding

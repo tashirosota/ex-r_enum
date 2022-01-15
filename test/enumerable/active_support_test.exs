@@ -47,4 +47,23 @@ defmodule REnum.Enumerable.ActiveSupportTest do
              {:page, 5}
            ]
   end
+
+  describe "many?" do
+    test "many?/1" do
+      refute REnum.many?([])
+      refute REnum.many?([1])
+      assert REnum.many?([1, 2])
+      refute REnum.many?(%{})
+      refute REnum.many?(%{a: 1})
+      assert REnum.many?(%{a: 1, b: 2})
+    end
+
+    test "many?/2" do
+      refute REnum.many?([1, 2, 3], &(&1 < 2))
+      assert REnum.many?([1, 2, 3], &(&1 < 3))
+
+      refute REnum.many?(["bar", "baz", "foo"], "bar")
+      assert REnum.many?(["bar", "baz", "foo"], ~r/a/)
+    end
+  end
 end
