@@ -66,4 +66,14 @@ defmodule REnum.Enumerable.ActiveSupportTest do
       assert REnum.many?(["bar", "baz", "foo"], ~r/a/)
     end
   end
+
+  test "pick/2" do
+    payments = [%{dollars: 5, cents: 99}, %{dollars: 10, cents: 0}]
+    assert REnum.pick(payments, [:dollars, :cents]) == [5, 99]
+    assert REnum.pick(payments, [:dollars]) == 5
+    assert REnum.pick(payments, :dollars) == 5
+
+    assert REnum.pick([], :price) == nil
+    assert REnum.pick([], [:dollars, :cents]) == nil
+  end
 end

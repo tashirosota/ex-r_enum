@@ -90,5 +90,27 @@ defmodule REnum.Enumerable.ActiveSupport do
     truthy_count(enumerable, pattern_or_func) > 1
   end
 
+  @spec pick(list(map()), list(atom()) | atom()) :: any
+  def pick([], _keys), do: nil
+
+  def pick(map_list, keys) when is_list(keys) do
+    [head, _] = map_list
+
+    if(many?(keys)) do
+      keys
+      |> Enum.map(fn key ->
+        head[key]
+      end)
+    else
+      [key | _] = keys
+      head[key]
+    end
+  end
+
+  def pick(map_list, key) when is_atom(key) do
+    [head, _] = map_list
+    head[key]
+  end
+
   defdelegate without(enumerable, elements), to: __MODULE__, as: :excluding
 end
