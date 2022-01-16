@@ -83,7 +83,7 @@ iex> REnum.sort()
 [1, 2, 3]
 ```
 
-And more functions. [See also](https://hexdocs.pm/r_enum)
+For the full list of available functions, see [API Reference](https://hexdocs.pm/r_enum/api-reference.html).
 
 ## Docs
 
