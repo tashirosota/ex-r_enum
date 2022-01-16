@@ -15,7 +15,7 @@ It also provides full support for native functions through metaprogramming.
 ```elixir
 def deps do
   [
-    {:r_enum, "~> 0.1.0"}
+    {:r_enum, "~> 0.1"}
   ]
 end
 ```
