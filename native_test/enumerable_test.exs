@@ -1,6 +1,6 @@
-defmodule REnum.Enumerable.NativeTest do
+defmodule REnum.NativeTest do
   use ExUnit.Case, async: true
-  doctest REnum.Enumerable.Native
+  doctest REnum.Native
 
   defp assert_runs_enumeration_only_once(enum_fun) do
     enumerator =
