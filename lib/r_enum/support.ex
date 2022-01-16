@@ -1,11 +1,11 @@
-defmodule REnum.Enumerable.Support do
+defmodule REnum.Support do
   @moduledoc """
   Summarized other useful functions related to enumerable.
-  Defines all of here functions when `use REnum.Enumerable.Support`.
+  Defines all of here functions when `use REnum.Support`.
   """
   @spec __using__(any) :: list
   defmacro __using__(_opts) do
-    REnum.Utils.define_all_functions!(__MODULE__)
+    RUtils.define_all_functions!(__MODULE__)
   end
 
   @type type_enumerable :: Enumerable.t()

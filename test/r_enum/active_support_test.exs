@@ -1,6 +1,6 @@
-defmodule REnum.Enumerable.ActiveSupportTest do
+defmodule REnum.ActiveSupportTest do
   use ExUnit.Case
-  doctest REnum.Enumerable.ActiveSupport
+  doctest REnum.ActiveSupport
 
   @payments [
     %Payment{dollars: 5, cents: 99},

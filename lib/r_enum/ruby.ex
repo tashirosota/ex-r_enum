@@ -1,19 +1,19 @@
-defmodule REnum.Enumerable.Ruby do
+defmodule REnum.Ruby do
   @moduledoc """
   Summarized all of Ruby functions.
   If a function with the same name already exists in Elixir, that is not implemented.
   Also, the function that returns Enumerator in Ruby is customized each behavior on the characteristics.
-  Defines all of here functions when `use REnum.Enumerable.Ruby`.
+  Defines all of here functions when `use REnum.Ruby`.
   """
   @spec __using__(any) :: list
   defmacro __using__(_opts) do
-    REnum.Utils.define_all_functions!(__MODULE__)
+    RUtils.define_all_functions!(__MODULE__)
   end
 
   @type type_enumerable :: Enumerable.t()
   @type type_pattern :: number() | String.t() | Range.t() | Regex.t()
 
-  import REnum.Enumerable.Support
+  import REnum.Support
 
   # https://ruby-doc.org/core-3.1.0/Enumerable.html
   # ruby_enumerable = [:all?, :any?, :chain, :chunk, :chunk_while, :collect, :collect_concat, :compact, :count, :cycle, :detect, :drop, :drop_while, :each_cons, :each_entry, :each_slice, :each_with_index, :each_with_object, :entries, :filter, :filter_map, :find, :find_all, :find_index, :first, :flat_map, :grep, :grep_v, :group_by, :include?, :inject, :lazy, :map, :max, :max_by, :member?, :min, :min_by, :minmax, :minmax_by, :none?, :one?, :partition, :reduce, :reject, :reverse_each, :select, :slice_after, :slice_before, :slice_when, :sort, :sort_by, :sum, :take, :take_while, :tally, :to_a, :to_h, :uniq, :zip]

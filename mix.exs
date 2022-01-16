@@ -54,37 +54,37 @@ defmodule REnum.MixProject do
     [
       Enum: [
         REnum,
-        REnum.Enumerable.Native,
-        REnum.Enumerable.Ruby,
-        REnum.Enumerable.ActiveSupport,
-        REnum.Enumerable.Support
+        REnum.Native,
+        REnum.Ruby,
+        REnum.ActiveSupport,
+        REnum.Support
       ],
       List: [
-        REnum.List,
-        REnum.List.Native,
-        REnum.List.Ruby,
-        REnum.List.ActiveSupport
+        RList,
+        RList.Native,
+        RList.Ruby,
+        RList.ActiveSupport
       ],
       Map: [
-        REnum.Map,
-        REnum.Map.Native,
-        REnum.Map.Ruby,
-        REnum.Map.ActiveSupport
+        RMap,
+        RMap.Native,
+        RMap.Ruby,
+        RMap.ActiveSupport
       ],
       Range: [
-        REnum.Range,
-        REnum.Range.Native,
-        REnum.Range.Ruby,
-        REnum.Range.ActiveSupport
+        RRange,
+        RRange.Native,
+        RRange.Ruby,
+        RRange.ActiveSupport
       ],
       Stream: [
-        REnum.Stream,
-        REnum.Stream.Native,
-        REnum.Stream.Ruby,
-        REnum.Stream.ActiveSupport
+        RStream,
+        RStream.Native,
+        RStream.Ruby,
+        RStream.ActiveSupport
       ],
       Utils: [
-        REnum.Utils
+        RUtils
       ]
     ]
   end
