@@ -409,7 +409,8 @@ defmodule REnum.Enumerable.ActiveSupport do
   end
 
   @doc """
-  Returns the sole item in the enumerable. If there are no items, or more than one item, raises SoleItemExpectedError.
+  Returns the sole item in the enumerable.
+  If there are no items, or more than one item, raises SoleItemExpectedError.
   ## Examples
       iex> REnum.sole([1])
       1

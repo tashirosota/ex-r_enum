@@ -7,7 +7,7 @@
 # REnum
 
 **Many useful functions implemented.**
-Renum is Extensions and aliases for Enumerable modules inspired by Ruby and Rails.ActiveSupport.
+REnum is Enum extended with convenient functions inspired by Ruby and Rails ActiveSupport.
 It also provides full support for native functions through metaprogramming.
 
 ## Installation

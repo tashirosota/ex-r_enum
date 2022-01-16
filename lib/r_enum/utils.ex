@@ -48,7 +48,7 @@ defmodule REnum.Utils do
   end
 
   @doc """
-  Return true if object is blank if it's false, empty, or a whitespace string.
+  Return true if object is blank, false, empty, or a whitespace string.
   For example, +nil+, '', '   ', [], {}, and +false+ are all blank.
   ## Examples
       iex>  REnum.Utils.blank?(%{})
