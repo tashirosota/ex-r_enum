@@ -1,7 +1,7 @@
-defmodule REnum.Enumerable.RubyTest do
+defmodule REnum.RubyTest do
   use ExUnit.Case
   import ExUnit.CaptureIO
-  doctest REnum.Enumerable.Ruby
+  doctest REnum.Ruby
 
   describe "compact/1" do
     test "when list" do

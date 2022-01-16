@@ -26,11 +26,11 @@ You can use all of `Enum.Enumerable.*` functions through REnum Module.
 
 ```elixir
 # Examples.
-# REnum.Enumerable.Ruby.compact()
+# REnum.Ruby.compact()
 iex> [1, nil, 2, 3]
 iex> |> REnum.compact()
 [1, 2, 3]
-# REnum.Enumerable.Ruby.tally()
+# REnum.Ruby.tally()
 iex> ~w(a c d b c a)
 iex> |> REnum.tally()
 %{
@@ -39,18 +39,18 @@ iex> |> REnum.tally()
   "d" => 1,
   "b" => 1
 }
-# REnum.Enumerable.Ruby.grep()
+# REnum.Ruby.grep()
 iex> ["foo", "bar", "car", "moo"]
 iex> |> REnum.grep(~r/ar/)
 ["bar", "car"]
-# REnum.Enumerable.Ruby.reverse_each()
+# REnum.Ruby.reverse_each()
 iex> [1, 2, 3]
 iex> |> REnum.reverse_each(&IO.inspect(&1))
 # 3
 # 2
 # 1
 [1, 2, 3]
-# REnum.Enumerable.ActiveSupport.pluck()
+# REnum.ActiveSupport.pluck()
 iex> payments = [
 ...>   %Payment{dollars: 5, cents: 99},
 ...>   %Payment{dollars: 10, cents: 0},
@@ -58,26 +58,26 @@ iex> payments = [
 ...> ]
 iex> |> REnum.pluck(:dollars)
 [5, 10, 0]
-# REnum.Enumerable.ActiveSupport.maximum()
+# REnum.ActiveSupport.maximum()
 iex> REnum.maximum(payments, :dollars)
 10
-# REnum.Enumerable.ActiveSupport.without()
+# REnum.ActiveSupport.without()
 iex> 1..5
 iex> |> REnum.without([1, 5])
 [2, 3, 4]
 
 # Aliases.
-# REnum.Enumerable.Ruby.select()
+# REnum.Ruby.select()
 iex> [1, 2, 3]
 iex> |> REnum.select(fn x -> rem(x, 2) == 0 end) ==
 iex>   Enum.filter([1, 2, 3], fn x -> rem(x, 2) == 0 end)
 true
 # Can use Elixir's Enum functions too.
-# REnum.Enumerable.Ruby.find()
+# REnum.Ruby.find()
 iex> [1, 2, 3]
 iex> |> REnum.find(fn x -> rem(x, 2) == 1 end)
 3
-# REnum.Enumerable.Ruby.sort()
+# REnum.Ruby.sort()
 iex> [1, 2, 3]
 iex> REnum.sort()
 [1, 2, 3]
@@ -92,36 +92,36 @@ See **[hexdocs](https://hexdocs.pm/r_enum)**.
 ## Roadmap
 
 - [x] 0.1.0
-  - REnum.Enumerable.Native
-  - REnum.Enumerable.Ruby
-  - REnum.Enumerable.Support
-  - REnum.List.Native
-  - REnum.Map.Native
-  - REnum.Range.Native
-  - REnum.Stream.Native
-  - REnum.Utils
+  - REnum.Native
+  - REnum.Ruby
+  - REnum.Support
+  - RList.Native
+  - RMap.Native
+  - RRange.Native
+  - RStream.Native
+  - RUtils
 - [x] 0.2.0
-  - REnum.Enumerable.ActiveSupport
-- [ ] 0.3.0
-  - REnum.List.Ruby
+  - REnum.ActiveSupport
 - [ ] 0.4.0
-  - REnum.List.ActiveSupport
+  - RList.Ruby
 - [ ] 0.5.0
-  - REnum.Map.Ruby
-  - REnum.Map.ActiveSupport
+  - RList.ActiveSupport
 - [ ] 0.6.0
-  - REnum.Range.Ruby
-  - REnum.Range.ActiveSupport
+  - RMap.Ruby
+  - RMap.ActiveSupport
 - [ ] 0.7.0
-  - REnum.Stream.Ruby
-  - REnum.Stream.ActiveSupport
+  - RRange.Ruby
+  - RRange.ActiveSupport
+- [ ] 0.8.0
+  - RStream.Ruby
+  - RStream.ActiveSupport
 
 ## Progress
 
-| REnum        | Elixir Module | Ruby Class       | Elixir | Ruby | ActiveSupport |
-| ------------ | ------------- | ---------------- | :----: | :--: | :-----------: |
-| REnum        | Enum          | Enumerable       |   ◎    |  ◎   |       ◎       |
-| REnum.List   | List          | Array            |   ◎    |  ×   |       ×       |
-| REnum.Map    | Map           | Hash             |   ◎    |  ×   |       ×       |
-| REnum.Range  | Range         | Range            |   ◎    |  ×   |       ×       |
-| REnum.Stream | Stream        | Enumerator::Lazy |   ◎    |  ×   |       ×       |
+| REnum   | Elixir Module | Ruby Class       | Elixir | Ruby | ActiveSupport |
+| ------- | ------------- | ---------------- | :----: | :--: | :-----------: |
+| REnum   | Enum          | Enumerable       |   ◎    |  ◎   |       ◎       |
+| RList   | List          | Array            |   ◎    |  ×   |       ×       |
+| RMap    | Map           | Hash             |   ◎    |  ×   |       ×       |
+| RRange  | Range         | Range            |   ◎    |  ×   |       ×       |
+| RStream | Stream        | Enumerator::Lazy |   ◎    |  ×   |       ×       |

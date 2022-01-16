@@ -1,13 +1,13 @@
 defmodule REnum do
   @moduledoc """
-  Entry point of Enum extensions, and can use all of REnum.Enumerable.* functions.
+  Entry point of Enum extensions, and can use all of REnum.* functions.
   See also
-   - [REnum.Enumerable.Native](https://hexdocs.pm/r_enum/REnum.Enumerable.Native.html#content)
-   - [REnum.Enumerable.Ruby](https://hexdocs.pm/r_enum/REnum.Enumerable.Ruby.html#content)
-   - [REnum.Enumerable.Support](https://hexdocs.pm/r_enum/REnum.Enumerable.Support.html#content)
+   - [REnum.Native](https://hexdocs.pm/r_enum/REnum.Native.html#content)
+   - [REnum.Ruby](https://hexdocs.pm/r_enum/REnum.Ruby.html#content)
+   - [REnum.Support](https://hexdocs.pm/r_enum/REnum.Support.html#content)
   """
-  use REnum.Enumerable.Native
-  use REnum.Enumerable.Ruby
-  use REnum.Enumerable.ActiveSupport
-  use REnum.Enumerable.Support
+  use REnum.Native
+  use REnum.Ruby
+  use REnum.ActiveSupport
+  use REnum.Support
 end

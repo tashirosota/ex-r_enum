@@ -1,7 +1,7 @@
-defmodule REnum.Range.NativeTest do
+defmodule RRange.NativeTest do
   use ExUnit.Case, async: true
 
-  doctest REnum.Range.Native
+  doctest RRange.Native
 
   defp reverse(first..last) do
     last..first
@@ -19,18 +19,18 @@ defmodule REnum.Range.NativeTest do
     # The caller should choose pairs of representative ranges, and we take care
     # here of commuting them.
     Enum.each([[r1, r2], [r2, r1]], fn [a, b] ->
-      assert REnum.Range.disjoint?(a, b) == expected
-      assert REnum.Range.disjoint?(reverse(a), b) == expected
-      assert REnum.Range.disjoint?(a, reverse(b)) == expected
-      assert REnum.Range.disjoint?(reverse(a), reverse(b)) == expected
+      assert RRange.disjoint?(a, b) == expected
+      assert RRange.disjoint?(reverse(a), b) == expected
+      assert RRange.disjoint?(a, reverse(b)) == expected
+      assert RRange.disjoint?(reverse(a), reverse(b)) == expected
     end)
   end
 
   test "new" do
-    assert REnum.Range.new(1, 3) == 1..3//1
-    assert REnum.Range.new(3, 1) == 3..1//-1
-    assert REnum.Range.new(1, 3, 2) == 1..3//2
-    assert REnum.Range.new(3, 1, -2) == 3..1//-2
+    assert RRange.new(1, 3) == 1..3//1
+    assert RRange.new(3, 1) == 3..1//-1
+    assert RRange.new(1, 3, 2) == 1..3//2
+    assert RRange.new(3, 1, -2) == 3..1//-2
   end
 
   test "op" do
@@ -77,8 +77,8 @@ defmodule REnum.Range.NativeTest do
       assert_disjoint(-3..1, 2..3)
       assert_disjoint(-7..-5, -3..-1)
 
-      assert REnum.Range.disjoint?(1..1, 2..2) == true
-      assert REnum.Range.disjoint?(2..2, 1..1) == true
+      assert RRange.disjoint?(1..1, 2..2) == true
+      assert RRange.disjoint?(2..2, 1..1) == true
     end
 
     test "returns false for ranges with common endpoints" do
@@ -92,7 +92,7 @@ defmodule REnum.Range.NativeTest do
       assert_overlap(-3..1, -1..3)
       assert_overlap(-7..-5, -5..-1)
 
-      assert REnum.Range.disjoint?(1..1, 1..1) == false
+      assert RRange.disjoint?(1..1, 1..1) == false
     end
   end
 

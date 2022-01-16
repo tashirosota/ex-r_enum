@@ -1,12 +1,12 @@
-defmodule REnum.Enumerable.ActiveSupport do
-  import REnum.Utils
-  import REnum.Enumerable.Support
-  import REnum.Enumerable.Ruby
+defmodule REnum.ActiveSupport do
+  import RUtils
+  import REnum.Support
+  import REnum.Ruby
 
   @moduledoc """
   Summarized all of Enumerable functions in Rails.ActiveSupport.
   If a function with the same name already exists in Elixir, that is not implemented.
-  Defines all of here functions when `use REnum.Enumerable.Utils`.
+  Defines all of here functions when `use RUtils`.
   """
   @spec __using__(any) :: list
   defmacro __using__(_opts) do
@@ -42,7 +42,7 @@ defmodule REnum.Enumerable.ActiveSupport do
 
   @doc """
   Returns a new enumerable without the blank items.
-  Uses `REnum.Utils.blank?` for determining if an item is blank.
+  Uses `RUtils.blank?` for determining if an item is blank.
   ## Examples
       iex> [1, "", nil, 2, " ", [], %{}, false, true]
       ...> |> REnum.compact_blank()

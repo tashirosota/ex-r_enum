@@ -1,4 +1,4 @@
-defmodule REnum.Utils do
+defmodule RUtils do
   @brank_regex ~r/\A[[:space:]]*\z/
   @default_undelegate_functions [:__info__, :module_info, :"MACRO-__using__"]
   @moduledoc """
@@ -9,7 +9,7 @@ defmodule REnum.Utils do
   ## Examples
       iex> defmodule A do
       ...>   defmacro __using__(_opts) do
-      ...>     REnum.Utils.define_all_functions!(__MODULE__)
+      ...>     RUtils.define_all_functions!(__MODULE__)
       ...>   end
       ...>
       ...>   def test do
@@ -51,13 +51,13 @@ defmodule REnum.Utils do
   Return true if object is blank, false, empty, or a whitespace string.
   For example, +nil+, '', '   ', [], {}, and +false+ are all blank.
   ## Examples
-      iex>  REnum.Utils.blank?(%{})
+      iex>  RUtils.blank?(%{})
       true
 
-      iex> REnum.Utils.blank?([1])
+      iex> RUtils.blank?([1])
       false
 
-      iex> REnum.Utils.blank?("  ")
+      iex> RUtils.blank?("  ")
       true
   """
   @spec blank?(any()) :: boolean()
@@ -74,15 +74,15 @@ defmodule REnum.Utils do
   def blank?(_), do: false
 
   @doc """
-  Returns true if not `REnum.Utils.blank?`
+  Returns true if not `RUtils.blank?`
   ## Examples
-      iex>  REnum.Utils.present?(%{})
+      iex>  RUtils.present?(%{})
       false
 
-      iex> REnum.Utils.present?([1])
+      iex> RUtils.present?([1])
       true
 
-      iex> REnum.Utils.present?("  ")
+      iex> RUtils.present?("  ")
       false
   """
   @spec present?(any()) :: boolean()
