@@ -1,6 +1,6 @@
 defmodule REnum.MixProject do
   use Mix.Project
-  @versoin "0.2.0"
+  @versoin "0.2.1"
   @source_url "https://github.com/tashirosota/ex-r_enum"
   @description "REnum is Enum extended with convenient functions inspired by Ruby and Rails ActiveSupport."
   def project do
