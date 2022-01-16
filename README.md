@@ -120,8 +120,8 @@ See **[hexdocs](https://hexdocs.pm/r_enum)**.
 
 | REnum   | Elixir Module | Ruby Class       | Elixir | Ruby | ActiveSupport |
 | ------- | ------------- | ---------------- | :----: | :--: | :-----------: |
-| REnum   | Enum          | Enumerable       |   ◎    |  ◎   |       ◎       |
-| RList   | List          | Array            |   ◎    |  ×   |       ×       |
-| RMap    | Map           | Hash             |   ◎    |  ×   |       ×       |
-| RRange  | Range         | Range            |   ◎    |  ×   |       ×       |
-| RStream | Stream        | Enumerator::Lazy |   ◎    |  ×   |       ×       |
+| REnum   | Enum          | Enumerable       | &check;|&check;| &check;      |
+| RList   | List          | Array            | &check;| TODO  | TODO         |
+| RMap    | Map           | Hash             | &check;| TODO  | TODO         |
+| RRange  | Range         | Range            | &check;| TODO  | TODO         |
+| RStream | Stream        | Enumerator::Lazy | &check;| TODO  | TODO         |
