@@ -64,8 +64,7 @@ defmodule REnum.Support do
   @spec truthy_count(type_enumerable) :: non_neg_integer()
   def truthy_count(enumerable) do
     enumerable
-    |> Enum.filter(& &1)
-    |> Enum.count()
+    |> Enum.count(& &1)
   end
 
   @doc """
