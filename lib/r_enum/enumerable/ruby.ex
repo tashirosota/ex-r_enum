@@ -631,26 +631,6 @@ defmodule REnum.Enumerable.Ruby do
     |> Enum.map(func)
   end
 
-  @doc """
-  Returns a map containing the counts of equal elements.
-  ## Examples
-      iex> ~w(a c d b c a)
-      iex> |> REnum.tally()
-      %{"a" => 2, "c" => 2, "d" => 1, "b" => 1}
-
-      iex> [a: 1, b: 2, c: 3, c: 3]
-      iex> |> REnum.tally()
-      %{{:a, 1} => 1, {:b, 2} => 1, {:c, 3} => 2}
-  """
-  def tally(enumerable) do
-    enumerable
-    |> Enum.group_by(& &1)
-    |> Enum.map(fn el ->
-      {elem(el, 0), elem(el, 1) |> Enum.count()}
-    end)
-    |> Map.new()
-  end
-
   # aliases
 
   defdelegate detect(enumerable, default, func), to: Enum, as: :find
@@ -671,4 +651,5 @@ defmodule REnum.Enumerable.Ruby do
   defdelegate minmax_by(enumerable, func), to: Enum, as: :min_max_by
   defdelegate minmax_by(enumerable, func1, func2), to: Enum, as: :min_max_by
   defdelegate minmax_by(enumerable, func1, func2, func3), to: Enum, as: :min_max_by
+  defdelegate tally(enumerable), to: Enum, as: :frequencies
 end
