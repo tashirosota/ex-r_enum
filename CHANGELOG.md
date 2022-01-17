@@ -6,14 +6,14 @@
 
 ### Readme
 
-- Use ✅ in the Progress table. (by @mnishiguchi)
-- Fix API reference link. (by @mnishiguchi)
-- Loosen the library version. (by @mnishiguchi)
+- Use ✅ in the Progress table. (by [@mnishiguchi](https://github.com/mnishiguchi))
+- Fix API reference link. (by [@mnishiguchi](https://github.com/mnishiguchi))
+- Loosen the library version. (by [@mnishiguchi](https://github.com/mnishiguchi))
 
 ### Refactors
 
-- REnum.Support.truthy_count. (by @TORIFUKUKaiou)
-- REnum.Ruby.tally. (by @TORIFUKUKaiou)
+- REnum.Support.truthy_count. (by [@TORIFUKUKaiou](https://github.com/TORIFUKUKaiou))
+- REnum.Ruby.tally. (by [@TORIFUKUKaiou](https://github.com/TORIFUKUKaiou))
 
 ## v0.3.0 (2022-1-16)
 
