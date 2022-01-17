@@ -32,9 +32,9 @@ defmodule RList.Ruby do
   # ✔ collect
   # combination
   # ✔ compact
-  # concat
-  # count
-  # cycle
+  # ✔ concat
+  # ✔ count
+  # ✔ cycle
   # deconstruct
   # delete_if
   # difference
@@ -136,6 +136,11 @@ defmodule RList.Ruby do
 
   def clear(list) when is_list(list), do: []
 
+  def concat(list, lists) do
+    (list ++ List.wrap(lists))
+    |> List.flatten()
+  end
+
   # TODO: hard
   # def combination(list, n) do
   #   []
@@ -152,4 +157,7 @@ defmodule RList.Ruby do
   defdelegate map(list, func), to: Enum
   defdelegate collect(list, func), to: Enum, as: :map
   defdelegate compact(list), to: REnum.Ruby
+  defdelegate count(list), to: Enum
+  defdelegate count(list, func), to: Enum
+  defdelegate cycle(list, n, func), to: REnum.Ruby
 end

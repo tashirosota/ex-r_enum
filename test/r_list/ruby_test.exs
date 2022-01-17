@@ -47,21 +47,21 @@ defmodule RList.RubyTest do
     end
   end
 
-  describe "push/2" do
+  test "push/2" do
     assert RList.push([1], 2) == [1, 2]
     assert RList.push([1], 1..3) == [1, 1..3]
     assert RList.push([1], [2, 3]) == [1, 2, 3]
     assert RList.push([1], %{a: 1}) == [1, %{a: 1}]
   end
 
-  describe "append/2" do
+  test "append/2" do
     assert RList.push([1], 2) == RList.append([1], 2)
     assert RList.push([1], 1..3) == RList.append([1], 1..3)
     assert RList.push([1], [2, 3]) == RList.append([1], [2, 3])
     assert RList.push([1], %{a: 1}) == RList.append([1], %{a: 1})
   end
 
-  describe "assoc/2" do
+  test "assoc/2" do
     a = %{foo: 0}
     b = [1, 15]
     c = [2, 25]
@@ -72,29 +72,81 @@ defmodule RList.RubyTest do
     assert RList.assoc(list, {:foo, 0}) == a
   end
 
-  describe "clear/1" do
+  test "clear/1" do
     assert RList.clear([1]) == []
     assert RList.clear([]) == []
   end
 
-  describe "at/2" do
+  test "at/2" do
     assert RList.at([1], 2) == Enum.at([1], 2)
     assert RList.at(0..3, 2) == Enum.at(0..3, 2)
   end
 
-  describe "map/2" do
+  test "map/2" do
     assert RList.map([1], &to_string(&1)) == Enum.map([1], &to_string(&1))
     assert RList.map(0..3, &to_string(&1)) == Enum.map(0..3, &to_string(&1))
   end
 
-  describe "collect/2" do
+  test "collect/2" do
     assert RList.collect([1], &to_string(&1)) == Enum.map([1], &to_string(&1))
     assert RList.collect(0..3, &to_string(&1)) == Enum.map(0..3, &to_string(&1))
   end
 
-  describe "compact/2" do
+  test "compact/2" do
     assert RList.compact([1, nil]) == REnum.Ruby.compact([1, nil])
     assert RList.compact([1]) == REnum.Ruby.compact([1])
+  end
+
+  test "concat/2" do
+    list = [1, %{a: 1}, {:b, :c}]
+    assert RList.concat(list, 10) == [1, %{a: 1}, {:b, :c}, 10]
+    assert RList.concat(list, [10]) == [1, %{a: 1}, {:b, :c}, 10]
+    assert RList.concat(list, [[10], [20]]) == [1, %{a: 1}, {:b, :c}, 10, 20]
+  end
+
+  describe "count" do
+    test "count/1" do
+      assert RList.count([1, 2, 3]) == Enum.count([1, 2, 3])
+      assert RList.count([]) == Enum.count([])
+      assert RList.count([1, true, false, nil]) == Enum.count([1, true, false, nil])
+    end
+
+    test "count/2" do
+      assert RList.count([1, 2, 3], fn x -> rem(x, 2) == 0 end) ==
+               Enum.count([1, 2, 3], fn x -> rem(x, 2) == 0 end)
+
+      assert RList.count([], fn x -> rem(x, 2) == 0 end) ==
+               Enum.count([], fn x -> rem(x, 2) == 0 end)
+
+      assert RList.count([1, true, false, nil], & &1) == Enum.count([1, true, false, nil], & &1)
+    end
+  end
+
+  test "cycle/3" do
+    list = ["a", "b", "c"]
+
+    assert capture_io(fn ->
+             RList.cycle(list, 3, &IO.puts(&1))
+           end) ==
+             capture_io(fn ->
+               REnum.cycle(list, 3, &IO.puts(&1))
+             end)
+
+    assert capture_io(fn ->
+             RList.cycle(list, 0, &IO.puts(&1))
+           end) ==
+             capture_io(fn ->
+               REnum.cycle(list, 0, &IO.puts(&1))
+             end)
+
+    assert capture_io(fn ->
+             RList.cycle(list, nil, &IO.puts(&1))
+             |> Enum.take(4)
+           end) ==
+             capture_io(fn ->
+               REnum.cycle(list, nil, &IO.puts(&1))
+               |> Enum.take(4)
+             end)
   end
 
   # TODO: hard
