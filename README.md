@@ -15,7 +15,7 @@ It also provides full support for native functions through metaprogramming.
 ```elixir
 def deps do
   [
-    {:r_enum, "~> 0.1.0"}
+    {:r_enum, "~> 0.1"}
   ]
 end
 ```
@@ -83,7 +83,7 @@ iex> REnum.sort()
 [1, 2, 3]
 ```
 
-And more functions. [See also](https://hexdocs.pm/r_enum)
+For the full list of available functions, see [API Reference](https://hexdocs.pm/r_enum/api-reference.html).
 
 ## Docs
 
@@ -120,8 +120,8 @@ See **[hexdocs](https://hexdocs.pm/r_enum)**.
 
 | REnum   | Elixir Module | Ruby Class       | Elixir | Ruby | ActiveSupport |
 | ------- | ------------- | ---------------- | :----: | :--: | :-----------: |
-| REnum   | Enum          | Enumerable       |   ◎    |  ◎   |       ◎       |
-| RList   | List          | Array            |   ◎    |  ×   |       ×       |
-| RMap    | Map           | Hash             |   ◎    |  ×   |       ×       |
-| RRange  | Range         | Range            |   ◎    |  ×   |       ×       |
-| RStream | Stream        | Enumerator::Lazy |   ◎    |  ×   |       ×       |
+| REnum   | Enum          | Enumerable       |   ✅   |  ✅  |      ✅       |
+| RList   | List          | Array            |   ✅   | TODO |     TODO      |
+| RMap    | Map           | Hash             |   ✅   | TODO |     TODO      |
+| RRange  | Range         | Range            |   ✅   | TODO |     TODO      |
+| RStream | Stream        | Enumerator::Lazy |   ✅   | TODO |     TODO      |
