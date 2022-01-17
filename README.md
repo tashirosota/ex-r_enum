@@ -1,6 +1,6 @@
 <!-- @format -->
 
-[![hex.pm version](https://img.shields.io/hexpm/v/ltsv.svg)](https://hex.pm/packages/r_enum)
+[![hex.pm version](https://img.shields.io/hexpm/v/r_enum.svg)](https://hex.pm/packages/r_enum)
 [![CI](https://github.com/tashirosota/ex-r_enum/actions/workflows/ci.yml/badge.svg)](https://github.com/tashirosota/ex-r_enum/actions/workflows/ci.yml)
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/tashirosota/ex-r_enum)
 
