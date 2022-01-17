@@ -379,47 +379,71 @@ defmodule REnum.Ruby do
   end
 
   @doc """
-  Calls the given function with each element, returns given enumerable:
+  Returns Stream given enumerable sliced by each amount.
+  ## Examples
+      iex> ["a", "b", "c", "d", "e"]
+      iex> |> REnum.each_slice(2)
+      iex> |> Enum.to_list()
+      [["a", "b"], ["c", "d"], ["e"]]
+
+      iex> %{a: 1, b: 2, c: 3}
+      iex> |> REnum.each_slice(2)
+      iex> |> Enum.to_list()
+      [[a: 1, b: 2], [c: 3]]
+  """
+  @spec each_slice(type_enumerable(), non_neg_integer()) :: type_enumerable() | atom()
+  def each_slice(enumerable, amount) do
+    if(amount < 1) do
+      []
+    else
+      enumerable
+      |> each_slice(
+        0,
+        amount
+      )
+    end
+    |> lazy()
+  end
+
+  def each_slice(enumerable, start_index, amount_or_func) when is_integer(amount_or_func) do
+    sliced =
+      enumerable
+      |> Enum.slice(start_index, amount_or_func)
+
+    next_start_index = start_index + amount_or_func
+
+    [sliced] ++
+      if Enum.count(enumerable) > next_start_index,
+        do: each_slice(enumerable, next_start_index, amount_or_func),
+        else: []
+  end
+
+  @doc """
+  Calls the given function with each element, returns given enumerable.
   ## Examples
       iex> ["a", "b", "c", "d", "e"]
       iex> |> REnum.each_slice(2, &IO.inspect(&1))
       # ["a", "b"]
       # ["c", "d"]
       # ["e"]
-      ["a", "b", "c", "d", "e"]
+      :ok
 
       iex> %{a: 1, b: 2, c: 3}
       iex> |> REnum.each_slice(2, &IO.inspect(&1))
       # [a: 1, b: 2]
       # [c: 3]
-      %{a: 1, b: 2, c: 3}
+      :ok
   """
-  @spec each_slice(type_enumerable(), non_neg_integer(), function()) :: type_enumerable()
-  def each_slice(enumerable, amount, func) do
-    enumerable
-    |> each_slice(
-      0,
-      amount,
-      func
-    )
-
-    enumerable
-  end
-
-  defp each_slice(enumerable, start_index, amount, func) do
-    enumerable
-    |> Enum.slice(start_index, amount)
-    |> func.()
-
-    next_start_index = start_index + amount
-
-    if(Enum.count(enumerable) > next_start_index) do
-      each_slice(enumerable, next_start_index, amount, func)
-    end
+  @spec each_slice(type_enumerable(), non_neg_integer(), function() | non_neg_integer()) :: atom()
+  def each_slice(enumerable, amount, amount_or_func) when is_function(amount_or_func) do
+    each_slice(enumerable, amount)
+    |> Enum.each(fn els ->
+      amount_or_func.(els)
+    end)
   end
 
   @doc """
-  Returns an Stream, which redefines most Enumerable functions to postpone enumeration and enumerate values only on an as-needed basis.
+  Returns Stream, which redefines most Enumerable functions to postpone enumeration and enumerate values only on an as-needed basis.
   ## Examples
       iex> [1, 2, 3]
       iex> |> REnum.lazy()
