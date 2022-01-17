@@ -355,24 +355,6 @@ defmodule REnum.Ruby do
   end
 
   @doc """
-  Returns an Stream generated from given enumerables.
-  ## Examples
-      iex> ["a", "b", "c"]
-      iex> |> REnum.chain(["d", "e"])
-      iex> |> REnum.to_list()
-      ["a", "b", "c", "d", "e"]
-
-      iex> %{a: 1, b: 2}
-      iex> |> REnum.chain(1..3)
-      iex> |> REnum.to_list()
-      [{:a, 1}, {:b, 2}, 1, 2, 3]
-  """
-  @spec chain(type_enumerable(), type_enumerable()) :: Stream
-  def chain(enumerable_1, enumerable_2) do
-    Stream.concat([enumerable_1, enumerable_2])
-  end
-
-  @doc """
   Calls the given function with each element, returns given enumerable:
   ## Examples
       iex> ["a", "b", "c"]
@@ -444,7 +426,7 @@ defmodule REnum.Ruby do
       iex> |> REnum.to_list()
       [1, 2, 3]
   """
-  @spec lazy(type_enumerable()) :: Stream
+  @spec lazy(type_enumerable()) :: type_enumerable()
   def lazy(enumerable) do
     enumerable
     |> chain([])
@@ -652,4 +634,6 @@ defmodule REnum.Ruby do
   defdelegate minmax_by(enumerable, func1, func2), to: Enum, as: :min_max_by
   defdelegate minmax_by(enumerable, func1, func2, func3), to: Enum, as: :min_max_by
   defdelegate tally(enumerable), to: Enum, as: :frequencies
+  defdelegate chain(enumerables), to: Stream, as: :concat
+  defdelegate chain(first, second), to: Stream, as: :concat
 end
