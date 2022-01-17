@@ -2,6 +2,19 @@
 
 # Changelog
 
+## v0.3.1 (2022-1-17)
+
+### Readme
+
+- Use ✅ in the Progress table. (by @mnishiguchi)
+- Fix API reference link. (by @mnishiguchi)
+- Loosen the library version. (by @mnishiguchi)
+
+### Refactors
+
+- REnum.Support.truthy_count. (by @TORIFUKUKaiou)
+- REnum.Ruby.tally. (by @TORIFUKUKaiou)
+
 ## v0.3.0 (2022-1-16)
 
 ### Breaking changes
