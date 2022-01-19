@@ -93,7 +93,7 @@ defmodule REnum.Ruby do
       1
 
       iex> REnum.first(%{a: 1, b: 2})
-      [:a, 1]
+      {:a, 1}
   """
   @spec first(type_enumerable) :: any()
   def first(enumerable) do
@@ -101,7 +101,6 @@ defmodule REnum.Ruby do
 
     cond do
       result |> is_nil() -> nil
-      result |> is_tuple() -> result |> Tuple.to_list()
       true -> result
     end
   end
@@ -113,7 +112,7 @@ defmodule REnum.Ruby do
       [1, 2]
 
       iex> REnum.first(%{a: 1, b: 2}, 2)
-      [[:a, 1], [:b, 2]]
+      [{:a, 1}, {:b, 2}]
   """
   @spec first(type_enumerable, non_neg_integer()) :: type_enumerable()
   def first(enumerable, n) do
@@ -122,9 +121,6 @@ defmodule REnum.Ruby do
       enumerable |> Enum.at(index)
     end)
     |> compact()
-    |> Enum.map(fn el ->
-      if(el |> is_tuple, do: el |> Tuple.to_list(), else: el)
-    end)
   end
 
   @doc """
@@ -263,40 +259,6 @@ defmodule REnum.Ruby do
     end
 
     enumerable
-  end
-
-  @doc """
-  Returns all elements.
-  ## Examples
-      iex> REnum.to_a([1, 2, 3])
-      [1, 2, 3]
-
-      iex> REnum.to_a(%{:a => 1, 1 => :a, 3 => :b, :b => 5})
-      [
-        [1, :a],
-        [3, :b],
-        [:a, 1],
-        [:b, 5]
-      ]
-
-      iex> REnum.to_a(0..5)
-      [0, 1, 2, 3, 4, 5]
-
-      iex> REnum.to_a(a: 1, b: 2, c: 2, d: 4)
-      [{:a, 1}, {:b, 2}, {:c, 2}, {:d, 4}]
-  """
-  @spec to_a(type_enumerable()) :: list()
-  def to_a(enumerable) do
-    cond do
-      map_and_not_range?(enumerable) ->
-        enumerable
-        |> Enum.map(fn {k, v} ->
-          [k, v]
-        end)
-
-      true ->
-        enumerable |> Enum.to_list()
-    end
   end
 
   @doc """
@@ -660,4 +622,6 @@ defmodule REnum.Ruby do
   defdelegate tally(enumerable), to: Enum, as: :frequencies
   defdelegate chain(enumerables), to: Stream, as: :concat
   defdelegate chain(first, second), to: Stream, as: :concat
+  defdelegate to_a(enumerables), to: Enum, as: :to_list
+  defdelegate to_l(enumerables), to: Enum, as: :to_list
 end
