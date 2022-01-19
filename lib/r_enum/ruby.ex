@@ -266,40 +266,6 @@ defmodule REnum.Ruby do
   end
 
   @doc """
-  Returns all elements.
-  ## Examples
-      iex> REnum.to_a([1, 2, 3])
-      [1, 2, 3]
-
-      iex> REnum.to_a(%{:a => 1, 1 => :a, 3 => :b, :b => 5})
-      [
-        [1, :a],
-        [3, :b],
-        [:a, 1],
-        [:b, 5]
-      ]
-
-      iex> REnum.to_a(0..5)
-      [0, 1, 2, 3, 4, 5]
-
-      iex> REnum.to_a(a: 1, b: 2, c: 2, d: 4)
-      [{:a, 1}, {:b, 2}, {:c, 2}, {:d, 4}]
-  """
-  @spec to_a(type_enumerable()) :: list()
-  def to_a(enumerable) do
-    cond do
-      map_and_not_range?(enumerable) ->
-        enumerable
-        |> Enum.map(fn {k, v} ->
-          [k, v]
-        end)
-
-      true ->
-        enumerable |> Enum.to_list()
-    end
-  end
-
-  @doc """
   Calls the function with each element, but in reverse order; returns given enumerable.
   ## Examples
       iex> REnum.reverse_each([1, 2, 3], &IO.inspect(&1))
@@ -636,4 +602,5 @@ defmodule REnum.Ruby do
   defdelegate tally(enumerable), to: Enum, as: :frequencies
   defdelegate chain(enumerables), to: Stream, as: :concat
   defdelegate chain(first, second), to: Stream, as: :concat
+  defdelegate to_a(enumerables), to: Enum, as: :to_list
 end

@@ -215,13 +215,13 @@ defmodule REnum.RubyTest do
     assert REnum.to_a([1, 2, 3]) == [1, 2, 3]
 
     assert REnum.to_a(%{:a => 1, 1 => :a, 3 => :b, :b => 5}) == [
-             [1, :a],
-             [3, :b],
-             [:a, 1],
-             [:b, 5]
+             {1, :a},
+             {3, :b},
+             {:a, 1},
+             {:b, 5}
            ]
 
-    assert REnum.to_a(%{a: 1, b: 2, c: 2, d: 4}) == [[:a, 1], [:b, 2], [:c, 2], [:d, 4]]
+    assert REnum.to_a(%{a: 1, b: 2, c: 2, d: 4}) == [{:a, 1}, {:b, 2}, {:c, 2}, {:d, 4}]
     assert REnum.to_a(a: 1, b: 2, c: 2, d: 4) == [{:a, 1}, {:b, 2}, {:c, 2}, {:d, 4}]
     range = 0..5
     assert REnum.to_a(range) == [0, 1, 2, 3, 4, 5]
