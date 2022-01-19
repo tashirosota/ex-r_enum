@@ -99,14 +99,15 @@ defmodule REnum.RubyTest do
       assert REnum.first([]) == nil
       assert REnum.first([1, 2, 3]) == 1
       assert REnum.first(%{}) == nil
-      assert REnum.first(%{a: 1, b: 2}) == [:a, 1]
+      assert REnum.first(%{a: 1, b: 2}) == {:a, 1}
+      assert REnum.first(%{a: 1, b: 2}, 2) == [{:a, 1}, {:b, 2}]
     end
 
     test "first/2" do
       assert REnum.first([], 2) == []
       assert REnum.first([1, 2, 3], 2) == [1, 2]
       assert REnum.first(%{}, 2) == []
-      assert REnum.first(%{a: 1, b: 2}, 2) == [[:a, 1], [:b, 2]]
+      assert REnum.first(%{a: 1, b: 2}, 2) == [{:a, 1}, {:b, 2}]
     end
   end
 

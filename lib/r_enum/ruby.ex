@@ -93,7 +93,7 @@ defmodule REnum.Ruby do
       1
 
       iex> REnum.first(%{a: 1, b: 2})
-      [:a, 1]
+      {:a, 1}
   """
   @spec first(type_enumerable) :: any()
   def first(enumerable) do
@@ -101,7 +101,6 @@ defmodule REnum.Ruby do
 
     cond do
       result |> is_nil() -> nil
-      result |> is_tuple() -> result |> Tuple.to_list()
       true -> result
     end
   end
@@ -113,7 +112,7 @@ defmodule REnum.Ruby do
       [1, 2]
 
       iex> REnum.first(%{a: 1, b: 2}, 2)
-      [[:a, 1], [:b, 2]]
+      [{:a, 1}, {:b, 2}]
   """
   @spec first(type_enumerable, non_neg_integer()) :: type_enumerable()
   def first(enumerable, n) do
@@ -122,9 +121,6 @@ defmodule REnum.Ruby do
       enumerable |> Enum.at(index)
     end)
     |> compact()
-    |> Enum.map(fn el ->
-      if(el |> is_tuple, do: el |> Tuple.to_list(), else: el)
-    end)
   end
 
   @doc """
