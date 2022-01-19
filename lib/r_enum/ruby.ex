@@ -603,4 +603,5 @@ defmodule REnum.Ruby do
   defdelegate chain(enumerables), to: Stream, as: :concat
   defdelegate chain(first, second), to: Stream, as: :concat
   defdelegate to_a(enumerables), to: Enum, as: :to_list
+  defdelegate to_l(enumerables), to: Enum, as: :to_list
 end
