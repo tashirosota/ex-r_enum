@@ -2,6 +2,21 @@
 
 # Changelog
 
+## v0.3.2 (2022-1-20)
+
+### Breaking changes
+
+- `REnum.each_slice/3` returns :ok.
+- `REnum.to_a` uses Enum.to_list/1
+- `REnum.first` returns tuple when given map.
+
+### Other
+
+- Add `REnum.each_slice/2` that returns Stream.
+- Add `mix dialyzer` to test.
+- Fix hex version badge.
+- Add alias `REnum.to_l` of `REnum.to_lilst`.
+
 ## v0.3.1 (2022-1-17)
 
 ### Readme
