@@ -1171,10 +1171,6 @@ defmodule RStream.NativeTest do
     assert Enum.zip(list, list) == Enum.zip(stream, stream)
   end
 
-  test "uniq/1 & uniq/2" do
-    assert RStream.uniq([1, 2, 3, 2, 1]) |> Enum.to_list() == [1, 2, 3]
-  end
-
   test "uniq_by/2" do
     assert RStream.uniq_by([{1, :x}, {2, :y}, {1, :z}], fn {x, _} -> x end)
            |> Enum.to_list() ==

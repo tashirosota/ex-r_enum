@@ -5,6 +5,6 @@ defmodule RRange.Native do
   """
   @spec __using__(any) :: list
   defmacro __using__(_opts) do
-    RUtils.define_all_functions!(Range)
+    RUtils.define_all_functions!(Range, [:range?])
   end
 end

@@ -1365,10 +1365,6 @@ defmodule REnum.NativeTest do
     assert REnum.to_list([]) == []
   end
 
-  test "uniq/1" do
-    assert REnum.uniq([5, 1, 2, 3, 2, 1]) == [5, 1, 2, 3]
-  end
-
   test "uniq_by/2" do
     assert REnum.uniq_by([1, 2, 3, 2, 1], fn x -> x end) == [1, 2, 3]
   end
@@ -2291,10 +2287,6 @@ defmodule REnumTest.Range do
     assert REnum.to_list(1..3//2) == [1, 3]
     assert REnum.to_list(3..1//-2) == [3, 1]
     assert REnum.to_list(0..1//-1) == []
-  end
-
-  test "uniq/1" do
-    assert REnum.uniq(1..3) == [1, 2, 3]
   end
 
   test "uniq_by/2" do

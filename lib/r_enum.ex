@@ -6,6 +6,14 @@ defmodule REnum do
    - [REnum.Ruby](https://hexdocs.pm/r_enum/REnum.Ruby.html#content)
    - [REnum.Support](https://hexdocs.pm/r_enum/REnum.Support.html#content)
   """
+  defmacro __using__(opts) do
+    undelegate_functions = Keyword.get(opts, :undelegate_functions, [])
+
+    quote do
+      RUtils.define_all_functions!(unquote(__MODULE__), unquote(undelegate_functions))
+    end
+  end
+
   use REnum.Native
   use REnum.Ruby
   use REnum.ActiveSupport
