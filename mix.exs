@@ -1,6 +1,6 @@
 defmodule REnum.MixProject do
   use Mix.Project
-  @versoin "0.3.1"
+  @versoin "0.3.2"
   @source_url "https://github.com/tashirosota/ex-r_enum"
   @description "REnum is Enum extended with convenient functions inspired by Ruby and Rails ActiveSupport."
   def project do
@@ -38,7 +38,8 @@ defmodule REnum.MixProject do
 
   defp deps do
     [
-      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false}
+      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
+      {:dialyxir, "~> 1.0", only: [:dev, :test], runtime: false}
     ]
   end
 

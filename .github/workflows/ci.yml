@@ -6,7 +6,7 @@ jobs:
     strategy:
       matrix:
         otp: ['24.2']
-        elixir: ['1.13.1']
+        elixir: ['1.13.2']
     runs-on: ubuntu-latest
     env:
       MIX_ENV: test
@@ -18,13 +18,15 @@ jobs:
           elixir-version: ${{matrix.elixir}}
       - uses: actions/checkout@v2
       - run: mix deps.get
+      - run: mix compile
+      - run: mix dialyzer
       - run: mix test native_test
   test:
     name: OTP ${{matrix.otp}} / Elixir ${{matrix.elixir}}
     strategy:
       matrix:
         otp: ['23.3.4.10', '24.2']
-        elixir: [1.12.3', '1.13.1']
+        elixir: [1.12.3', '1.13.2']
     runs-on: ubuntu-latest
     env:
       MIX_ENV: test
@@ -37,4 +39,5 @@ jobs:
       - uses: actions/checkout@v2
       - run: mix deps.get
       - run: mix format --check-formatted
+      - run: mix compile
       - run: mix test test

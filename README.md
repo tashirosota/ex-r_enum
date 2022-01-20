@@ -1,6 +1,6 @@
 <!-- @format -->
 
-[![hex.pm version](https://img.shields.io/hexpm/v/ltsv.svg)](https://hex.pm/packages/r_enum)
+[![hex.pm version](https://img.shields.io/hexpm/v/r_enum.svg)](https://hex.pm/packages/r_enum)
 [![CI](https://github.com/tashirosota/ex-r_enum/actions/workflows/ci.yml/badge.svg)](https://github.com/tashirosota/ex-r_enum/actions/workflows/ci.yml)
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/tashirosota/ex-r_enum)
 
@@ -43,13 +43,11 @@ iex> |> REnum.tally()
 iex> ["foo", "bar", "car", "moo"]
 iex> |> REnum.grep(~r/ar/)
 ["bar", "car"]
-# REnum.Ruby.reverse_each()
-iex> [1, 2, 3]
-iex> |> REnum.reverse_each(&IO.inspect(&1))
-# 3
-# 2
-# 1
-[1, 2, 3]
+# REnum.Ruby.each_slice()
+iex> [1, 2, 3, 4, 5, 6, 7]
+iex> |> REnum.each_slice(3)
+iex> |> REnum.to_list()
+[[1, 2, 3], [4, 5, 6], [7]]
 # REnum.ActiveSupport.pluck()
 iex> payments = [
 ...>   %Payment{dollars: 5, cents: 99},

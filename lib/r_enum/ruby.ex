@@ -93,7 +93,7 @@ defmodule REnum.Ruby do
       1
 
       iex> REnum.first(%{a: 1, b: 2})
-      [:a, 1]
+      {:a, 1}
   """
   @spec first(type_enumerable) :: any()
   def first(enumerable) do
@@ -101,7 +101,6 @@ defmodule REnum.Ruby do
 
     cond do
       result |> is_nil() -> nil
-      result |> is_tuple() -> result |> Tuple.to_list()
       true -> result
     end
   end
@@ -113,7 +112,7 @@ defmodule REnum.Ruby do
       [1, 2]
 
       iex> REnum.first(%{a: 1, b: 2}, 2)
-      [[:a, 1], [:b, 2]]
+      [{:a, 1}, {:b, 2}]
   """
   @spec first(type_enumerable, non_neg_integer()) :: type_enumerable()
   def first(enumerable, n) do
@@ -122,9 +121,6 @@ defmodule REnum.Ruby do
       enumerable |> Enum.at(index)
     end)
     |> compact()
-    |> Enum.map(fn el ->
-      if(el |> is_tuple, do: el |> Tuple.to_list(), else: el)
-    end)
   end
 
   @doc """
@@ -266,40 +262,6 @@ defmodule REnum.Ruby do
   end
 
   @doc """
-  Returns all elements.
-  ## Examples
-      iex> REnum.to_a([1, 2, 3])
-      [1, 2, 3]
-
-      iex> REnum.to_a(%{:a => 1, 1 => :a, 3 => :b, :b => 5})
-      [
-        [1, :a],
-        [3, :b],
-        [:a, 1],
-        [:b, 5]
-      ]
-
-      iex> REnum.to_a(0..5)
-      [0, 1, 2, 3, 4, 5]
-
-      iex> REnum.to_a(a: 1, b: 2, c: 2, d: 4)
-      [{:a, 1}, {:b, 2}, {:c, 2}, {:d, 4}]
-  """
-  @spec to_a(type_enumerable()) :: list()
-  def to_a(enumerable) do
-    cond do
-      map_and_not_range?(enumerable) ->
-        enumerable
-        |> Enum.map(fn {k, v} ->
-          [k, v]
-        end)
-
-      true ->
-        enumerable |> Enum.to_list()
-    end
-  end
-
-  @doc """
   Calls the function with each element, but in reverse order; returns given enumerable.
   ## Examples
       iex> REnum.reverse_each([1, 2, 3], &IO.inspect(&1))
@@ -355,24 +317,6 @@ defmodule REnum.Ruby do
   end
 
   @doc """
-  Returns an Stream generated from given enumerables.
-  ## Examples
-      iex> ["a", "b", "c"]
-      iex> |> REnum.chain(["d", "e"])
-      iex> |> REnum.to_list()
-      ["a", "b", "c", "d", "e"]
-
-      iex> %{a: 1, b: 2}
-      iex> |> REnum.chain(1..3)
-      iex> |> REnum.to_list()
-      [{:a, 1}, {:b, 2}, 1, 2, 3]
-  """
-  @spec chain(type_enumerable(), type_enumerable()) :: Stream
-  def chain(enumerable_1, enumerable_2) do
-    Stream.concat([enumerable_1, enumerable_2])
-  end
-
-  @doc """
   Calls the given function with each element, returns given enumerable:
   ## Examples
       iex> ["a", "b", "c"]
@@ -397,54 +341,78 @@ defmodule REnum.Ruby do
   end
 
   @doc """
-  Calls the given function with each element, returns given enumerable:
+  Returns Stream given enumerable sliced by each amount.
+  ## Examples
+      iex> ["a", "b", "c", "d", "e"]
+      iex> |> REnum.each_slice(2)
+      iex> |> Enum.to_list()
+      [["a", "b"], ["c", "d"], ["e"]]
+
+      iex> %{a: 1, b: 2, c: 3}
+      iex> |> REnum.each_slice(2)
+      iex> |> Enum.to_list()
+      [[a: 1, b: 2], [c: 3]]
+  """
+  @spec each_slice(type_enumerable(), non_neg_integer()) :: type_enumerable() | atom()
+  def each_slice(enumerable, amount) do
+    if(amount < 1) do
+      []
+    else
+      enumerable
+      |> each_slice(
+        0,
+        amount
+      )
+    end
+    |> lazy()
+  end
+
+  def each_slice(enumerable, start_index, amount_or_func) when is_integer(amount_or_func) do
+    sliced =
+      enumerable
+      |> Enum.slice(start_index, amount_or_func)
+
+    next_start_index = start_index + amount_or_func
+
+    [sliced] ++
+      if Enum.count(enumerable) > next_start_index,
+        do: each_slice(enumerable, next_start_index, amount_or_func),
+        else: []
+  end
+
+  @doc """
+  Calls the given function with each element, returns given enumerable.
   ## Examples
       iex> ["a", "b", "c", "d", "e"]
       iex> |> REnum.each_slice(2, &IO.inspect(&1))
       # ["a", "b"]
       # ["c", "d"]
       # ["e"]
-      ["a", "b", "c", "d", "e"]
+      :ok
 
       iex> %{a: 1, b: 2, c: 3}
       iex> |> REnum.each_slice(2, &IO.inspect(&1))
       # [a: 1, b: 2]
       # [c: 3]
-      %{a: 1, b: 2, c: 3}
+      :ok
   """
-  @spec each_slice(type_enumerable(), non_neg_integer(), function()) :: type_enumerable()
-  def each_slice(enumerable, amount, func) do
-    enumerable
-    |> each_slice(
-      0,
-      amount,
-      func
-    )
-
-    enumerable
-  end
-
-  defp each_slice(enumerable, start_index, amount, func) do
-    enumerable
-    |> Enum.slice(start_index, amount)
-    |> func.()
-
-    next_start_index = start_index + amount
-
-    if(Enum.count(enumerable) > next_start_index) do
-      each_slice(enumerable, next_start_index, amount, func)
-    end
+  @spec each_slice(type_enumerable(), non_neg_integer(), function() | non_neg_integer()) :: atom()
+  def each_slice(enumerable, amount, amount_or_func) when is_function(amount_or_func) do
+    each_slice(enumerable, amount)
+    |> Enum.each(fn els ->
+      amount_or_func.(els)
+    end)
   end
 
   @doc """
-  Returns an Stream, which redefines most Enumerable functions to postpone enumeration and enumerate values only on an as-needed basis.
+  Returns Stream, which redefines most Enumerable functions to postpone enumeration and enumerate values only on an as-needed basis.
   ## Examples
       iex> [1, 2, 3]
       iex> |> REnum.lazy()
       iex> |> REnum.to_list()
       [1, 2, 3]
   """
-  @spec lazy(type_enumerable()) :: Stream
+  @spec lazy(type_enumerable()) :: type_enumerable()
   def lazy(enumerable) do
     enumerable
     |> chain([])
@@ -652,4 +620,8 @@ defmodule REnum.Ruby do
   defdelegate minmax_by(enumerable, func1, func2), to: Enum, as: :min_max_by
   defdelegate minmax_by(enumerable, func1, func2, func3), to: Enum, as: :min_max_by
   defdelegate tally(enumerable), to: Enum, as: :frequencies
+  defdelegate chain(enumerables), to: Stream, as: :concat
+  defdelegate chain(first, second), to: Stream, as: :concat
+  defdelegate to_a(enumerables), to: Enum, as: :to_list
+  defdelegate to_l(enumerables), to: Enum, as: :to_list
 end

@@ -99,14 +99,15 @@ defmodule REnum.RubyTest do
       assert REnum.first([]) == nil
       assert REnum.first([1, 2, 3]) == 1
       assert REnum.first(%{}) == nil
-      assert REnum.first(%{a: 1, b: 2}) == [:a, 1]
+      assert REnum.first(%{a: 1, b: 2}) == {:a, 1}
+      assert REnum.first(%{a: 1, b: 2}, 2) == [{:a, 1}, {:b, 2}]
     end
 
     test "first/2" do
       assert REnum.first([], 2) == []
       assert REnum.first([1, 2, 3], 2) == [1, 2]
       assert REnum.first(%{}, 2) == []
-      assert REnum.first(%{a: 1, b: 2}, 2) == [[:a, 1], [:b, 2]]
+      assert REnum.first(%{a: 1, b: 2}, 2) == [{:a, 1}, {:b, 2}]
     end
   end
 
@@ -215,13 +216,13 @@ defmodule REnum.RubyTest do
     assert REnum.to_a([1, 2, 3]) == [1, 2, 3]
 
     assert REnum.to_a(%{:a => 1, 1 => :a, 3 => :b, :b => 5}) == [
-             [1, :a],
-             [3, :b],
-             [:a, 1],
-             [:b, 5]
+             {1, :a},
+             {3, :b},
+             {:a, 1},
+             {:b, 5}
            ]
 
-    assert REnum.to_a(%{a: 1, b: 2, c: 2, d: 4}) == [[:a, 1], [:b, 2], [:c, 2], [:d, 4]]
+    assert REnum.to_a(%{a: 1, b: 2, c: 2, d: 4}) == [{:a, 1}, {:b, 2}, {:c, 2}, {:d, 4}]
     assert REnum.to_a(a: 1, b: 2, c: 2, d: 4) == [{:a, 1}, {:b, 2}, {:c, 2}, {:d, 4}]
     range = 0..5
     assert REnum.to_a(range) == [0, 1, 2, 3, 4, 5]
@@ -320,22 +321,44 @@ defmodule REnum.RubyTest do
     assert REnum.each_entry(list, &to_string(&1)) == list
   end
 
-  test "each_slice/1" do
-    list = ["a", "b", "c", "d", "e", "f", "g"]
+  describe "each_slice" do
+    test "each_slice/2" do
+      list = ["a", "b", "c", "d", "e", "f", "g"]
 
-    assert capture_io(fn ->
-             REnum.each_slice(list, 3, &IO.inspect(&1))
-           end) == "[\"a\", \"b\", \"c\"]\n[\"d\", \"e\", \"f\"]\n[\"g\"]\n"
+      assert REnum.each_slice(list, 3) |> Enum.to_list() == [
+               ["a", "b", "c"],
+               ["d", "e", "f"],
+               ["g"]
+             ]
 
-    assert REnum.each_slice(list, 3, &to_string(&1)) == list
+      assert REnum.each_slice(list, 0) |> Enum.to_list() == []
+      assert REnum.each_slice(list, 8) |> Enum.to_list() == [["a", "b", "c", "d", "e", "f", "g"]]
 
-    map = %{a: 1, b: 2, c: 3, d: 4, e: 5, f: 6}
+      map = %{a: 1, b: 2, c: 3, d: 4, e: 5, f: 6}
 
-    assert capture_io(fn ->
-             REnum.each_slice(map, 2, &IO.inspect(&1))
-           end) == "[a: 1, b: 2]\n[c: 3, d: 4]\n[e: 5, f: 6]\n"
+      assert REnum.each_slice(map, 4) |> Enum.to_list() == [
+               [a: 1, b: 2, c: 3, d: 4],
+               [e: 5, f: 6]
+             ]
+    end
 
-    assert REnum.each_slice(map, 3, &Enum.to_list(&1)) == map
+    test "each_slice/3" do
+      list = ["a", "b", "c", "d", "e", "f", "g"]
+
+      assert capture_io(fn ->
+               REnum.each_slice(list, 3, &IO.inspect(&1))
+             end) == "[\"a\", \"b\", \"c\"]\n[\"d\", \"e\", \"f\"]\n[\"g\"]\n"
+
+      assert REnum.each_slice(list, 3, &to_string(&1)) == :ok
+
+      map = %{a: 1, b: 2, c: 3, d: 4, e: 5, f: 6}
+
+      assert capture_io(fn ->
+               REnum.each_slice(map, 2, &IO.inspect(&1))
+             end) == "[a: 1, b: 2]\n[c: 3, d: 4]\n[e: 5, f: 6]\n"
+
+      assert REnum.each_slice(map, 3, &Enum.to_list(&1)) == :ok
+    end
   end
 
   test "with_index/2" do
