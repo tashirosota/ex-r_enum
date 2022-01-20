@@ -8,10 +8,7 @@ defmodule REnum do
   """
   defmacro __using__(opts) do
     undelegate_functions = Keyword.get(opts, :undelegate_functions, [])
-
-    quote do
-      RUtils.define_all_functions!(unquote(__MODULE__), unquote(undelegate_functions))
-    end
+    RUtils.define_all_functions!(__MODULE__, elem(Code.eval_quoted(undelegate_functions), 0))
   end
 
   use REnum.Native
