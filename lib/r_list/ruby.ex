@@ -11,16 +11,12 @@ defmodule RList.Ruby do
     RUtils.define_all_functions!(__MODULE__)
   end
 
+  use REnum.Ruby
   import REnum.Support
 
   # https://ruby-doc.org/core-3.1.0/Array.html
   # [:all?, :any?, :append, :assoc, :at, :bsearch, :bsearch_index, :clear, :collect, :collect!, :combination, :compact, :compact!, :concat, :count, :cycle, :deconstruct, :delete, :delete_at, :delete_if, :difference, :dig, :drop, :drop_while, :each, :each_index, :empty?, :eql?, :fetch, :fill, :filter, :filter!, :find_index, :first, :flatten, :flatten!, :hash, :include?, :index, :initialize_copy, :insert, :inspect, :intersect?, :intersection, :join, :keep_if, :last, :length, :map, :map!, :max, :min, :minmax, :none?, :old_to_s, :one?, :pack, :permutation, :pop, :prepend, :product, :push, :rassoc, :reject, :reject!, :repeated_combination, :repeated_permutation, :replace, :reverse, :reverse!, :reverse_each, :rindex, :rotate, :rotate!, :sample, :select, :select!, :shift, :shuffle, :shuffle!, :size, :slice, :slice!, :sort, :sort!, :sort_by!, :sum, :take, :take_while, :to_a, :to_ary, :to_h, :to_s, :transpose, :union, :uniq, :uniq!, :unshift, :values_at, :zip]
-  # |> Enum.reject(fn method ->
-  #     already_defined_func = (List.module_info()[:exports])
-  #                             |> Keyword.keys()
-  #                             |> Enum.find(&(&1 == method))
-  #     !!already_defined_func || to_string(method) =~ ~r/!/
-  #   end)
+  # |> RUtils.required_functions([List, REnum.Ruby])
   # ✔ all?
   # ✔ any?
   # ✔ append
@@ -29,15 +25,12 @@ defmodule RList.Ruby do
   # bsearch
   # bsearch_index
   # ✔ clear
-  # ✔ collect
   # combination
-  # ✔ compact
   # ✔ concat
   # ✔ count
-  # ✔ cycle
   # deconstruct
-  # delete_if
-  # difference
+  # ✔ delete_if
+  # ✔ difference
   # dig
   # drop
   # drop_while
@@ -47,10 +40,9 @@ defmodule RList.Ruby do
   # eql?
   # fetch
   # fill
-  # filter
+  # ✔ filter
   # find_index
   # hash
-  # include?
   # index
   # initialize_copy
   # insert
@@ -58,15 +50,12 @@ defmodule RList.Ruby do
   # intersect?
   # intersection
   # join
-  # keep_if
+  # ✔ keep_if
   # length
   # map
   # max
   # min
-  # minmax
-  # none?
   # old_to_s
-  # one?
   # pack
   # permutation
   # pop
@@ -74,16 +63,14 @@ defmodule RList.Ruby do
   # product
   # push
   # rassoc
-  # reject
+  # ✔ reject
   # repeated_combination
   # repeated_permutation
   # replace
   # reverse
-  # reverse_each
   # rindex
   # rotate
   # sample
-  # select
   # shift
   # shuffle
   # size
@@ -92,9 +79,7 @@ defmodule RList.Ruby do
   # sum
   # take
   # take_while
-  # to_a
   # to_ary
-  # to_h
   # to_s
   # transpose
   # union
@@ -141,6 +126,21 @@ defmodule RList.Ruby do
     |> List.flatten()
   end
 
+  def difference(list1, list2) do
+    list1 -- list2
+  end
+
+  def dig(list, index, identifiers \\ []) do
+    el = Enum.at(list, index)
+
+    if(Enum.any?(identifiers)) do
+      [next_index | next_identifiers] = identifiers
+      dig(el, next_index, next_identifiers)
+    else
+      el
+    end
+  end
+
   # TODO: hard
   # def combination(list, n) do
   #   []
@@ -155,9 +155,10 @@ defmodule RList.Ruby do
   defdelegate append(list, elements), to: __MODULE__, as: :push
   defdelegate at(list, index), to: Enum
   defdelegate map(list, func), to: Enum
-  defdelegate collect(list, func), to: Enum, as: :map
-  defdelegate compact(list), to: REnum.Ruby
   defdelegate count(list), to: Enum
   defdelegate count(list, func), to: Enum
-  defdelegate cycle(list, n, func), to: REnum.Ruby
+  defdelegate delete_if(list, func), to: Enum, as: :reject
+  defdelegate reject(list, func), to: Enum
+  defdelegate keep_if(list, func), to: Enum, as: :filter
+  defdelegate filter(list, func), to: Enum
 end

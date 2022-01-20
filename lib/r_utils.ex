@@ -89,4 +89,20 @@ defmodule RUtils do
   def present?(obj) do
     !blank?(obj)
   end
+
+  @doc false
+  def required_functions(functions, exclude_modules) do
+    functions
+    |> Enum.reject(fn method ->
+      exclude_functions = exclude_modules |> Enum.flat_map(& &1.module_info()[:exports])
+
+      already_defined_func =
+        exclude_functions
+        |> Keyword.keys()
+        |> Enum.find(&(&1 == method))
+
+      !!already_defined_func || to_string(method) =~ ~r/!/
+    end)
+    |> Enum.each(&IO.puts(&1))
+  end
 end

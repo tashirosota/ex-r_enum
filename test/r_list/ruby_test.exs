@@ -87,16 +87,6 @@ defmodule RList.RubyTest do
     assert RList.map(0..3, &to_string(&1)) == Enum.map(0..3, &to_string(&1))
   end
 
-  test "collect/2" do
-    assert RList.collect([1], &to_string(&1)) == Enum.map([1], &to_string(&1))
-    assert RList.collect(0..3, &to_string(&1)) == Enum.map(0..3, &to_string(&1))
-  end
-
-  test "compact/2" do
-    assert RList.compact([1, nil]) == REnum.Ruby.compact([1, nil])
-    assert RList.compact([1]) == REnum.Ruby.compact([1])
-  end
-
   test "concat/2" do
     list = [1, %{a: 1}, {:b, :c}]
     assert RList.concat(list, 10) == [1, %{a: 1}, {:b, :c}, 10]
@@ -122,31 +112,53 @@ defmodule RList.RubyTest do
     end
   end
 
-  test "cycle/3" do
-    list = ["a", "b", "c"]
+  test "keep_if/2" do
+    assert RList.keep_if([1, 2, 3], fn x -> rem(x, 2) == 0 end) ==
+             Enum.filter([1, 2, 3], fn x -> rem(x, 2) == 0 end)
 
-    assert capture_io(fn ->
-             RList.cycle(list, 3, &IO.puts(&1))
-           end) ==
-             capture_io(fn ->
-               REnum.cycle(list, 3, &IO.puts(&1))
-             end)
+    assert RList.keep_if([1, 2, 3], fn x -> rem(x, 2) == 0 end) ==
+             Enum.filter([1, 2, 3], fn x -> rem(x, 2) == 0 end)
+  end
 
-    assert capture_io(fn ->
-             RList.cycle(list, 0, &IO.puts(&1))
-           end) ==
-             capture_io(fn ->
-               REnum.cycle(list, 0, &IO.puts(&1))
-             end)
+  test "delete_if/2" do
+    assert RList.delete_if([1, 2, 3], fn x -> rem(x, 2) == 0 end) ==
+             Enum.reject([1, 2, 3], fn x -> rem(x, 2) == 0 end)
 
-    assert capture_io(fn ->
-             RList.cycle(list, nil, &IO.puts(&1))
-             |> Enum.take(4)
-           end) ==
-             capture_io(fn ->
-               REnum.cycle(list, nil, &IO.puts(&1))
-               |> Enum.take(4)
-             end)
+    assert RList.delete_if([2, 4, 6], fn x -> rem(x, 2) == 0 end) ==
+             Enum.reject([2, 4, 6], fn x -> rem(x, 2) == 0 end)
+
+    assert RList.delete_if([1, true, nil, false, 2], & &1) ==
+             Enum.reject([1, true, nil, false, 2], & &1)
+  end
+
+  test "filter/2" do
+    assert RList.filter([1, 2, 3], fn x -> rem(x, 2) == 0 end) ==
+             Enum.filter([1, 2, 3], fn x -> rem(x, 2) == 0 end)
+
+    assert RList.filter([1, 2, 3], fn x -> rem(x, 2) == 0 end) ==
+             Enum.filter([1, 2, 3], fn x -> rem(x, 2) == 0 end)
+  end
+
+  test "reject/2" do
+    assert RList.reject([1, 2, 3], fn x -> rem(x, 2) == 0 end) ==
+             Enum.reject([1, 2, 3], fn x -> rem(x, 2) == 0 end)
+
+    assert RList.reject([2, 4, 6], fn x -> rem(x, 2) == 0 end) ==
+             Enum.reject([2, 4, 6], fn x -> rem(x, 2) == 0 end)
+
+    assert RList.reject([1, true, nil, false, 2], & &1) ==
+             Enum.reject([1, true, nil, false, 2], & &1)
+  end
+
+  test "dig/2" do
+    list = [:foo, [:bar, :baz, [:bat, :bam]]]
+    assert RList.dig(list, 1) == [:bar, :baz, [:bat, :bam]]
+    assert RList.dig(list, 1, [2]) == [:bat, :bam]
+    assert RList.dig(list, 1, [2, 0]) == :bat
+
+    assert_raise Protocol.UndefinedError, fn ->
+      assert RList.dig(list, 1, [2, 0, 1]) == nil
+    end
   end
 
   # TODO: hard
