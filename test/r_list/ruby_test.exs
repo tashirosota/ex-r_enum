@@ -43,6 +43,14 @@ defmodule RList.RubyTest do
     end
   end
 
+  test "values_at/2" do
+    list = ~w[a b c d e f]
+    assert RList.values_at(list, [1, 3, 5]) == ["b", "d", "f"]
+    assert RList.values_at(list, [1, 3, 5, 7]) == ["b", "d", "f", nil]
+    assert RList.values_at(list, [-1, -2, -2, -7]) == ["f", "e", "e", nil]
+    assert RList.values_at(list, [4..6, 3..5]) == ["e", "f", nil, "d", "e", "f"]
+  end
+
   # TODO: hard
   # describe "combination/2" do
   #   list = [1, 2, 3, 4]

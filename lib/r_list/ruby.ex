@@ -128,6 +128,16 @@ defmodule RList.Ruby do
     end
   end
 
+  def values_at(list, indices) do
+    indices
+    |> Enum.map(fn
+      i when is_integer(i) -> i
+      i -> Enum.to_list(i)
+    end)
+    |> List.flatten()
+    |> Enum.map(&Enum.at(list, &1))
+  end
+
   def to_ary(list), do: list
 
   # TODO: hard
