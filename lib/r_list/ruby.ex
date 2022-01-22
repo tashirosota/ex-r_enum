@@ -128,6 +128,27 @@ defmodule RList.Ruby do
     end
   end
 
+  @doc """
+  Returns a list containing the elements in self corresponding to the given selector(s).
+  The selectors may be either integer indices or ranges.
+
+  ## Examples
+
+      iex> RList.values_at(~w[a b c d e f], [1, 3, 5])
+      ["b", "d", "f"]
+
+      iex> RList.values_at(~w[a b c d e f], [1, 3, 5, 7])
+      ["b", "d", "f", nil]
+
+      iex> RList.values_at(~w[a b c d e f], [-1, -2, -2, -7])
+      ["f", "e", "e", nil]
+
+      iex> RList.values_at(~w[a b c d e f], [4..6, 3..5])
+      ["e", "f", nil, "d", "e", "f"]
+
+      iex> RList.values_at(~w[a b c d e f], 4..6)
+      ["e", "f", nil]
+  """
   @spec values_at([any], [integer | Range.t()] | Range.t()) :: [any]
   def values_at(list, indices) do
     indices
