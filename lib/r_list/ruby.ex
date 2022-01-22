@@ -48,7 +48,7 @@ defmodule RList.Ruby do
   # repeated_combination
   # repeated_permutation
   # × replace
-  # rindex
+  # ✔ rindex
   # rotate
   # ✔ sample
   # shift
@@ -127,6 +127,30 @@ defmodule RList.Ruby do
       head
     end
   end
+
+  @doc """
+  Returns the index of the last element found in in the list.
+  Returns nil if no match is found.
+
+  ## Examples
+      iex> RList.rindex(~w[a b b b c], "b")
+      3
+
+      iex> RList.rindex(~w[a b b b c], "z")
+      nil
+
+      iex> RList.rindex(~w[a b b b c], fn x -> x == "b" end)
+      3
+  """
+  @spec rindex([any], any) :: any | nil
+  def rindex(list, finder) when is_function(finder) do
+    list
+    |> Enum.with_index()
+    |> Enum.reverse()
+    |> Enum.find_value(fn {x, i} -> finder.(x) && i end)
+  end
+
+  def rindex(list, finder), do: rindex(list, &Kernel.==(&1, finder))
 
   def to_ary(list), do: list
 
