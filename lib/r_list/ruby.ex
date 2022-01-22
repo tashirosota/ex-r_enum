@@ -28,7 +28,7 @@ defmodule RList.Ruby do
   # ✔ dig
   # ✔ each_index
   # ✔ eql?
-  # fill
+  # ✔ fill
   # hash
   # ✔ index
   # × initialize_copy
@@ -127,6 +127,41 @@ defmodule RList.Ruby do
       head
     end
   end
+
+  @doc """
+  Fills the list with the provided value. The filler can be either a function or a fixed value.
+
+  ## Examples
+      iex> RList.fill(~w[a b c d], "x")
+      ["x", "x", "x", "x"]
+
+      iex> RList.fill(~w[a b c d], "x", 0..1)
+      ["x", "x", "c", "d"]
+
+      iex> RList.fill(~w[a b c d], fn _, i -> i * i end)
+      [0, 1, 4, 9]
+
+      iex> RList.fill(~w[a b c d], fn _, i -> i * 2 end, 0..1)
+      [0, 2, "c", "d"]
+  """
+  @spec fill([any], any) :: [any]
+  def fill(list, filler_fun) when is_function(filler_fun) do
+    Enum.with_index(list, filler_fun)
+  end
+
+  def fill(list, filler), do: Enum.map(list, fn _ -> filler end)
+
+  @spec fill([any], any, Range.t()) :: [any]
+  def fill(list, filler_fun, %Range{} = fill_range) when is_function(filler_fun) do
+    Enum.with_index(list, fn x, i ->
+      case i in fill_range do
+        true -> filler_fun.(x, i)
+        _ -> x
+      end
+    end)
+  end
+
+  def fill(list, filler, fill_range), do: fill(list, fn _, _ -> filler end, fill_range)
 
   def to_ary(list), do: list
 
