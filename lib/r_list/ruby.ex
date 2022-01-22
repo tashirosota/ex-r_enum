@@ -58,7 +58,7 @@ defmodule RList.Ruby do
   # transpose
   # union
   # unshift
-  # values_at
+  # ✔ values_at
 
   def push(list, elements_or_element) do
     list ++ List.wrap(elements_or_element)
