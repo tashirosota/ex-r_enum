@@ -51,7 +51,7 @@ defmodule RList.Ruby do
   # rindex
   # rotate
   # ✔ sample
-  # shift
+  # ✔ shift
   # ✔ size
   # ✔ to_ary
   # ✔ to_s
@@ -217,6 +217,23 @@ defmodule RList.Ruby do
   @spec unshift([any], any) :: [any]
   def unshift(list, prepend) when is_list(prepend), do: prepend ++ list
   def unshift(list, prepend), do: [prepend | list]
+
+  @doc """
+  Splits the list into the first n elements and the rest. Returns nil if the list is empty.
+  ## Examples
+      iex> RList.shift([])
+      nil
+
+      iex> RList.shift(~w[-m -q -filename])
+      {["-m"], ["-q", "-filename"]}
+
+      iex> RList.shift(~w[-m -q -filename], 2)
+      {["-m", "-q"], ["-filename"]}
+  """
+  @spec shift([any], integer) :: {[any], [any]} | nil
+  def shift(list, count \\ 1)
+  def shift([], _count), do: nil
+  def shift(list, count), do: Enum.split(list, count)
 
   def to_ary(list), do: list
 
