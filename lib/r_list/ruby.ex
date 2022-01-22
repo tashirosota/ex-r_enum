@@ -49,7 +49,7 @@ defmodule RList.Ruby do
   # repeated_permutation
   # × replace
   # rindex
-  # rotate
+  # ✔ rotate
   # ✔ sample
   # shift
   # ✔ size
@@ -126,6 +126,25 @@ defmodule RList.Ruby do
       [head | _] = taked
       head
     end
+  end
+
+  @doc """
+  Rotate the list so that the element at count is the first element of the list.
+
+  ## Examples
+      iex> RList.rotate(~w[a b c d])
+      ["b", "c", "d", "a"]
+
+      iex> RList.rotate(~w[a b c d], 2)
+      ["c", "d", "a", "b"]
+
+      iex> RList.rotate(~w[a b c d], -3)
+      ["b", "c", "d", "a"]
+  """
+  @spec rotate([any], integer) :: [any]
+  def rotate(list, count \\ 1) do
+    {first, last} = Enum.split(list, count)
+    last ++ first
   end
 
   def to_ary(list), do: list
