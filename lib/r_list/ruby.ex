@@ -56,7 +56,7 @@ defmodule RList.Ruby do
   # ✔ to_ary
   # ✔ to_s
   # transpose
-  # union
+  # ✔ union
   # unshift
   # values_at
 
@@ -127,6 +127,18 @@ defmodule RList.Ruby do
       head
     end
   end
+
+  @doc """
+  Returns a new list by joining two lists, excluding any duplicates and preserving the order from the given lists.
+  ## Examples
+      iex> RList.union(["a", "b", "c"], [ "c", "d", "a"])
+      ["a", "b", "c", "d"]
+
+      iex> ["a"] |> RList.union(["e", "b"]) |> RList.union(["a", "c", "b"])
+      ["a", "e", "b", "c"]
+  """
+  @spec union([any], [any]) :: [any]
+  def union(list_a, list_b), do: Enum.uniq(list_a ++ list_b)
 
   def to_ary(list), do: list
 
