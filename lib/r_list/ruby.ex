@@ -57,7 +57,7 @@ defmodule RList.Ruby do
   # ✔ to_s
   # ✔ transpose
   # ✔ union
-  # unshift
+  # ✔ unshift
   # ✔ values_at
 
   def push(list, elements_or_element) do
@@ -204,6 +204,19 @@ defmodule RList.Ruby do
   """
   @spec union([any], [any]) :: [any]
   def union(list_a, list_b), do: Enum.uniq(list_a ++ list_b)
+
+  @doc """
+  Prepends elements to the front of the list, moving other elements upwards.
+  ## Examples
+      iex> RList.unshift(~w[b c d], "a")
+      ["a", "b", "c", "d"]
+
+      iex> RList.unshift(~w[b c d], [1, 2])
+      [1, 2, "b", "c", "d"]
+  """
+  @spec unshift([any], any) :: [any]
+  def unshift(list, prepend) when is_list(prepend), do: prepend ++ list
+  def unshift(list, prepend), do: [prepend | list]
 
   def to_ary(list), do: list
 
