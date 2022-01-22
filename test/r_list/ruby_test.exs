@@ -49,6 +49,7 @@ defmodule RList.RubyTest do
     assert RList.values_at(list, [1, 3, 5, 7]) == ["b", "d", "f", nil]
     assert RList.values_at(list, [-1, -2, -2, -7]) == ["f", "e", "e", nil]
     assert RList.values_at(list, [4..6, 3..5]) == ["e", "f", nil, "d", "e", "f"]
+    assert RList.values_at(list, 4..6) == ["e", "f", nil]
   end
 
   # TODO: hard

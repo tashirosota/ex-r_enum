@@ -128,6 +128,7 @@ defmodule RList.Ruby do
     end
   end
 
+  @spec values_at([any], [integer | Range.t()] | Range.t()) :: [any]
   def values_at(list, indices) do
     indices
     |> Enum.map(fn
