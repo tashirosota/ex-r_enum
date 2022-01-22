@@ -152,12 +152,10 @@ defmodule RList.Ruby do
   def fill(list, filler), do: Enum.map(list, fn _ -> filler end)
 
   @spec fill([any], any, Range.t()) :: [any]
-  def fill(list, filler_fun, %Range{} = fill_range) when is_function(filler_fun) do
-    Enum.with_index(list, fn x, i ->
-      case i in fill_range do
-        true -> filler_fun.(x, i)
-        _ -> x
-      end
+  def fill(list, filler_fun, a..b) when is_function(filler_fun) do
+    Enum.with_index(list, fn
+      x, i when i >= a and i <= b -> filler_fun.(x, i)
+      x, _i -> x
     end)
   end
 
