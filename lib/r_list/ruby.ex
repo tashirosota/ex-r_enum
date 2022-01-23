@@ -11,6 +11,8 @@ defmodule RList.Ruby do
     RUtils.define_all_functions!(__MODULE__)
   end
 
+  @type type_pattern :: number() | String.t() | Range.t() | Regex.t()
+
   import REnum.Support
 
   # https://ruby-doc.org/core-3.1.0/Array.html
@@ -18,8 +20,8 @@ defmodule RList.Ruby do
   # |> RUtils.required_functions([List, REnum])
   # ✔ append
   # ✔ assoc
-  # bsearch
-  # bsearch_index
+  # × bsearch
+  # × bsearch_index
   # ✔ clear
   # combination
   # deconstruct
@@ -60,10 +62,40 @@ defmodule RList.Ruby do
   # ✔ unshift
   # ✔ values_at
 
+  @doc """
+  Appends trailing elements.
+
+  ## Examples
+      iex> [:foo, 'bar', 2]
+      iex> |> RList.push([:baz, :bat])
+      [:foo, 'bar', 2, :baz, :bat]
+
+      iex> [:foo, 'bar', 2]
+      iex> |> RList.push(:baz)
+      [:foo, 'bar', 2, :baz]
+  """
+  @spec push(list(), list() | any) :: list()
   def push(list, elements_or_element) do
     list ++ List.wrap(elements_or_element)
   end
 
+  @doc """
+  Returns the first element in list that is an List whose first key == obj:
+
+  ## Examples
+      iex> [[:foo, 0], [2, 4], [4, 5, 6], [4, 5]]
+      iex> |> RList.assoc(4)
+      [4, 5, 6]
+
+      iex> [[:foo, 0], [2, 4], [4, 5, 6], [4, 5]]
+      iex> |> RList.assoc(1)
+      nil
+
+      iex> [[:foo, 0], [2, 4], %{a: 4, b: 5, c: 6}, [4, 5]]
+      iex> |> RList.assoc({:a, 4})
+      %{a: 4, b: 5, c: 6}
+  """
+  @spec assoc(list(), any) :: any
   def assoc(list, key) do
     list
     |> Enum.find(fn els ->
@@ -72,23 +104,89 @@ defmodule RList.Ruby do
     end)
   end
 
+  @doc """
+  Returns [].
+
+  ## Examples
+      iex> [[:foo, 0], [2, 4], [4, 5, 6], [4, 5]]
+      iex> |> RList.clear()
+      []
+  """
+  @spec clear(list()) :: []
   def clear(list) when is_list(list), do: []
 
+  @doc """
+  Returns differences between list1 and list2.
+
+  ## Examples
+      iex> [0, 1, 1, 2, 1, 1, 3, 1, 1]
+      iex> |> RList.difference([1])
+      [0, 2, 3]
+
+      iex> [0, 1, 2]
+      iex> |> RList.difference([4])
+      [0, 1, 2]
+  """
+  @spec difference(list(), list()) :: list()
   def difference(list1, list2) do
-    list1 -- list2
+    list1
+    |> Enum.reject(fn el ->
+      el in list2
+    end)
   end
 
+  @doc """
+  Finds and returns the element in nested elements that is specified by index and identifiers.
+
+  ## Examples
+      iex> [:foo, [:bar, :baz, [:bat, :bam]]]
+      iex> |> RList.dig(1)
+      [:bar, :baz, [:bat, :bam]]
+
+      iex> [:foo, [:bar, :baz, [:bat, :bam]]]
+      iex> |> RList.dig(1, [2])
+      [:bat, :bam]
+
+      iex> [:foo, [:bar, :baz, [:bat, :bam]]]
+      iex> |> RList.dig(1, [2, 0])
+      :bat
+
+      iex> [:foo, [:bar, :baz, [:bat, :bam]]]
+      iex> |> RList.dig(1, [2, 3])
+      nil
+  """
+  @spec dig(list(), integer, list()) :: any
   def dig(list, index, identifiers \\ []) do
     el = Enum.at(list, index)
 
     if(Enum.any?(identifiers)) do
-      [next_index | next_identifiers] = identifiers
+      [next_index | next_identifiers] =
+        identifiers
+        |> IO.inspect()
+
       dig(el, next_index, next_identifiers)
     else
       el
     end
   end
 
+  @doc """
+  Returns the index of a specified element.
+
+  ## Examples
+      iex> [:foo, "bar", 2, "bar"]
+      iex> |> RList.index("bar")
+      1
+
+      iex> [2, 4, 6, 8]
+      iex> |> RList.index(5..7)
+      2
+
+      iex> [2, 4, 6, 8]
+      iex> |> RList.index(&(&1 == 8))
+      3
+  """
+  @spec index(list(), type_pattern | function()) :: any
   def index(list, func_or_pattern) when is_function(func_or_pattern) do
     Enum.find_index(list, func_or_pattern)
   end
@@ -97,15 +195,58 @@ defmodule RList.Ruby do
     index(list, match_function(func_or_pattern))
   end
 
+  @doc """
+  Returns true if list1 == list2.
+
+  ## Examples
+      iex>  [:foo, 'bar', 2]
+      iex> |> RList.eql?([:foo, 'bar', 2])
+      true
+
+      iex>  [:foo, 'bar', 2]
+      iex> |> RList.eql?([:foo, 'bar', 3])
+      false
+  """
+  @spec eql?(list(), list()) :: boolean()
   def eql?(list1, list2) do
     list1 == list2
   end
 
+  @doc """
+  Returns true if the list1 and list2 have at least one element in common, otherwise returns false.
+
+  ## Examples
+      iex> [1, 2, 3]
+      iex> |> RList.intersect?([3, 4, 5])
+      true
+
+      iex> [1, 2, 3]
+      iex> |> RList.intersect?([5, 6, 7])
+      false
+  """
+  @spec intersect?(list(), list()) :: boolean()
   def intersect?(list1, list2) do
     intersection(list1, list2)
     |> Enum.count() > 0
   end
 
+  @doc """
+  Returns a new list containing each element found both in list1 and in all of the given list2; duplicates are omitted.
+
+  ## Examples
+      iex> [1, 2, 3]
+      iex> |> RList.intersection([3, 4, 5])
+      [3]
+
+      iex> [1, 2, 3]
+      iex> |> RList.intersection([5, 6, 7])
+      []
+
+      iex> [1, 2, 3]
+      iex> |> RList.intersection([1, 2, 3])
+      [1, 2, 3]
+  """
+  @spec intersection(list(), list()) :: list()
   def intersection(list1, list2) do
     m1 = MapSet.new(list1)
     m2 = MapSet.new(list2)
@@ -114,6 +255,9 @@ defmodule RList.Ruby do
     |> Enum.to_list()
   end
 
+  @doc """
+  Returns one or more random elements.
+  """
   def sample(list, n \\ 1) do
     taked =
       list
@@ -144,14 +288,14 @@ defmodule RList.Ruby do
       iex> RList.fill(~w[a b c d], fn _, i -> i * 2 end, 0..1)
       [0, 2, "c", "d"]
   """
-  @spec fill([any], any) :: [any]
+  @spec fill(list(), any) :: list()
   def fill(list, filler_fun) when is_function(filler_fun) do
     Enum.with_index(list, filler_fun)
   end
 
   def fill(list, filler), do: Enum.map(list, fn _ -> filler end)
 
-  @spec fill([any], any, Range.t()) :: [any]
+  @spec fill(list(), any, Range.t()) :: list()
   def fill(list, filler_fun, a..b) when is_function(filler_fun) do
     Enum.with_index(list, fn
       x, i when i >= a and i <= b -> filler_fun.(x, i)
@@ -162,7 +306,7 @@ defmodule RList.Ruby do
   def fill(list, filler, fill_range), do: fill(list, fn _, _ -> filler end, fill_range)
 
   @doc """
-  Returns a list containing the elements in self corresponding to the given selector(s).
+  Returns a list containing the elements in list corresponding to the given selector(s).
   The selectors may be either integer indices or ranges.
 
   ## Examples
@@ -182,7 +326,7 @@ defmodule RList.Ruby do
       iex> RList.values_at(~w[a b c d e f], 4..6)
       ["e", "f", nil]
   """
-  @spec values_at([any], [integer | Range.t()] | Range.t()) :: [any]
+  @spec values_at(list(), [integer | Range.t()] | Range.t()) :: list()
   def values_at(list, indices) do
     indices
     |> Enum.map(fn
@@ -202,7 +346,7 @@ defmodule RList.Ruby do
       iex> ["a"] |> RList.union(["e", "b"]) |> RList.union(["a", "c", "b"])
       ["a", "e", "b", "c"]
   """
-  @spec union([any], [any]) :: [any]
+  @spec union(list(), list()) :: list()
   def union(list_a, list_b), do: Enum.uniq(list_a ++ list_b)
 
   @doc """
@@ -214,7 +358,7 @@ defmodule RList.Ruby do
       iex> RList.unshift(~w[b c d], [1, 2])
       [1, 2, "b", "c", "d"]
   """
-  @spec unshift([any], any) :: [any]
+  @spec unshift(list(), any) :: list()
   def unshift(list, prepend) when is_list(prepend), do: prepend ++ list
   def unshift(list, prepend), do: [prepend | list]
 
@@ -230,7 +374,7 @@ defmodule RList.Ruby do
       iex> RList.shift(~w[-m -q -filename], 2)
       {["-m", "-q"], ["-filename"]}
   """
-  @spec shift([any], integer) :: {[any], [any]} | nil
+  @spec shift(list(), integer) :: {list(), list()} | nil
   def shift(list, count \\ 1)
   def shift([], _count), do: nil
   def shift(list, count), do: Enum.split(list, count)
@@ -247,7 +391,7 @@ defmodule RList.Ruby do
       iex> RList.rindex(~w[a b b b c], fn x -> x == "b" end)
       3
   """
-  @spec rindex([any], any) :: integer | nil
+  @spec rindex(list(), any) :: integer | nil
   def rindex(list, finder) when is_function(finder) do
     list
     |> Enum.with_index()
@@ -270,12 +414,23 @@ defmodule RList.Ruby do
       iex> RList.rotate(~w[a b c d], -3)
       ["b", "c", "d", "a"]
   """
-  @spec rotate([any], integer) :: [any]
+  @spec rotate(list(), integer) :: list()
   def rotate(list, count \\ 1) do
     {first, last} = Enum.split(list, count)
     last ++ first
   end
 
+  @doc """
+  Returns list.
+
+  ## Examples
+      iex> RList.to_ary(["b", "c", "d", "a"])
+      ["b", "c", "d", "a"]
+
+      iex> RList.to_ary(["c", "d", "a", "b"])
+      ["c", "d", "a", "b"]
+  """
+  @spec to_ary(list()) :: list()
   def to_ary(list), do: list
 
   # TODO: hard
