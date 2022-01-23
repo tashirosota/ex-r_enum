@@ -399,10 +399,22 @@ defmodule RList.Ruby do
       iex> [[1, "one"], [2, "two"], [3, "three"], ["ii", "two"]]
       iex> |> RList.rassoc("four")
       nil
+
+      iex> [] |> RList.rassoc(4)
+      nil
+
+      iex> [[]] |> RList.rassoc(4)
+      nil
+
+      iex> [{}] |> RList.rassoc(4)
+      nil
   """
   @spec rassoc([list | tuple], any) :: list | nil
   def rassoc(list, q) do
     Enum.find(list, fn
+      nil -> nil
+      [] -> nil
+      {} -> nil
       x when is_tuple(x) -> x |> Tuple.to_list() |> Enum.reverse() |> hd() == q
       x -> x |> Enum.reverse() |> hd() == q
     end)
