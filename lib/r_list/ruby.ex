@@ -23,7 +23,7 @@ defmodule RList.Ruby do
   # × bsearch
   # × bsearch_index
   # ✔ clear
-  # combination
+  # ✔ combination
   # deconstruct
   # ✔ delete_if
   # ✔ difference
@@ -114,6 +114,31 @@ defmodule RList.Ruby do
   """
   @spec clear(list()) :: []
   def clear(list) when is_list(list), do: []
+
+  @doc """
+  combinations of elements
+
+  ## Examples
+      iex> RList.combination([1, 2, 3, 4], 1)
+      [[1],[2],[3],[4]]
+
+      iex> RList.combination([1, 2, 3, 4], 3)
+      [[1,2,3],[1,2,4],[1,3,4],[2,3,4]]
+
+      iex> RList.combination([1, 2, 3, 4], 0)
+      [[]]
+
+      iex> RList.combination([1, 2, 3, 4], 5)
+      []
+  """
+  def combination(_elements, 0), do: [[]]
+
+  def combination([], _), do: []
+
+  @spec combination(list(), integer) :: list()
+  def combination([x | xs], n) do
+    for(y <- combination(xs, n - 1), do: [x | y]) ++ combination(xs, n)
+  end
 
   @doc """
   Returns differences between list1 and list2.
