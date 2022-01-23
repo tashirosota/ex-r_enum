@@ -55,7 +55,7 @@ defmodule RList.Ruby do
   # ✔ size
   # ✔ to_ary
   # ✔ to_s
-  # transpose
+  # ✔ transpose
   # union
   # unshift
   # values_at
@@ -148,4 +148,5 @@ defmodule RList.Ruby do
   defdelegate inspect(list), to: Kernel, as: :inspect
   defdelegate each_index(list, func), to: Enum, as: :with_index
   defdelegate insert(list, index, element), to: List, as: :insert_at
+  defdelegate transpose(list_of_lists), to: List, as: :zip
 end
