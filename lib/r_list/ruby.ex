@@ -58,7 +58,7 @@ defmodule RList.Ruby do
   # ✔ transpose
   # union
   # unshift
-  # values_at
+  # ✔ values_at
 
   def push(list, elements_or_element) do
     list ++ List.wrap(elements_or_element)
@@ -126,6 +126,38 @@ defmodule RList.Ruby do
       [head | _] = taked
       head
     end
+  end
+
+  @doc """
+  Returns a list containing the elements in self corresponding to the given selector(s).
+  The selectors may be either integer indices or ranges.
+
+  ## Examples
+
+      iex> RList.values_at(~w[a b c d e f], [1, 3, 5])
+      ["b", "d", "f"]
+
+      iex> RList.values_at(~w[a b c d e f], [1, 3, 5, 7])
+      ["b", "d", "f", nil]
+
+      iex> RList.values_at(~w[a b c d e f], [-1, -2, -2, -7])
+      ["f", "e", "e", nil]
+
+      iex> RList.values_at(~w[a b c d e f], [4..6, 3..5])
+      ["e", "f", nil, "d", "e", "f"]
+
+      iex> RList.values_at(~w[a b c d e f], 4..6)
+      ["e", "f", nil]
+  """
+  @spec values_at([any], [integer | Range.t()] | Range.t()) :: [any]
+  def values_at(list, indices) do
+    indices
+    |> Enum.map(fn
+      i when is_integer(i) -> i
+      i -> Enum.to_list(i)
+    end)
+    |> List.flatten()
+    |> Enum.map(&Enum.at(list, &1))
   end
 
   def to_ary(list), do: list
