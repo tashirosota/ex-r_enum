@@ -28,7 +28,7 @@ defmodule RList.Ruby do
   # ✔ dig
   # ✔ each_index
   # ✔ eql?
-  # fill
+  # ✔ fill
   # hash
   # ✔ index
   # × initialize_copy
@@ -48,16 +48,16 @@ defmodule RList.Ruby do
   # repeated_combination
   # repeated_permutation
   # × replace
-  # rindex
-  # rotate
+  # ✔ rindex
+  # ✔ rotate
   # ✔ sample
-  # shift
+  # ✔ shift
   # ✔ size
   # ✔ to_ary
   # ✔ to_s
   # ✔ transpose
-  # union
-  # unshift
+  # ✔ union
+  # ✔ unshift
   # ✔ values_at
 
   def push(list, elements_or_element) do
@@ -129,6 +129,39 @@ defmodule RList.Ruby do
   end
 
   @doc """
+  Fills the list with the provided value. The filler can be either a function or a fixed value.
+
+  ## Examples
+      iex> RList.fill(~w[a b c d], "x")
+      ["x", "x", "x", "x"]
+
+      iex> RList.fill(~w[a b c d], "x", 0..1)
+      ["x", "x", "c", "d"]
+
+      iex> RList.fill(~w[a b c d], fn _, i -> i * i end)
+      [0, 1, 4, 9]
+
+      iex> RList.fill(~w[a b c d], fn _, i -> i * 2 end, 0..1)
+      [0, 2, "c", "d"]
+  """
+  @spec fill([any], any) :: [any]
+  def fill(list, filler_fun) when is_function(filler_fun) do
+    Enum.with_index(list, filler_fun)
+  end
+
+  def fill(list, filler), do: Enum.map(list, fn _ -> filler end)
+
+  @spec fill([any], any, Range.t()) :: [any]
+  def fill(list, filler_fun, a..b) when is_function(filler_fun) do
+    Enum.with_index(list, fn
+      x, i when i >= a and i <= b -> filler_fun.(x, i)
+      x, _i -> x
+    end)
+  end
+
+  def fill(list, filler, fill_range), do: fill(list, fn _, _ -> filler end, fill_range)
+
+  @doc """
   Returns a list containing the elements in self corresponding to the given selector(s).
   The selectors may be either integer indices or ranges.
 
@@ -158,6 +191,89 @@ defmodule RList.Ruby do
     end)
     |> List.flatten()
     |> Enum.map(&Enum.at(list, &1))
+  end
+
+  @doc """
+  Returns a new list by joining two lists, excluding any duplicates and preserving the order from the given lists.
+  ## Examples
+      iex> RList.union(["a", "b", "c"], [ "c", "d", "a"])
+      ["a", "b", "c", "d"]
+
+      iex> ["a"] |> RList.union(["e", "b"]) |> RList.union(["a", "c", "b"])
+      ["a", "e", "b", "c"]
+  """
+  @spec union([any], [any]) :: [any]
+  def union(list_a, list_b), do: Enum.uniq(list_a ++ list_b)
+
+  @doc """
+  Prepends elements to the front of the list, moving other elements upwards.
+  ## Examples
+      iex> RList.unshift(~w[b c d], "a")
+      ["a", "b", "c", "d"]
+
+      iex> RList.unshift(~w[b c d], [1, 2])
+      [1, 2, "b", "c", "d"]
+  """
+  @spec unshift([any], any) :: [any]
+  def unshift(list, prepend) when is_list(prepend), do: prepend ++ list
+  def unshift(list, prepend), do: [prepend | list]
+
+  @doc """
+  Splits the list into the first n elements and the rest. Returns nil if the list is empty.
+  ## Examples
+      iex> RList.shift([])
+      nil
+
+      iex> RList.shift(~w[-m -q -filename])
+      {["-m"], ["-q", "-filename"]}
+
+      iex> RList.shift(~w[-m -q -filename], 2)
+      {["-m", "-q"], ["-filename"]}
+  """
+  @spec shift([any], integer) :: {[any], [any]} | nil
+  def shift(list, count \\ 1)
+  def shift([], _count), do: nil
+  def shift(list, count), do: Enum.split(list, count)
+
+  @doc """
+  Returns the index of the last element found in in the list. Returns nil if no match is found.
+  ## Examples
+      iex> RList.rindex(~w[a b b b c], "b")
+      3
+
+      iex> RList.rindex(~w[a b b b c], "z")
+      nil
+
+      iex> RList.rindex(~w[a b b b c], fn x -> x == "b" end)
+      3
+  """
+  @spec rindex([any], any) :: integer | nil
+  def rindex(list, finder) when is_function(finder) do
+    list
+    |> Enum.with_index()
+    |> Enum.reverse()
+    |> Enum.find_value(fn {x, i} -> finder.(x) && i end)
+  end
+
+  def rindex(list, finder), do: rindex(list, &Kernel.==(&1, finder))
+
+  @doc """
+  Rotate the list so that the element at count is the first element of the list.
+
+  ## Examples
+      iex> RList.rotate(~w[a b c d])
+      ["b", "c", "d", "a"]
+
+      iex> RList.rotate(~w[a b c d], 2)
+      ["c", "d", "a", "b"]
+
+      iex> RList.rotate(~w[a b c d], -3)
+      ["b", "c", "d", "a"]
+  """
+  @spec rotate([any], integer) :: [any]
+  def rotate(list, count \\ 1) do
+    {first, last} = Enum.split(list, count)
+    last ++ first
   end
 
   def to_ary(list), do: list
