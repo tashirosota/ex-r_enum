@@ -1,6 +1,5 @@
 defmodule REnum.Native do
-  # @deprecate_functions [:partition, :filter_map, :chunk, :uniq]
-  @deprecate_functions []
+  @deprecate_functions [:partition, :filter_map, :chunk, :uniq]
   @moduledoc """
   A module defines all of native Enum functions when `use REnum.Native`.
   [See also.](https://hexdocs.pm/elixir/Enum.html)

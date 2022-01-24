@@ -229,9 +229,11 @@ defmodule RMap.NativeTest do
              delete_first: 2,
              get_values: 2,
              keyword?: 1,
+             map: 2,
              pop_first: 2,
              pop_first: 3,
              pop_values: 2,
+             size: 1,
              validate: 2,
              validate!: 2
            ]

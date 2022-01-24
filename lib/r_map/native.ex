@@ -5,6 +5,6 @@ defmodule RMap.Native do
   """
   @spec __using__(any) :: list
   defmacro __using__(_opts) do
-    RUtils.define_all_functions!(Map)
+    RUtils.define_all_functions!(Map, [:size, :map])
   end
 end

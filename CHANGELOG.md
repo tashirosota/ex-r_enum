@@ -2,6 +2,37 @@
 
 # Changelog
 
+## v0.4.0 (2022-1-24)
+
+### Features
+
+- RList.Ruby
+- RList, Range, RMap and Stream has all REnum functions without duplicate native functions.
+- Add zip, values_at, fill, union, unshift, shift, rindex, rotate and rassoc (by [@mnishiguchi](https://github.com/mnishiguchi))
+- Add RList.Ruby.combination (by [@TORIFUKUKaiou](https://github.com/mnishiguchi))
+
+### Breaking changes
+
+- Removes deprecated native functions.
+
+## v0.3.2 (2022-1-20)
+
+### Features
+
+- Add `REnum.each_slice/2` that returns Stream.
+- Add alias `REnum.to_l` of `REnum.to_lilst`.
+- Add `mix dialyzer` to test.
+
+### Breaking changes
+
+- `REnum.each_slice/3` returns :ok.
+- `REnum.to_a` uses Enum.to_list/1
+- `REnum.first` returns tuple when given map.
+
+### Other
+
+- Fix hex version badge.
+
 ## v0.3.1 (2022-1-17)
 
 ### Readme
