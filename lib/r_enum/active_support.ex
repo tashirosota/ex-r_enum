@@ -6,7 +6,7 @@ defmodule REnum.ActiveSupport do
   @moduledoc """
   Summarized all of Enumerable functions in Rails.ActiveSupport.
   If a function with the same name already exists in Elixir, that is not implemented.
-  Defines all of here functions when `use RUtils`.
+  Defines all of here functions when `use ActiveSupport`.
   """
   @spec __using__(any) :: list
   defmacro __using__(_opts) do

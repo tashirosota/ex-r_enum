@@ -105,7 +105,7 @@ See **[hexdocs](https://hexdocs.pm/r_enum)**.
   - REnum.ActiveSupport
 - [x] 0.4.0
   - RList.Ruby
-- [ ] 0.5.0
+- [x] 0.5.0
   - RList.ActiveSupport
 - [ ] 0.6.0
   - RMap.Ruby
@@ -122,7 +122,7 @@ See **[hexdocs](https://hexdocs.pm/r_enum)**.
 | REnum   | Elixir Module | Ruby Class       | Elixir | Ruby | ActiveSupport |
 | ------- | ------------- | ---------------- | :----: | :--: | :-----------: |
 | REnum   | Enum          | Enumerable       |   ✅   |  ✅  |      ✅       |
-| RList   | List          | Array            |   ✅   |  ✅  |     TODO      |
+| RList   | List          | Array            |   ✅   |  ✅  |      ✅       |
 | RMap    | Map           | Hash             |   ✅   | TODO |     TODO      |
 | RRange  | Range         | Range            |   ✅   | TODO |     TODO      |
 | RStream | Stream        | Enumerator::Lazy |   ✅   | TODO |     TODO      |
