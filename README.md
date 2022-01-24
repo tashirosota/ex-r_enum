@@ -57,7 +57,7 @@ iex> |> REnum.without([1, 5])
 
 # RList.Ruby.combination/2
 iex> [1, 2, 3, 4]
-iex> RList.combination(3)
+iex> |> RList.combination(3)
 iex> |> Enum.to_list()
 [[1,2,3],[1,2,4],[1,3,4],[2,3,4]]
 # See also RList.Ruby.repeated_combination, RList.Ruby.permutation, RList.Ruby.repeated_permutation
