@@ -44,7 +44,7 @@ defmodule RList.Ruby do
   # pack
   # permutation
   # ✔ pop
-  # prepend
+  # ✔ prepend
   # ✔ push
   # ✔ rassoc
   # repeated_combination
@@ -525,4 +525,5 @@ defmodule RList.Ruby do
   defdelegate each_index(list, func), to: Enum, as: :with_index
   defdelegate insert(list, index, element), to: List, as: :insert_at
   defdelegate transpose(list_of_lists), to: List, as: :zip
+  defdelegate prepend(list, count \\ 1), to: __MODULE__, as: :shift
 end
