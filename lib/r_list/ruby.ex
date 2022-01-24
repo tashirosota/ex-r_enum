@@ -25,6 +25,8 @@ defmodule RList.Ruby do
   # ✔ clear
   # ✔ combination
   # deconstruct
+  # ✔ combination
+  # × deconstruct
   # ✔ delete_if
   # ✔ difference
   # ✔ dig
@@ -43,10 +45,10 @@ defmodule RList.Ruby do
   # × old_to_s
   # pack
   # permutation
-  # pop
-  # prepend
+  # ✔ pop
+  # ✔ prepend
   # ✔ push
-  # rassoc
+  # ✔ rassoc
   # repeated_combination
   # repeated_permutation
   # × replace
@@ -77,31 +79,6 @@ defmodule RList.Ruby do
   @spec push(list(), list() | any) :: list()
   def push(list, elements_or_element) do
     list ++ List.wrap(elements_or_element)
-  end
-
-  @doc """
-  Returns the first element in list that is an List whose first key == obj:
-
-  ## Examples
-      iex> [[:foo, 0], [2, 4], [4, 5, 6], [4, 5]]
-      iex> |> RList.assoc(4)
-      [4, 5, 6]
-
-      iex> [[:foo, 0], [2, 4], [4, 5, 6], [4, 5]]
-      iex> |> RList.assoc(1)
-      nil
-
-      iex> [[:foo, 0], [2, 4], %{a: 4, b: 5, c: 6}, [4, 5]]
-      iex> |> RList.assoc({:a, 4})
-      %{a: 4, b: 5, c: 6}
-  """
-  @spec assoc(list(), any) :: any
-  def assoc(list, key) do
-    list
-    |> Enum.find(fn els ->
-      [head | _] = els |> Enum.to_list()
-      head == key
-    end)
   end
 
   @doc """
@@ -405,6 +382,104 @@ defmodule RList.Ruby do
   def shift(list, count), do: Enum.split(list, count)
 
   @doc """
+  Splits the list into the last n elements and the rest. Returns nil if the list is empty.
+  ## Examples
+      iex> RList.pop([])
+      nil
+
+      iex> RList.pop(~w[-m -q -filename test.txt])
+      {["test.txt"], ["-m", "-q", "-filename"]}
+
+      iex> RList.pop(~w[-m -q -filename test.txt], 2)
+      {["-filename", "test.txt"], ["-m", "-q"]}
+  """
+  @spec pop(list(), integer) :: {list(), list()} | nil
+  def pop(list, count \\ 1) do
+    list
+    |> Enum.reverse()
+    |> shift(count)
+    |> _pop()
+  end
+
+  defp _pop(nil), do: nil
+
+  defp _pop(tuple) do
+    {
+      elem(tuple, 0) |> Enum.reverse(),
+      elem(tuple, 1) |> Enum.reverse()
+    }
+  end
+
+  @doc """
+  Returns the first element that is a List whose last element `==` the specified term.
+
+  ## Examples
+
+      iex> [{:foo, 0}, [2, 4], [4, 5, 6], [4, 5]]
+      iex> |> RList.rassoc(4)
+      [2, 4]
+
+      iex> [{:foo, 0}, [2, 4], [4, 5, 6], [4, 5]]
+      iex> |> RList.rassoc(0)
+      {:foo, 0}
+
+      iex> [[1, "one"], [2, "two"], [3, "three"], ["ii", "two"]]
+      iex> |> RList.rassoc("two")
+      [2, "two"]
+
+      iex> [[1, "one"], [2, "two"], [3, "three"], ["ii", "two"]]
+      iex> |> RList.rassoc("four")
+      nil
+
+      iex> [] |> RList.rassoc(4)
+      nil
+
+      iex> [[]] |> RList.rassoc(4)
+      nil
+
+      iex> [{}] |> RList.rassoc(4)
+      nil
+  """
+  @spec rassoc([list | tuple], any) :: list | nil
+  def rassoc(list, key) do
+    Enum.find(list, fn
+      nil -> nil
+      [] -> nil
+      {} -> nil
+      x when is_tuple(x) -> x |> Tuple.to_list() |> Enum.reverse() |> hd() == key
+      x -> x |> Enum.reverse() |> hd() == key
+    end)
+  end
+
+  @doc """
+  Returns the first element in list that is an List whose first key == obj:
+
+  ## Examples
+      iex> [{:foo, 0}, [2, 4], [4, 5, 6], [4, 5]]
+      iex> |> RList.assoc(4)
+      [4, 5, 6]
+
+      iex> [[:foo, 0], [2, 4], [4, 5, 6], [4, 5]]
+      iex> |> RList.assoc(1)
+      nil
+
+      iex> [[:foo, 0], [2, 4], %{a: 4, b: 5, c: 6}, [4, 5]]
+      iex> |> RList.assoc({:a, 4})
+      %{a: 4, b: 5, c: 6}
+  """
+  @spec assoc(list(), any) :: any
+  def assoc(list, key) do
+    list
+    |> Enum.find(fn
+      nil -> nil
+      [] -> nil
+      {} -> nil
+      x when is_tuple(x) -> x |> Tuple.to_list() |> hd() == key
+      x -> x |> Enum.to_list() |> hd() == key
+    end)
+  end
+
+  @doc """
   Returns the index of the last element found in in the list. Returns nil if no match is found.
   ## Examples
       iex> RList.rindex(~w[a b b b c], "b")
@@ -477,4 +552,5 @@ defmodule RList.Ruby do
   defdelegate each_index(list, func), to: Enum, as: :with_index
   defdelegate insert(list, index, element), to: List, as: :insert_at
   defdelegate transpose(list_of_lists), to: List, as: :zip
+  defdelegate prepend(list, count \\ 1), to: __MODULE__, as: :shift
 end
