@@ -46,7 +46,7 @@ defmodule RList.Ruby do
   # pop
   # prepend
   # ✔ push
-  # rassoc
+  # ✔ rassoc
   # repeated_combination
   # repeated_permutation
   # × replace
@@ -378,6 +378,47 @@ defmodule RList.Ruby do
   def shift(list, count \\ 1)
   def shift([], _count), do: nil
   def shift(list, count), do: Enum.split(list, count)
+
+  @doc """
+  Returns the first element that is a List whose last element `==` the specified term.
+
+  ## Examples
+
+      iex> [{:foo, 0}, [2, 4], [4, 5, 6], [4, 5]]
+      iex> |> RList.rassoc(4)
+      [2, 4]
+
+      iex> [{:foo, 0}, [2, 4], [4, 5, 6], [4, 5]]
+      iex> |> RList.rassoc(0)
+      {:foo, 0}
+
+      iex> [[1, "one"], [2, "two"], [3, "three"], ["ii", "two"]]
+      iex> |> RList.rassoc("two")
+      [2, "two"]
+
+      iex> [[1, "one"], [2, "two"], [3, "three"], ["ii", "two"]]
+      iex> |> RList.rassoc("four")
+      nil
+
+      iex> [] |> RList.rassoc(4)
+      nil
+
+      iex> [[]] |> RList.rassoc(4)
+      nil
+
+      iex> [{}] |> RList.rassoc(4)
+      nil
+  """
+  @spec rassoc([list | tuple], any) :: list | nil
+  def rassoc(list, q) do
+    Enum.find(list, fn
+      nil -> nil
+      [] -> nil
+      {} -> nil
+      x when is_tuple(x) -> x |> Tuple.to_list() |> Enum.reverse() |> hd() == q
+      x -> x |> Enum.reverse() |> hd() == q
+    end)
+  end
 
   @doc """
   Returns the index of the last element found in in the list. Returns nil if no match is found.
