@@ -43,7 +43,7 @@ defmodule RList.Ruby do
   # × old_to_s
   # pack
   # permutation
-  # pop
+  # ✔ pop
   # prepend
   # ✔ push
   # ✔ rassoc
@@ -353,6 +353,35 @@ defmodule RList.Ruby do
   def shift(list, count \\ 1)
   def shift([], _count), do: nil
   def shift(list, count), do: Enum.split(list, count)
+
+  @doc """
+  Splits the list into the last n elements and the rest. Returns nil if the list is empty.
+  ## Examples
+      iex> RList.pop([])
+      nil
+
+      iex> RList.pop(~w[-m -q -filename test.txt])
+      {["test.txt"], ["-m", "-q", "-filename"]}
+
+      iex> RList.pop(~w[-m -q -filename test.txt], 2)
+      {["-filename", "test.txt"], ["-m", "-q"]}
+  """
+  @spec pop(list(), integer) :: {list(), list()} | nil
+  def pop(list, count \\ 1) do
+    list
+    |> Enum.reverse()
+    |> shift(count)
+    |> _pop()
+  end
+
+  defp _pop(nil), do: nil
+
+  defp _pop(tuple) do
+    {
+      elem(tuple, 0) |> Enum.reverse(),
+      elem(tuple, 1) |> Enum.reverse()
+    }
+  end
 
   @doc """
   Returns the first element that is a List whose last element `==` the specified term.
