@@ -24,7 +24,7 @@ defmodule RList.Ruby do
   # × bsearch_index
   # ✔ clear
   # combination
-  # deconstruct
+  # × deconstruct
   # ✔ delete_if
   # ✔ difference
   # ✔ dig
