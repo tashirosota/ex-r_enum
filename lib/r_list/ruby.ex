@@ -33,7 +33,7 @@ defmodule RList.Ruby do
   # ✔ each_index
   # ✔ eql?
   # ✔ fill
-  # hash
+  # hash TODO: Low priority
   # ✔ index
   # × initialize_copy
   # ✔ insert
@@ -43,7 +43,7 @@ defmodule RList.Ruby do
   # ✔ keep_if
   # ✔ length
   # × old_to_s
-  # pack
+  # pack TODO: Low priority
   # ✔ permutation
   # ✔ pop
   # ✔ prepend
@@ -716,9 +716,6 @@ defmodule RList.Ruby do
   Returns list.
 
   ## Examples
-      iex> RList.to_ary(["b", "c", "d", "a"])
-      ["b", "c", "d", "a"]
-
       iex> RList.to_ary(["c", "d", "a", "b"])
       ["c", "d", "a", "b"]
   """

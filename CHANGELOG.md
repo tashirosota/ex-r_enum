@@ -2,12 +2,14 @@
 
 # Changelog
 
-## v0.4.0 (2022-1-xx)
+## v0.4.0 (2022-1-24)
 
 ### Features
 
 - RList.Ruby
 - RList, Range, RMap and Stream has all REnum functions without duplicate native functions.
+- Add zip, values_at, fill, union, unshift, shift, rindex, rotate and rassoc (by [@mnishiguchi](https://github.com/mnishiguchi))
+- Add RList.Ruby.combination (by [@TORIFUKUKaiou](https://github.com/mnishiguchi))
 
 ### Breaking changes
 
