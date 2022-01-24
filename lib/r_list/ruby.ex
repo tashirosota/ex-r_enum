@@ -44,13 +44,13 @@ defmodule RList.Ruby do
   # ✔ length
   # × old_to_s
   # pack
-  # permutation
+  # ✔ permutation
   # ✔ pop
   # ✔ prepend
   # ✔ push
   # ✔ rassoc
   # ✔ repeated_combination
-  # repeated_permutation
+  # ✔ repeated_permutation
   # × replace
   # ✔ rindex
   # ✔ rotate
@@ -154,7 +154,7 @@ defmodule RList.Ruby do
   end
 
   @doc """
-    Returns Stream that is each repeated combinations of elements of given list. The order of combinations is indeterminate.
+  Returns Stream that is each repeated combinations of elements of given list. The order of combinations is indeterminate.
 
   ## Examples
       iex> RList.repeated_combination([1, 2, 3], 1)
@@ -228,6 +228,88 @@ defmodule RList.Ruby do
   def _repeated_combination([h | t] = s, n) do
     for(l <- _repeated_combination(s, n - 1), do: [h | l]) ++ _repeated_combination(t, n)
   end
+
+  @doc """
+  Returns Stream that is each repeated permutations of elements of given list. The order of permutations is indeterminate.
+
+  ## Examples
+      iex> RList.permutation([1, 2, 3], 1)
+      iex> |> Enum.to_list()
+      [[1],[2],[3]]
+
+      iex> RList.permutation([1, 2, 3], 2)
+      iex> |> Enum.to_list()
+      [[1,2],[1,3],[2,1],[2,3],[3,1],[3,2]]
+
+      iex> RList.permutation([1, 2, 3])
+      iex> |> Enum.to_list()
+      [[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]]
+
+      iex> RList.permutation([1, 2, 3], 0)
+      iex> |> Enum.to_list()
+      [[]]
+
+      iex> RList.permutation([1, 2, 3], 4)
+      iex> |> Enum.to_list()
+      []
+  """
+  @spec permutation(list(), non_neg_integer() | nil) :: type_enumerable
+
+  def permutation(list, length \\ nil) do
+    n = length || Enum.count(list)
+
+    cond do
+      n <= 0 ->
+        [[]]
+
+      n == Enum.count(list) ->
+        _permutation(list)
+
+      n >= Enum.count(list) ->
+        []
+
+      true ->
+        _permutation(list)
+        |> Enum.map(&Enum.take(&1, n))
+        |> Enum.uniq()
+    end
+    |> REnum.lazy()
+  end
+
+  defp _permutation(list),
+    do: for(elem <- list, rest <- permutation(list -- [elem]), do: [elem | rest])
+
+  @doc """
+  Returns Stream that is each repeated permutations of elements of given list. The order of permutations is indeterminate.
+
+  ## Examples
+      iex> RList.repeated_permutation([1, 2], 1)
+      iex> |> Enum.to_list()
+      [[1],[2]]
+
+      iex> RList.repeated_permutation([1, 2], 2)
+      iex> |> Enum.to_list()
+      [[1,1],[1,2],[2,1],[2,2]]
+
+      iex> RList.repeated_permutation([1, 2], 3)
+      iex> |> Enum.to_list()
+      [[1,1,1],[1,1,2],[1,2,1],[1,2,2],[2,1,1],[2,1,2],[2,2,1],[2,2,2]]
+
+      iex> RList.repeated_permutation([1, 2], 0)
+      iex> |> Enum.to_list()
+      [[]]
+  """
+  @spec repeated_permutation(list(), non_neg_integer()) :: type_enumerable
+
+  def repeated_permutation(list, length) do
+    _repeated_permutation(list, length) |> REnum.lazy()
+  end
+
+  defp _repeated_permutation([], _), do: [[]]
+  defp _repeated_permutation(_, 0), do: [[]]
+
+  defp _repeated_permutation(list, length),
+    do: for(x <- list, y <- _repeated_permutation(list, length - 1), do: [x | y])
 
   @doc """
   Returns differences between list1 and list2.
