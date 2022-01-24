@@ -12,6 +12,7 @@ defmodule RList.Ruby do
   end
 
   @type type_pattern :: number() | String.t() | Range.t() | Regex.t()
+  @type type_enumerable :: Enumerable.t()
 
   import REnum.Support
 
@@ -25,7 +26,6 @@ defmodule RList.Ruby do
   # ✔ clear
   # ✔ combination
   # deconstruct
-  # ✔ combination
   # × deconstruct
   # ✔ delete_if
   # ✔ difference
@@ -93,28 +93,64 @@ defmodule RList.Ruby do
   def clear(list) when is_list(list), do: []
 
   @doc """
-  combinations of elements
-
+  Returns Stream that combinations of elements of given list. The order of combinations is indeterminate.
   ## Examples
       iex> RList.combination([1, 2, 3, 4], 1)
+      iex> |> Enum.to_list()
       [[1],[2],[3],[4]]
 
       iex> RList.combination([1, 2, 3, 4], 3)
+      iex> |> Enum.to_list()
       [[1,2,3],[1,2,4],[1,3,4],[2,3,4]]
 
       iex> RList.combination([1, 2, 3, 4], 0)
+      iex> |> Enum.to_list()
       [[]]
 
       iex> RList.combination([1, 2, 3, 4], 5)
+      iex> |> Enum.to_list()
       []
   """
-  def combination(_elements, 0), do: [[]]
+  @spec combination(list(), non_neg_integer()) :: type_enumerable
+  def combination(list, n) do
+    _combination(list, n) |> REnum.lazy()
+  end
 
-  def combination([], _), do: []
+  @doc """
+  Calls the function with combinations of elements of given list; returns :ok. The order of combinations is indeterminate.
+  ## Examples
+      iex> RList.combination([1, 2, 3, 4], 1, &(IO.inspect(&1)))
+      # [1]
+      # [2]
+      # [3]
+      # [4]
+      :ok
 
-  @spec combination(list(), integer) :: list()
-  def combination([x | xs], n) do
-    for(y <- combination(xs, n - 1), do: [x | y]) ++ combination(xs, n)
+      iex> RList.combination([1, 2, 3, 4], 3, &(IO.inspect(&1)))
+      # [1, 2, 3]
+      # [1, 2, 4]
+      # [1, 3, 4]
+      # [2, 3, 4]
+      :ok
+
+      iex> RList.combination([1, 2, 3, 4], 0, &(IO.inspect(&1)))
+      # []
+      :ok
+
+      iex> RList.combination([1, 2, 3, 4], 5, &(IO.inspect(&1)))
+      :ok
+  """
+  @spec combination(list(), non_neg_integer, function()) :: :ok
+  def combination(list, n, func) do
+    combination(list, n) |> Enum.each(fn el -> func.(el) end)
+  end
+
+  def _combination(_elements, 0), do: [[]]
+
+  def _combination([], _), do: []
+
+  def _combination([head | tail], n) do
+    for(comb <- _combination(tail, n - 1), do: [head | comb]) ++ _combination(tail, n)
   end
 
   @doc """
@@ -162,9 +198,7 @@ defmodule RList.Ruby do
     el = Enum.at(list, index)
 
     if(Enum.any?(identifiers)) do
-      [next_index | next_identifiers] =
-        identifiers
-        |> IO.inspect()
+      [next_index | next_identifiers] = identifiers
 
       dig(el, next_index, next_identifiers)
     else
@@ -532,15 +566,6 @@ defmodule RList.Ruby do
   """
   @spec to_ary(list()) :: list()
   def to_ary(list), do: list
-
-  # TODO: hard
-  # def combination(list, n) do
-  #   []
-  # end
-  # def combination(list, n, func) do
-  #   combination(list, n)
-  #   |> func.()
-  # end
 
   defdelegate append(list, elements), to: __MODULE__, as: :push
   defdelegate delete_if(list, func), to: Enum, as: :reject

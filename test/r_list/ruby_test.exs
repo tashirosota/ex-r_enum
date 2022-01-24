@@ -1,5 +1,6 @@
 defmodule RList.RubyTest do
   use ExUnit.Case
+  import ExUnit.CaptureIO
   doctest RList.Ruby
 
   test "push/2" do
@@ -55,26 +56,32 @@ defmodule RList.RubyTest do
     assert RList.prepend(~w[-m -q -filename], 2) == RList.shift(~w[-m -q -filename], 2)
   end
 
-  # TODO: hard
-  # describe "combination/2" do
-  #   list = [1, 2, 3, 4]
-  #   assert RList.combination(list, 0) |> Enum.to_list() == [[]]
-  #   assert RList.combination(list, 1) |> Enum.to_list() == [[1], [2], [3], [4]]
-  #   assert RList.combination(list, 2) |> Enum.to_list() == [
-  #            [1, 2],
-  #            [1, 3],
-  #            [1, 4],
-  #            [2, 3],
-  #            [2, 4],
-  #            [3, 4]
-  #          ]
-  #   assert RList.combination(list, 3) |> Enum.to_list() == [
-  #            [1, 2, 3],
-  #            [1, 2, 4],
-  #            [1, 3, 4],
-  #            [2, 3, 4]
-  #          ]
-  #   assert RList.combination(list, 4) |> Enum.to_list() == [[1, 2, 3, 4]]
-  #   assert RList.combination(list, 5) |> Enum.to_list() == []
-  # end
+  describe "combination" do
+    list = [1, 2, 3, 4]
+    assert RList.combination(list, 0) |> Enum.to_list() == [[]]
+    assert RList.combination(list, 1) |> Enum.to_list() == [[1], [2], [3], [4]]
+
+    assert RList.combination(list, 2) |> Enum.to_list() == [
+             [1, 2],
+             [1, 3],
+             [1, 4],
+             [2, 3],
+             [2, 4],
+             [3, 4]
+           ]
+
+    assert RList.combination(list, 3) |> Enum.to_list() == [
+             [1, 2, 3],
+             [1, 2, 4],
+             [1, 3, 4],
+             [2, 3, 4]
+           ]
+
+    assert RList.combination(list, 4) |> Enum.to_list() == [[1, 2, 3, 4]]
+    assert RList.combination(list, 5) |> Enum.to_list() == []
+
+    assert capture_io(fn ->
+             RList.combination(list, 2, &IO.inspect(&1))
+           end) == "[1, 2]\n[1, 3]\n[1, 4]\n[2, 3]\n[2, 4]\n[3, 4]\n"
+  end
 end
