@@ -103,7 +103,7 @@ See **[hexdocs](https://hexdocs.pm/r_enum)**.
   - RUtils
 - [x] 0.2.0
   - REnum.ActiveSupport
-- [ ] 0.4.0
+- [x] 0.4.0
   - RList.Ruby
 - [ ] 0.5.0
   - RList.ActiveSupport
