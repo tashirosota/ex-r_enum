@@ -80,31 +80,6 @@ defmodule RList.Ruby do
   end
 
   @doc """
-  Returns the first element in list that is an List whose first key == obj:
-
-  ## Examples
-      iex> [[:foo, 0], [2, 4], [4, 5, 6], [4, 5]]
-      iex> |> RList.assoc(4)
-      [4, 5, 6]
-
-      iex> [[:foo, 0], [2, 4], [4, 5, 6], [4, 5]]
-      iex> |> RList.assoc(1)
-      nil
-
-      iex> [[:foo, 0], [2, 4], %{a: 4, b: 5, c: 6}, [4, 5]]
-      iex> |> RList.assoc({:a, 4})
-      %{a: 4, b: 5, c: 6}
-  """
-  @spec assoc(list(), any) :: any
-  def assoc(list, key) do
-    list
-    |> Enum.find(fn els ->
-      [head | _] = els |> Enum.to_list()
-      head == key
-    end)
-  end
-
-  @doc """
   Returns [].
 
   ## Examples
@@ -410,13 +385,41 @@ defmodule RList.Ruby do
       nil
   """
   @spec rassoc([list | tuple], any) :: list | nil
-  def rassoc(list, q) do
+  def rassoc(list, key) do
     Enum.find(list, fn
       nil -> nil
       [] -> nil
       {} -> nil
-      x when is_tuple(x) -> x |> Tuple.to_list() |> Enum.reverse() |> hd() == q
-      x -> x |> Enum.reverse() |> hd() == q
+      x when is_tuple(x) -> x |> Tuple.to_list() |> Enum.reverse() |> hd() == key
+      x -> x |> Enum.reverse() |> hd() == key
+    end)
+  end
+
+  @doc """
+  Returns the first element in list that is an List whose first key == obj:
+
+  ## Examples
+      iex> [{:foo, 0}, [2, 4], [4, 5, 6], [4, 5]]
+      iex> |> RList.assoc(4)
+      [4, 5, 6]
+
+      iex> [[:foo, 0], [2, 4], [4, 5, 6], [4, 5]]
+      iex> |> RList.assoc(1)
+      nil
+
+      iex> [[:foo, 0], [2, 4], %{a: 4, b: 5, c: 6}, [4, 5]]
+      iex> |> RList.assoc({:a, 4})
+      %{a: 4, b: 5, c: 6}
+  """
+  @spec assoc(list(), any) :: any
+  def assoc(list, key) do
+    list
+    |> Enum.find(fn
+      nil -> nil
+      [] -> nil
+      {} -> nil
+      x when is_tuple(x) -> x |> Tuple.to_list() |> hd() == key
+      x -> x |> Enum.to_list() |> hd() == key
     end)
   end
 
