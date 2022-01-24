@@ -84,4 +84,26 @@ defmodule RList.RubyTest do
              RList.combination(list, 2, &IO.inspect(&1))
            end) == "[1, 2]\n[1, 3]\n[1, 4]\n[2, 3]\n[2, 4]\n[3, 4]\n"
   end
+
+  describe "repeated_combination" do
+    list = [1, 2, 3, 4]
+
+    assert RList.repeated_combination(list, 2) |> Enum.to_list() == [
+             [1, 1],
+             [1, 2],
+             [1, 3],
+             [1, 4],
+             [2, 2],
+             [2, 3],
+             [2, 4],
+             [3, 3],
+             [3, 4],
+             [4, 4]
+           ]
+
+    assert capture_io(fn ->
+             RList.repeated_combination(list, 2, &IO.inspect(&1))
+           end) ==
+             "[1, 1]\n[1, 2]\n[1, 3]\n[1, 4]\n[2, 2]\n[2, 3]\n[2, 4]\n[3, 3]\n[3, 4]\n[4, 4]\n"
+  end
 end

@@ -49,7 +49,7 @@ defmodule RList.Ruby do
   # ✔ prepend
   # ✔ push
   # ✔ rassoc
-  # repeated_combination
+  # ✔ repeated_combination
   # repeated_permutation
   # × replace
   # ✔ rindex
@@ -93,7 +93,7 @@ defmodule RList.Ruby do
   def clear(list) when is_list(list), do: []
 
   @doc """
-  Returns Stream that combinations of elements of given list. The order of combinations is indeterminate.
+  Returns Stream that is each repeated combinations of elements of given list. The order of combinations is indeterminate.
   ## Examples
       iex> RList.combination([1, 2, 3, 4], 1)
       iex> |> Enum.to_list()
@@ -112,8 +112,8 @@ defmodule RList.Ruby do
       []
   """
   @spec combination(list(), non_neg_integer()) :: type_enumerable
-  def combination(list, n) do
-    _combination(list, n) |> REnum.lazy()
+  def combination(list, length) do
+    _combination(list, length) |> REnum.lazy()
   end
 
   @doc """
@@ -151,6 +151,82 @@ defmodule RList.Ruby do
 
   def _combination([head | tail], n) do
     for(comb <- _combination(tail, n - 1), do: [head | comb]) ++ _combination(tail, n)
+  end
+
+  @doc """
+    Returns Stream that is each repeated combinations of elements of given list. The order of combinations is indeterminate.
+
+  ## Examples
+      iex> RList.repeated_combination([1, 2, 3], 1)
+      iex> |> Enum.to_list()
+      [[1], [2], [3]]
+
+      iex> RList.repeated_combination([1, 2, 3], 2)
+      iex> |> Enum.to_list()
+      [[1, 1], [1, 2], [1, 3], [2, 2], [2, 3], [3, 3]]
+
+      iex> RList.repeated_combination([1, 2, 3], 3)
+      iex> |> Enum.to_list()
+      [[1, 1, 1], [1, 1, 2], [1, 1, 3], [1, 2, 2], [1, 2, 3], [1, 3, 3], [2, 2, 2], [2, 2, 3], [2, 3, 3], [3, 3, 3]]
+
+      iex> RList.repeated_combination([1, 2, 3], 0)
+      iex> |> Enum.to_list()
+      [[]]
+
+      iex> RList.repeated_combination([1, 2, 3], 5)
+      iex> |> Enum.to_list()
+      [
+        [1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 2],
+        [1, 1, 1, 1, 3],
+        [1, 1, 1, 2, 2],
+        [1, 1, 1, 2, 3],
+        [1, 1, 1, 3, 3],
+        [1, 1, 2, 2, 2],
+        [1, 1, 2, 2, 3],
+        [1, 1, 2, 3, 3],
+        [1, 1, 3, 3, 3],
+        [1, 2, 2, 2, 2],
+        [1, 2, 2, 2, 3],
+        [1, 2, 2, 3, 3],
+        [1, 2, 3, 3, 3],
+        [1, 3, 3, 3, 3],
+        [2, 2, 2, 2, 2],
+        [2, 2, 2, 2, 3],
+        [2, 2, 2, 3, 3],
+        [2, 2, 3, 3, 3],
+        [2, 3, 3, 3, 3],
+        [3, 3, 3, 3, 3]
+      ]
+  """
+  @spec repeated_combination(list(), non_neg_integer()) :: type_enumerable
+  def repeated_combination(list, length) do
+    _repeated_combination(list, length) |> REnum.lazy()
+  end
+
+  @doc """
+  Calls the function with each repeated combinations of elements of given list; returns :ok. The order of combinations is indeterminate.
+  ## Examples
+      iex> RList.repeated_combination([1, 2, 3, 4], 2, &(IO.inspect(&1)))
+      # [1, 1]
+      # [1, 2]
+      # [1, 3]
+      # [2, 2]
+      # [2, 3]
+      # [3, 3]
+      :ok
+  """
+  @spec repeated_combination(list(), non_neg_integer, function()) :: :ok
+  def repeated_combination(list, n, func) do
+    _repeated_combination(list, n) |> Enum.each(fn el -> func.(el) end)
+  end
+
+  def _repeated_combination(_elements, 0), do: [[]]
+
+  def _repeated_combination([], _), do: []
+
+  def _repeated_combination([h | t] = s, n) do
+    for(l <- _repeated_combination(s, n - 1), do: [h | l]) ++ _repeated_combination(t, n)
   end
 
   @doc """
@@ -578,4 +654,6 @@ defmodule RList.Ruby do
   defdelegate insert(list, index, element), to: List, as: :insert_at
   defdelegate transpose(list_of_lists), to: List, as: :zip
   defdelegate prepend(list, count \\ 1), to: __MODULE__, as: :shift
+  defdelegate all_combination(list, length), to: __MODULE__, as: :repeated_combination
+  defdelegate all_combination(list, length, func), to: __MODULE__, as: :repeated_combination
 end
