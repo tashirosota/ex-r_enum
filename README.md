@@ -30,15 +30,18 @@ You can use all of `Enum.Enumerable.*` functions through REnum Module.
 iex> [1, nil, 2, 3]
 iex> |> REnum.compact()
 [1, 2, 3]
+
 # REnum.Ruby.grep/2
 iex> ["foo", "bar", "car", "moo"]
 iex> |> REnum.grep(~r/ar/)
 ["bar", "car"]
+
 # REnum.Ruby.each_slice/2
 iex> [1, 2, 3, 4, 5, 6, 7]
 iex> |> REnum.each_slice(3)
 iex> |> REnum.to_list()
 [[1, 2, 3], [4, 5, 6], [7]]
+
 # REnum.ActiveSupport.pluck/2
 iex> payments = [
 ...>   %Payment{dollars: 5, cents: 99},
@@ -47,9 +50,7 @@ iex> payments = [
 ...> ]
 iex> |> REnum.pluck(:dollars)
 [5, 10, 0]
-# REnum.ActiveSupport.maximum/2
-iex> REnum.maximum(payments, :dollars)
-10
+
 # REnum.ActiveSupport.without/2
 iex> 1..5
 iex> |> REnum.without([1, 5])
@@ -62,25 +63,45 @@ iex> |> Enum.to_list()
 [[1,2,3],[1,2,4],[1,3,4],[2,3,4]]
 # See also RList.Ruby.repeated_combination, RList.Ruby.permutation, RList.Ruby.repeated_permutation
 
+# RList.Ruby.push/2
 iex> [:foo, 'bar', 2]
 iex> |> RList.push([:baz, :bat])
 [:foo, 'bar', 2, :baz, :bat]
 # See also RList.Ruby.pop, RList.Ruby.shift, RList.Ruby.unshift
 
+# RList.ActiveSupport.second/1
+iex> [:foo, 'bar', 2]
+iex> |> RList.second()
+'bar'
+# See also RList.ActiveSupport.second, RList.ActiveSupport.third, RList.ActiveSupport.fourth, RList.ActiveSupport.fifth, RList.ActiveSupport.forty_two
+
+# RList.ActiveSupport.from/2
+iex> ~w[a b c d]
+iex> |> RList.from(2)
+["c", "d"]
+# See also RList.ActiveSupport.to
+
+# RList.ActiveSupport.to_sentence/2
+iex> ["one", "two", "three"]
+iex> |> RList.to_sentence(words_connector: " or ", last_word_connector: " or at least ")
+"one or two or at least three"
+
 # Aliases.
-# REnum.Ruby.select2
+# REnum.Ruby.select/2
 iex> [1, 2, 3]
 iex> |> REnum.select(fn x -> rem(x, 2) == 0 end) ==
-iex>   Enum.filter([1, 2, 3], fn x -> rem(x, 2) == 0 end)
+...>   Enum.filter([1, 2, 3], fn x -> rem(x, 2) == 0 end)
 true
+
 # Can use Elixir's Enum functions too.
 # REnum.Ruby.find/2
 iex> [1, 2, 3]
 iex> |> REnum.find(fn x -> rem(x, 2) == 1 end)
 3
+
 # REnum.Ruby.sort/1
 iex> [1, 2, 3]
-iex> REnum.sort()
+iex> |> REnum.sort()
 [1, 2, 3]
 ```
 
@@ -105,7 +126,7 @@ See **[hexdocs](https://hexdocs.pm/r_enum)**.
   - REnum.ActiveSupport
 - [x] 0.4.0
   - RList.Ruby
-- [ ] 0.5.0
+- [x] 0.5.0
   - RList.ActiveSupport
 - [ ] 0.6.0
   - RMap.Ruby
@@ -114,6 +135,10 @@ See **[hexdocs](https://hexdocs.pm/r_enum)**.
   - RRange.Ruby
   - RRange.ActiveSupport
 - [ ] 0.8.0
+  - to_param
+  - to_query
+  - to_xml
+- [ ] 0.9.0
   - RStream.Ruby
   - RStream.ActiveSupport
 
@@ -122,7 +147,7 @@ See **[hexdocs](https://hexdocs.pm/r_enum)**.
 | REnum   | Elixir Module | Ruby Class       | Elixir | Ruby | ActiveSupport |
 | ------- | ------------- | ---------------- | :----: | :--: | :-----------: |
 | REnum   | Enum          | Enumerable       |   ✅   |  ✅  |      ✅       |
-| RList   | List          | Array            |   ✅   |  ✅  |     TODO      |
+| RList   | List          | Array            |   ✅   |  ✅  |      ✅       |
 | RMap    | Map           | Hash             |   ✅   | TODO |     TODO      |
 | RRange  | Range         | Range            |   ✅   | TODO |     TODO      |
 | RStream | Stream        | Enumerator::Lazy |   ✅   | TODO |     TODO      |

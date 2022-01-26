@@ -4,6 +4,7 @@ defmodule REnum do
   See also
    - [REnum.Native](https://hexdocs.pm/r_enum/REnum.Native.html#content)
    - [REnum.Ruby](https://hexdocs.pm/r_enum/REnum.Ruby.html#content)
+   - [REnum.ActiveSupport](https://hexdocs.pm/r_enum/REnum.ActiveSupport.html#content)
    - [REnum.Support](https://hexdocs.pm/r_enum/REnum.Support.html#content)
   """
   defmacro __using__(opts) do

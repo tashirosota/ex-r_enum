@@ -2,6 +2,12 @@
 
 # Changelog
 
+## v0.5.0 (2022-1-26)
+
+### Features
+
+- RList.ActiveSupport
+
 ## v0.4.0 (2022-1-24)
 
 ### Features

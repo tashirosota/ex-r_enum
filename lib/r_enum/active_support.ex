@@ -6,7 +6,7 @@ defmodule REnum.ActiveSupport do
   @moduledoc """
   Summarized all of Enumerable functions in Rails.ActiveSupport.
   If a function with the same name already exists in Elixir, that is not implemented.
-  Defines all of here functions when `use RUtils`.
+  Defines all of here functions when `use ActiveSupport`.
   """
   @spec __using__(any) :: list
   defmacro __using__(_opts) do
@@ -20,7 +20,7 @@ defmodule REnum.ActiveSupport do
   # https://www.rubydoc.info/gems/activesupport/Enumerable
   # ruby_enumerable = [:as_json, :compact_blank, :exclude?, :excluding, :in_order_of, :including, :index_by, :index_with, :many?, :maximum, :minimum, :pick, :pluck, :sole, :without]
   # |> RUtils.required_functions([Enum])
-  # as_json
+  # × as_json
   # ✔ compact_blank
   # ✔ exclude?
   # ✔ excluding

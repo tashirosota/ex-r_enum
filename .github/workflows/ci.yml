@@ -1,5 +1,5 @@
 name: CI
-on: [push, pull_request]
+on: [push]
 jobs:
   native_test:
     name: OTP ${{matrix.otp}} / Elixir ${{matrix.elixir}}
