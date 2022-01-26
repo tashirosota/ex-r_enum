@@ -135,6 +135,10 @@ See **[hexdocs](https://hexdocs.pm/r_enum)**.
   - RRange.Ruby
   - RRange.ActiveSupport
 - [ ] 0.8.0
+  - to_param
+  - to_query
+  - to_xml
+- [ ] 0.9.0
   - RStream.Ruby
   - RStream.ActiveSupport
 

@@ -11,14 +11,14 @@ defmodule RList.ActiveSupport do
 
   # https://www.rubydoc.info/gems/activesupport/Array
   # [:as_json, :compact_blank!, :deep_dup, :excluding, :extract!, :extract_options!, :fifth, :forty_two, :fourth, :from, :in_groups, :in_groups_of, :including, :inquiry, :second, :second_to_last, :split, :sum, :third, :third_to_last, :to, :to_default_s, :to_formatted_s, :to_param, :to_query, :to_s, :to_sentence, :to_xml]
-  # |> RUtils.required_functions([List, REnum])
+  # |> RUtils.required_functions([List, RList.Ruby, REnum])
   # × as_json
   # × deep_dup
   # ✔ fifth
   # ✔ forty_two
   # ✔ fourth
   # ✔ from
-  # in_groups
+  # ✔ in_groups
   # in_groups_of
   # inquiry
   # ✔ second
@@ -26,11 +26,10 @@ defmodule RList.ActiveSupport do
   # ✔ third
   # ✔ third_to_last
   # ✔ to
-  # × to_default_s
-  # to_formatted_s
+  # ✔ to_default_s
+  # × to_formatted_s
   # to_param
   # to_query
-  # ✔ to_s
   # ✔ to_sentence
   # to_xml
 
@@ -38,27 +37,27 @@ defmodule RList.ActiveSupport do
   Returns the tail of the list from position.
   ## Examples
       iex> ~w[a b c d]
-      ...> |> RList.from(0)
+      iex> |> RList.from(0)
       ["a", "b", "c", "d"]
 
       iex> ~w[a b c d]
-      ...> |> RList.from(2)
+      iex> |> RList.from(2)
       ["c", "d"]
 
       iex> ~w[a b c d]
-      ...> |> RList.from(10)
+      iex> |> RList.from(10)
       []
 
       iex> ~w[]
-      ...> |> RList.from(0)
+      iex> |> RList.from(0)
       []
 
       iex> ~w[a b c d]
-      ...> |> RList.from(-2)
+      iex> |> RList.from(-2)
       ["c", "d"]
 
       iex> ~w[a b c d]
-      ...> |> RList.from(-10)
+      iex> |> RList.from(-10)
       []
   """
   @spec from(list(), integer()) :: list()
@@ -71,27 +70,27 @@ defmodule RList.ActiveSupport do
   Returns the beginning of the list up to position.
   ## Examples
       iex> ~w[a b c d]
-      ...> |> RList.to(0)
+      iex> |> RList.to(0)
       ["a"]
 
       iex> ~w[a b c d]
-      ...> |> RList.to(2)
+      iex> |> RList.to(2)
       ["a", "b", "c"]
 
       iex> ~w[a b c d]
-      ...> |> RList.to(10)
+      iex> |> RList.to(10)
       ["a", "b", "c", "d"]
 
       iex> ~w[]
-      ...> |> RList.to(0)
+      iex> |> RList.to(0)
       []
 
       iex> ~w[a b c d]
-      ...> |> RList.to(-2)
+      iex> |> RList.to(-2)
       ["a", "b", "c"]
 
       iex> ~w[a b c d]
-      ...> |> RList.to(-10)
+      iex> |> RList.to(-10)
       []
   """
   @spec to(list(), integer()) :: list()
@@ -104,7 +103,7 @@ defmodule RList.ActiveSupport do
   Equal to `Enum.at(list, 1)`.
   ## Examples
       iex> ~w[a b c d]
-      ...> |> RList.second()
+      iex> |> RList.second()
       "b"
   """
   @spec second(list()) :: any()
@@ -116,7 +115,7 @@ defmodule RList.ActiveSupport do
   Equal to `Enum.at(list, 2)`.
   ## Examples
       iex> ~w[a b c d]
-      ...> |> RList.third()
+      iex> |> RList.third()
       "c"
   """
   @spec third(list()) :: any()
@@ -128,7 +127,7 @@ defmodule RList.ActiveSupport do
   Equal to `Enum.at(list, 3)`.
   ## Examples
       iex> ~w[a b c d]
-      ...> |> RList.fourth()
+      iex> |> RList.fourth()
       "d"
   """
   @spec fourth(list()) :: any()
@@ -140,7 +139,7 @@ defmodule RList.ActiveSupport do
   Equal to `Enum.at(list, 4)`.
   ## Examples
       iex> ~w[a b c d e]
-      ...> |> RList.fifth()
+      iex> |> RList.fifth()
       "e"
   """
   @spec fifth(list()) :: any()
@@ -152,7 +151,7 @@ defmodule RList.ActiveSupport do
   Equal to `Enum.at(list, 41)`. Also known as accessing "the reddit".
   ## Examples
       iex> 1..42
-      ...> |> RList.forty_two()
+      iex> |> RList.forty_two()
       42
   """
   @spec forty_two(list()) :: any()
@@ -164,7 +163,7 @@ defmodule RList.ActiveSupport do
   Equal to `Enum.at(list, -2)`.
   ## Examples
       iex> ~w[a b c d e]
-      ...> |> RList.second_to_last()
+      iex> |> RList.second_to_last()
       "d"
   """
   @spec second_to_last(list()) :: any()
@@ -176,24 +175,12 @@ defmodule RList.ActiveSupport do
   Equal to `Enum.at(list, -3)`.
   ## Examples
       iex> ~w[a b c d e]
-      ...> |> RList.third_to_last()
+      iex> |> RList.third_to_last()
       "c"
   """
   @spec third_to_last(list()) :: any()
   def third_to_last(list) do
     Enum.at(list, -3)
-  end
-
-  @doc """
-  Equal to `inspect(list)`.
-  ## Examples
-      iex> [1, 2, 3, 4]
-      ...> |> RList.to_s()
-      "[1, 2, 3, 4]"
-  """
-  @spec to_s(list()) :: String.t()
-  def to_s(list) do
-    list |> inspect()
   end
 
   @doc """
@@ -213,23 +200,23 @@ defmodule RList.ActiveSupport do
 
   ## Examples
       iex> ["one", "two"]
-      ...> |> RList.to_sentence()
+      iex> |> RList.to_sentence()
       "one and two"
 
       iex> ["one", "two", "three"]
-      ...> |> RList.to_sentence()
+      iex> |> RList.to_sentence()
       "one, two, and three"
 
       iex> ["one", "two"]
-      ...> |> RList.to_sentence(two_words_connector: "-")
+      iex> |> RList.to_sentence(two_words_connector: "-")
       "one-two"
 
       iex> ["one", "two", "three"]
-      ...> |> RList.to_sentence(words_connector: " or ", last_word_connector: " or at least ")
+      iex> |> RList.to_sentence(words_connector: " or ", last_word_connector: " or at least ")
       "one or two or at least three"
 
       iex> ["one", "two", "three"]
-      ...> |> RList.to_sentence()
+      iex> |> RList.to_sentence()
       "one, two, and three"
   """
   @spec to_sentence(list(), list(keyword()) | nil) :: String.t()
@@ -245,4 +232,35 @@ defmodule RList.ActiveSupport do
       _ -> "#{to(list, -2) |> Enum.join(words_connector)}#{last_word_connector}#{List.last(list)}"
     end
   end
+
+  @doc """
+  ## Examples
+      iex> ~w[1 2 3 4 5 6 7 8 9 10]
+      iex> |> RList.in_groups(3)
+      [
+        ["1", "2", "3", "4"],
+        ["5", "6", "7", nil],
+        ["8", "9", "10", nil]
+      ]
+
+      iex> ~w[1 2 3 4 5 6 7 8 9 10]
+      iex> |> RList.in_groups(3, '&nbsp;')
+      [
+        ["1", "2", "3", "4"],
+        ["5", "6", "7", "&nbsp;"],
+        ["8", "9", "10", "&nbsp;"]
+      ]
+
+      iex> ~w[1 2 3 4 5 6 7]
+      iex> |> RList.in_groups(3, false)
+      [
+        ["1", "2", "3"],
+        ["4", "5"],
+        ["6", "7"]
+      ]
+  """
+  def in_groups(list, number, fill_with \\ nil) do
+  end
+
+  defdelegate to_default_s(list), to: Kernel, as: :inspect
 end
