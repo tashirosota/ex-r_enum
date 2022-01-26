@@ -10,5 +10,6 @@ defmodule RList do
   use RList.Native
   use RList.Ruby
   use RList.ActiveSupport
+  use RList.Support
   use REnum, undelegate_functions: List.module_info()[:exports] |> Keyword.keys()
 end

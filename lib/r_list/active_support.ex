@@ -9,6 +9,8 @@ defmodule RList.ActiveSupport do
     RUtils.define_all_functions!(__MODULE__)
   end
 
+  alias RList.Support
+
   # https://www.rubydoc.info/gems/activesupport/Array
   # [:as_json, :compact_blank!, :deep_dup, :excluding, :extract!, :extract_options!, :fifth, :forty_two, :fourth, :from, :in_groups, :in_groups_of, :including, :inquiry, :second, :second_to_last, :split, :sum, :third, :third_to_last, :to, :to_default_s, :to_formatted_s, :to_param, :to_query, :to_s, :to_sentence, :to_xml]
   # |> RUtils.required_functions([List, RList.Ruby, REnum])
@@ -19,7 +21,7 @@ defmodule RList.ActiveSupport do
   # ✔ fourth
   # ✔ from
   # ✔ in_groups
-  # in_groups_of
+  # ✔ in_groups_of
   # inquiry
   # ✔ second
   # ✔ second_to_last
@@ -290,6 +292,46 @@ defmodule RList.ActiveSupport do
         acc ++ [group]
       end
     end)
+  end
+
+  @doc """
+  Splits or iterates over the list in groups of size number, padding any remaining slots with fill_with unless it is +false+.
+  ## Examples
+      iex> ~w[1 2 3 4 5 6 7 8 9 10]
+      iex> |> RList.in_groups_of(3)
+      [
+        ["1", "2", "3"],
+        ["4", "5", "6"],
+        ["7", "8", "9"],
+        ["10", nil, nil]
+      ]
+
+      iex> ~w[1 2 3 4 5]
+      iex> |> RList.in_groups_of(2, "&nbsp;")
+      [
+        ["1", "2"],
+        ["3", "4"],
+        ["5", "&nbsp;"]
+      ]
+
+      iex> ~w[1 2 3 4 5]
+      iex> |> RList.in_groups_of(2, false)
+      [
+        ["1", "2"],
+        ["3", "4"],
+        ["5"]
+      ]
+  """
+  @spec in_groups_of(list(), non_neg_integer(), any() | nil) :: list()
+  def in_groups_of(list, number, fill_with \\ nil) do
+    if(fill_with == false) do
+      list
+    else
+      padding = rem(number - rem(Enum.count(list), number), number)
+      list ++ Support.new(fill_with, padding)
+    end
+    |> REnum.each_slice(number)
+    |> Enum.to_list()
   end
 
   defdelegate to_default_s(list), to: Kernel, as: :inspect
