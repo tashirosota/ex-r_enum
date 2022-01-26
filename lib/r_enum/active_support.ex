@@ -20,7 +20,7 @@ defmodule REnum.ActiveSupport do
   # https://www.rubydoc.info/gems/activesupport/Enumerable
   # ruby_enumerable = [:as_json, :compact_blank, :exclude?, :excluding, :in_order_of, :including, :index_by, :index_with, :many?, :maximum, :minimum, :pick, :pluck, :sole, :without]
   # |> RUtils.required_functions([Enum])
-  # as_json
+  # × as_json
   # ✔ compact_blank
   # ✔ exclude?
   # ✔ excluding
