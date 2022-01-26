@@ -10,7 +10,6 @@ defmodule RList.Support do
 
   @type type_enumerable :: Enumerable.t()
 
-  @spec new(any) :: [...]
   @doc """
   Equal to `[el]`.
   ## Examples
@@ -18,6 +17,7 @@ defmodule RList.Support do
       iex> |> RList.new()
       [1]
   """
+  @spec new(any()) :: list()
   def new(el) do
     [el]
   end
@@ -29,6 +29,7 @@ defmodule RList.Support do
       iex> |> RList.new(3)
       [1, 1, 1]
   """
+  @spec new(any(), non_neg_integer()) :: list()
   def new(el, amount) do
     1..amount
     |> Enum.map(fn _ ->
