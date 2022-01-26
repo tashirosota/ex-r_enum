@@ -234,6 +234,7 @@ defmodule RList.ActiveSupport do
   end
 
   @doc """
+  Splits or iterates over the list in number of groups, padding any remaining slots with fill_with unless it is false.
   ## Examples
       iex> ~w[1 2 3 4 5 6 7 8 9 10]
       iex> |> RList.in_groups(3)
@@ -244,7 +245,7 @@ defmodule RList.ActiveSupport do
       ]
 
       iex> ~w[1 2 3 4 5 6 7 8 9 10]
-      iex> |> RList.in_groups(3, '&nbsp;')
+      iex> |> RList.in_groups(3, "&nbsp;")
       [
         ["1", "2", "3", "4"],
         ["5", "6", "7", "&nbsp;"],
@@ -259,7 +260,36 @@ defmodule RList.ActiveSupport do
         ["6", "7"]
       ]
   """
+  @spec in_groups(list(), non_neg_integer(), any() | nil) :: list()
   def in_groups(list, number, fill_with \\ nil) do
+    division = div(Enum.count(list), number)
+    modulo = rem(Enum.count(list), number)
+    range = 0..(number - 1)
+
+    length_list =
+      range
+      |> Enum.map(&(division + if(modulo > 0 && modulo > &1, do: 1, else: 0)))
+      |> IO.inspect()
+
+    range
+    |> Enum.reduce([], fn index, acc ->
+      length = length_list |> Enum.at(index)
+
+      group =
+        Enum.slice(
+          list,
+          length_list
+          |> Enum.take(index)
+          |> Enum.sum(),
+          length
+        )
+
+      if fill_with != false && modulo > 0 && length == division do
+        acc ++ [group ++ [fill_with]]
+      else
+        acc ++ [group]
+      end
+    end)
   end
 
   defdelegate to_default_s(list), to: Kernel, as: :inspect
