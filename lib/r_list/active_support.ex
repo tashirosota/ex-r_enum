@@ -2,7 +2,7 @@ defmodule RList.ActiveSupport do
   @moduledoc """
   Summarized all of List functions in Rails.ActiveSupport.
   If a function with the same name already exists in Elixir, that is not implemented.
-  Defines all of here functions when `use ActiveSupport`.
+  Defines all of here functions when `use RList.ActiveSupport`.
   """
   @spec __using__(any) :: list
   defmacro __using__(_opts) do

@@ -128,7 +128,7 @@ See **[hexdocs](https://hexdocs.pm/r_enum)**.
   - RList.Ruby
 - [x] 0.5.0
   - RList.ActiveSupport
-- [ ] 0.6.0
+- [x] 0.6.0
   - RMap.Ruby
   - RMap.ActiveSupport
 - [ ] 0.7.0
