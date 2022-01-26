@@ -26,12 +26,12 @@ defmodule RList.ActiveSupport do
   # ✔ third
   # ✔ third_to_last
   # ✔ to
-  # to_default_s
+  # × to_default_s
   # to_formatted_s
   # to_param
   # to_query
-  # to_s
-  # to_sentence
+  # ✔ to_s
+  # ✔ to_sentence
   # to_xml
 
   @doc """
@@ -182,5 +182,67 @@ defmodule RList.ActiveSupport do
   @spec third_to_last(list()) :: any()
   def third_to_last(list) do
     Enum.at(list, -3)
+  end
+
+  @doc """
+  Equal to `inspect(list)`.
+  ## Examples
+      iex> [1, 2, 3, 4]
+      ...> |> RList.to_s()
+      "[1, 2, 3, 4]"
+  """
+  @spec to_s(list()) :: String.t()
+  def to_s(list) do
+    list |> inspect()
+  end
+
+  @doc """
+  Converts the list to a comma-separated sentence where the last element is
+  joined by the connector word.
+
+  You can pass the following options to change the default behavior. If you
+  pass an option key that doesn't exist in the list below, it will raise an
+
+  ** Options **
+  * `:words_connector` - The sign or word used to join all but the last
+    element in lists with three or more elements (default: ", ").
+  * `:last_word_connector` - The sign or word used to join the last element
+    in lists with three or more elements (default: ", and ").
+  * `:two_words_connector` - The sign or word used to join the elements
+    in lists with two elements (default: " and ").
+
+  ## Examples
+      iex> ["one", "two"]
+      ...> |> RList.to_sentence()
+      "one and two"
+
+      iex> ["one", "two", "three"]
+      ...> |> RList.to_sentence()
+      "one, two, and three"
+
+      iex> ["one", "two"]
+      ...> |> RList.to_sentence(two_words_connector: "-")
+      "one-two"
+
+      iex> ["one", "two", "three"]
+      ...> |> RList.to_sentence(words_connector: " or ", last_word_connector: " or at least ")
+      "one or two or at least three"
+
+      iex> ["one", "two", "three"]
+      ...> |> RList.to_sentence()
+      "one, two, and three"
+  """
+  @spec to_sentence(list(), list(keyword()) | nil) :: String.t()
+  def to_sentence(list, opts \\ []) do
+    words_connector = Keyword.get(opts, :words_connector) || ", "
+    two_words_connector = Keyword.get(opts, :two_words_connector) || " and "
+    last_word_connector = Keyword.get(opts, :last_word_connector) || ", and "
+
+    case Enum.count(list) do
+      0 -> ""
+      1 -> "#{Enum.at(list, 0)}"
+      2 -> "#{Enum.at(list, 0)}#{two_words_connector}#{Enum.at(list, 1)}"
+      _ -> "#{to(list, -2) |> Enum.join(words_connector)}#{last_word_connector}#{List.last(list)}"
+    end
   end
 end

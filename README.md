@@ -51,10 +51,6 @@ iex> payments = [
 iex> |> REnum.pluck(:dollars)
 [5, 10, 0]
 
-# REnum.ActiveSupport.maximum/2
-iex> REnum.maximum(payments, :dollars)
-10
-
 # REnum.ActiveSupport.without/2
 iex> 1..5
 iex> |> REnum.without([1, 5])
@@ -85,11 +81,16 @@ iex> |> RList.from(2)
 ["c", "d"]
 # See also RList.ActiveSupport.to
 
+# RList.ActiveSupport.to_sentence/2
+iex> ["one", "two", "three"]
+iex> |> RList.to_sentence(words_connector: " or ", last_word_connector: " or at least ")
+"one or two or at least three"
+
 # Aliases.
-# REnum.Ruby.select2
+# REnum.Ruby.select/2
 iex> [1, 2, 3]
 iex> |> REnum.select(fn x -> rem(x, 2) == 0 end) ==
-iex>   Enum.filter([1, 2, 3], fn x -> rem(x, 2) == 0 end)
+...>   Enum.filter([1, 2, 3], fn x -> rem(x, 2) == 0 end)
 true
 
 # Can use Elixir's Enum functions too.
@@ -100,7 +101,7 @@ iex> |> REnum.find(fn x -> rem(x, 2) == 1 end)
 
 # REnum.Ruby.sort/1
 iex> [1, 2, 3]
-iex> REnum.sort()
+iex> |> REnum.sort()
 [1, 2, 3]
 ```
 
