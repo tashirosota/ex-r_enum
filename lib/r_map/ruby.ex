@@ -52,6 +52,7 @@ defmodule RMap.Ruby do
   # ✔ values_at
 
   @doc """
+  Returns a list whose entries are those for which the function returns a truthy value.
   ## Examples
       iex> RMap.filter(%{a: 1, b: 2, c: 3}, fn {_, v} -> v > 1 end)
       %{b: 2, c: 3}
@@ -63,6 +64,7 @@ defmodule RMap.Ruby do
   end
 
   @doc """
+  Returns a list whose entries are all those from self for which the function returns false or nil.
   ## Examples
       iex> RMap.reject(%{a: 1, b: 2, c: 3}, fn {_, v} -> v > 1 end)
       %{a: 1}
@@ -74,6 +76,7 @@ defmodule RMap.Ruby do
   end
 
   @doc """
+  Returns %{}.
   ## Examples
       iex> RMap.clear(%{a: 1, b: 2, c: 3})
       %{}
@@ -84,6 +87,7 @@ defmodule RMap.Ruby do
   end
 
   @doc """
+  Calls the function with each value; returns :ok.
   ## Examples
       iex> RMap.each_value(%{a: 1, b: 2, c: 3}, &IO.inspect(&1))
       # 1
@@ -99,6 +103,7 @@ defmodule RMap.Ruby do
   end
 
   @doc """
+  Calls the function with each key; returns :ok.
   ## Examples
       iex> RMap.each_key(%{a: 1, b: 2, c: 3}, &IO.inspect(&1))
       # :a
@@ -114,6 +119,7 @@ defmodule RMap.Ruby do
   end
 
   @doc """
+  Returns true if value is a value in list, otherwise false.
   ## Examples
       iex> RMap.value?(%{a: 1, b: 2, c: 3}, 3)
       true
@@ -129,6 +135,7 @@ defmodule RMap.Ruby do
   end
 
   @doc """
+  Returns a list containing values for the given keys.
   ## Examples
       iex> RMap.values_at(%{a: 1, b: 2, c: 3}, [:a, :b, :d])
       [1, 2, nil]
@@ -139,6 +146,7 @@ defmodule RMap.Ruby do
   end
 
   @doc """
+  Returns given map.
   ## Examples
       iex> RMap.to_hash(%{a: 1, b: 2, c: 3})
       %{a: 1, b: 2, c: 3}
@@ -149,6 +157,7 @@ defmodule RMap.Ruby do
   end
 
   @doc """
+  Returns the object in nested map that is specified by a given key and additional arguments.
   ## Examples
       iex> RMap.dig(%{a: %{b: %{c: 1}}}, [:a, :b, :c])
       1
@@ -166,6 +175,7 @@ defmodule RMap.Ruby do
   end
 
   @doc """
+  Returns a 2-element tuple containing a given key and its value.
   ## Examples
       iex> RMap.assoc(%{a: 1, b: 2, c: 3}, :a)
       {:a, 1}
@@ -186,6 +196,7 @@ defmodule RMap.Ruby do
   end
 
   @doc """
+  Returns a 2-element tuple consisting of the key and value of the first-found entry having a given value.
   ## Examples
       iex> RMap.rassoc(%{a: 1, b: 2, c: 3}, 1)
       {:a, 1}
@@ -204,6 +215,7 @@ defmodule RMap.Ruby do
   end
 
   @doc """
+  Returns a map with modified keys.
   ## Examples
       iex> RMap.transform_keys(%{a: 1, b: 2, c: 3}, &to_string(&1))
       %{"a" => 1, "b" => 2, "c" => 3}
@@ -220,6 +232,7 @@ defmodule RMap.Ruby do
   end
 
   @doc """
+  Returns a map with modified values.
   ## Examples
       iex> RMap.transform_values(%{a: 1, b: 2, c: 3}, &inspect(&1))
       %{a: "1", b: "2", c: "3"}
@@ -236,6 +249,7 @@ defmodule RMap.Ruby do
   end
 
   @doc """
+  Returns a map excluding entries for the given keys.
   ## Examples
       iex> RMap.except(%{a: 1, b: 2, c: 3}, [:a, :b])
       %{c: 3}
@@ -248,6 +262,7 @@ defmodule RMap.Ruby do
   end
 
   @doc """
+  Returns a list containing the values associated with the given keys.
   ## Examples
       iex> RMap.fetch_values(%{ "cat" => "feline", "dog" => "canine", "cow" => "bovine" }, ["cow", "cat"])
       ["bovine", "feline"]
@@ -267,6 +282,7 @@ defmodule RMap.Ruby do
   end
 
   @doc """
+  When a function is given, calls the function with each missing key, treating the block's return value as the value for that key.
   ## Examples
       iex> RMap.fetch_values(%{ "cat" => "feline", "dog" => "canine", "cow" => "bovine" }, ["cow", "bird"], &(String.upcase(&1)))
       ["bovine", "BIRD"]
@@ -283,6 +299,7 @@ defmodule RMap.Ruby do
   end
 
   @doc """
+  Returns a flatten list.
   ## Examples
       iex> RMap.flatten(%{1=> "one", 2 => [2,"two"], 3 => "three"})
       [1, "one", 2, 2, "two", 3, "three"]
@@ -296,6 +313,7 @@ defmodule RMap.Ruby do
   end
 
   @doc """
+  Returns a map object with the each key-value pair inverted.
   ## Examples
       iex> RMap.invert(%{"a" => 0, "b" => 100, "c" => 200, "d" => 300, "e" => 300})
       %{0 => "a", 100 => "b", 200 => "c", 300 => "e"}
@@ -313,6 +331,9 @@ defmodule RMap.Ruby do
   end
 
   @doc """
+  Removes the first map entry; returns a 2-element tuple.
+  First element is {key, value}.
+  Second element is a map without first pair.
   ## Examples
       iex> RMap.shift(%{a: 1, b: 2, c: 3})
       {{:a, 1}, %{b: 2, c: 3}}

@@ -9,6 +9,7 @@ defmodule RMap.Support do
   end
 
   @doc """
+  Returns list recursively converted　 from given map to list.
   ## Examples
       iex> RMap.deep_to_list(%{a: 1, b: %{c: 2, d: {1, 2}, e: [1, 2]}})
       [[:a, 1], [:b, [[:c, 2], [:d, [1, 2]], [:e, [1, 2]]]]]
