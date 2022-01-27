@@ -20,8 +20,8 @@ defmodule RMap.ActiveSupport do
   # × deep_merge
   # ✔ deep_stringify_keys
   # ✔ deep_symbolize_keys
-  # deep_transform_keys
-  # deep_transform_values
+  # ✔ deep_transform_keys
+  # ✔ deep_transform_values
   # extractable_options?
   # reverse_merge
   # ✔ stringify_keys
@@ -72,11 +72,7 @@ defmodule RMap.ActiveSupport do
   def deep_stringify_keys(map) do
     map
     |> Enum.map(fn {k, v} ->
-      if(is_map(v)) do
-        {to_string(k), deep_stringify_keys(v)}
-      else
-        {to_string(k), v}
-      end
+      if is_map(v), do: {to_string(k), deep_stringify_keys(v)}, else: {to_string(k), v}
     end)
     |> Map.new()
   end
@@ -102,11 +98,32 @@ defmodule RMap.ActiveSupport do
   def deep_symbolize_keys(map) do
     map
     |> Enum.map(fn {k, v} ->
-      if(is_map(v)) do
-        {String.to_atom(k), deep_symbolize_keys(v)}
-      else
-        {String.to_atom(k), v}
-      end
+      if is_map(v), do: {String.to_atom(k), deep_symbolize_keys(v)}, else: {String.to_atom(k), v}
+    end)
+    |> Map.new()
+  end
+
+  @doc """
+  ## Examples
+      iex> RMap.deep_transform_keys(%{a: %{b: %{c: 1}}}, &to_string(&1))
+      %{"a" => %{"b" => %{"c" => 1}}}
+  """
+  def deep_transform_keys(map, func) do
+    map
+    |> Enum.map(fn {k, v} ->
+      if is_map(v), do: {func.(k), deep_transform_keys(v, func)}, else: {func.(k), v}
+    end)
+    |> Map.new()
+  end
+
+  @doc """
+  ## Examples
+      iex> RMap.deep_transform_values(%{a: %{b: %{c: 1}}, d: 2}, &inspect(&1))
+       %{a: %{b: %{c: "1"}}, d: "2"}
+  """
+  def deep_transform_values(map, func) do
+    Enum.map(map, fn {k, v} ->
+      if is_map(v), do: {k, deep_transform_values(v, func)}, else: {k, func.(v)}
     end)
     |> Map.new()
   end
