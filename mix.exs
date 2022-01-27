@@ -64,13 +64,15 @@ defmodule REnum.MixProject do
         RList,
         RList.Native,
         RList.Ruby,
-        RList.ActiveSupport
+        RList.ActiveSupport,
+        RList.Support
       ],
       Map: [
         RMap,
         RMap.Native,
         RMap.Ruby,
-        RMap.ActiveSupport
+        RMap.ActiveSupport,
+        RMap.Support
       ],
       Range: [
         RRange,
