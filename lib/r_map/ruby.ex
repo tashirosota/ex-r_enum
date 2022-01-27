@@ -56,6 +56,7 @@ defmodule RMap.Ruby do
       iex> RMap.filter(%{a: 1, b: 2, c: 3}, fn {_, v} -> v > 1 end)
       %{b: 2, c: 3}
   """
+  @spec filter(map(), function()) :: map()
   def filter(map, func) do
     Enum.filter(map, func)
     |> Map.new()
@@ -66,6 +67,7 @@ defmodule RMap.Ruby do
       iex> RMap.reject(%{a: 1, b: 2, c: 3}, fn {_, v} -> v > 1 end)
       %{a: 1}
   """
+  @spec reject(map(), function()) :: map()
   def reject(map, func) do
     Enum.reject(map, func)
     |> Map.new()
@@ -76,6 +78,7 @@ defmodule RMap.Ruby do
       iex> RMap.clear(%{a: 1, b: 2, c: 3})
       %{}
   """
+  @spec clear(map()) :: %{}
   def clear(_) do
     %{}
   end
@@ -88,6 +91,7 @@ defmodule RMap.Ruby do
       # 3
       :ok
   """
+  @spec each_value(map(), function()) :: :ok
   def each_value(map, func) do
     Enum.each(map, fn {_, value} ->
       func.(value)
@@ -102,6 +106,7 @@ defmodule RMap.Ruby do
       # :c
       :ok
   """
+  @spec each_key(map(), function()) :: :ok
   def each_key(map, func) do
     Enum.each(map, fn {key, _} ->
       func.(key)
@@ -116,6 +121,7 @@ defmodule RMap.Ruby do
       iex> RMap.value?(%{a: 1, b: 2, c: 3}, 4)
       false
   """
+  @spec value?(map(), any) :: boolean()
   def value?(map, value) do
     Enum.any?(map, fn {_, v} ->
       v == value
@@ -127,6 +133,7 @@ defmodule RMap.Ruby do
       iex> RMap.values_at(%{a: 1, b: 2, c: 3}, [:a, :b, :d])
       [1, 2, nil]
   """
+  @spec values_at(map(), list()) :: list()
   def values_at(map, keys) do
     Enum.map(keys, &Map.get(map, &1))
   end
@@ -136,6 +143,7 @@ defmodule RMap.Ruby do
       iex> RMap.to_hash(%{a: 1, b: 2, c: 3})
       %{a: 1, b: 2, c: 3}
   """
+  @spec to_hash(map()) :: map()
   def to_hash(map) do
     map
   end
@@ -150,7 +158,7 @@ defmodule RMap.Ruby do
   """
   def dig(nil, _), do: nil
   def dig(result, []), do: result
-
+  @spec dig(map(), list()) :: any()
   def dig(map, keys) do
     [key | tail_keys] = keys
     result = Map.get(map, key)
@@ -168,6 +176,7 @@ defmodule RMap.Ruby do
       iex> RMap.assoc(%{a: %{b: %{c: 1}}}, :a)
       {:a, %{b: %{c: 1}}}
   """
+  @spec assoc(map(), any()) :: any()
   def assoc(map, key) do
     if(value = Map.get(map, key)) do
       {key, value}
@@ -187,6 +196,7 @@ defmodule RMap.Ruby do
       iex> RMap.rassoc(%{a: %{b: %{c: 1}}}, %{b: %{c: 1}})
       {:a, %{b: %{c: 1}}}
   """
+  @spec rassoc(map(), any()) :: any()
   def rassoc(map, value) do
     Enum.find_value(map, fn {k, v} ->
       if v == value, do: {k, v}
@@ -201,6 +211,7 @@ defmodule RMap.Ruby do
       iex> RMap.transform_keys(%{a: %{b: %{c: 1}}}, &to_string(&1))
       %{"a" => %{b: %{c: 1}}}
   """
+  @spec transform_keys(map(), function()) :: map()
   def transform_keys(map, func) do
     Enum.map(map, fn {key, value} ->
       {func.(key), value}
@@ -216,6 +227,7 @@ defmodule RMap.Ruby do
       iex> RMap.transform_values(%{a: %{b: %{c: 1}}}, &inspect(&1))
       %{a: "%{b: %{c: 1}}"}
   """
+  @spec transform_values(map(), function()) :: map()
   def transform_values(map, func) do
     Enum.map(map, fn {key, value} ->
       {key, func.(value)}
@@ -228,6 +240,7 @@ defmodule RMap.Ruby do
       iex> RMap.except(%{a: 1, b: 2, c: 3}, [:a, :b])
       %{c: 3}
   """
+  @spec except(map(), list()) :: map()
   def except(map, keys) do
     delete_if(map, fn {key, _} ->
       key in keys
@@ -242,6 +255,7 @@ defmodule RMap.Ruby do
       iex> RMap.fetch_values(%{ "cat" => "feline", "dog" => "canine", "cow" => "bovine" }, ["cow", "bird"])
       ** (MapKeyError) key not found: bird
   """
+  @spec fetch_values(map(), list()) :: list()
   def fetch_values(map, keys) do
     Enum.map(keys, fn key ->
       if(value = map |> Map.get(key)) do
@@ -257,6 +271,7 @@ defmodule RMap.Ruby do
       iex> RMap.fetch_values(%{ "cat" => "feline", "dog" => "canine", "cow" => "bovine" }, ["cow", "bird"], &(String.upcase(&1)))
       ["bovine", "BIRD"]
   """
+  @spec fetch_values(map(), list(), function()) :: list()
   def fetch_values(map, keys, func) do
     Enum.map(keys, fn key ->
       if(value = map |> Map.get(key)) do
@@ -275,6 +290,7 @@ defmodule RMap.Ruby do
       iex> RMap.flatten(%{1 => "one", 2 => %{a: 1, b: %{c: 3}}})
       [1, "one", 2, :a, 1, :b, :c, 3]
   """
+  @spec flatten(map()) :: list()
   def flatten(map) do
     deep_to_list(map) |> List.flatten()
   end
@@ -287,6 +303,7 @@ defmodule RMap.Ruby do
       iex> RMap.invert(%{a: 1, b: 1, c: %{d: 2}})
       %{1 => :b, %{d: 2} => :c}
   """
+  @spec invert(map()) :: map()
   def invert(map) do
     map
     |> Enum.map(fn {k, v} ->
@@ -303,6 +320,7 @@ defmodule RMap.Ruby do
       iex> RMap.shift(%{})
       {nil, %{}}
   """
+  @spec shift(map()) :: {tuple() | nil, map()}
   def shift(map) do
     {result, list} = map |> Enum.split(1)
     {List.last(result), Map.new(list)}
