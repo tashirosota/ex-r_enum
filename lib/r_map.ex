@@ -8,6 +8,7 @@ defmodule RMap do
   use RMap.Native
   use RMap.Ruby
   use RMap.ActiveSupport
+  use RMap.Support
 
   use REnum,
     undelegate_functions:

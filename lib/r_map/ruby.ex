@@ -11,6 +11,8 @@ defmodule RMap.Ruby do
     RUtils.define_all_functions!(__MODULE__)
   end
 
+  import RMap.Support
+
   # https://ruby-doc.org/core-3.1.0/Hash.html
   # [:any?, :assoc, :clear, :compact, :compact!, :compare_by_identity, :compare_by_identity?, :deconstruct_keys, :delete, :delete_if, :dig, :each, :each_key, :each_pair, :each_value, :empty?, :eql?, :except, :fetch, :fetch_values, :filter, :filter!, :flatten, :has_key?, :has_value?, :hash, :include?, :initialize_copy, :inspect, :invert, :keep_if, :key, :key?, :keys, :length, :member?, :merge, :merge!, :rassoc, :rehash, :reject, :reject!, :replace, :select, :select!, :shift, :size, :slice, :store, :to_a, :to_h, :to_hash, :to_proc, :to_s, :transform_keys, :transform_keys!, :transform_values, :transform_values!, :update, :value?, :values, :values_at]
   # |> RUtils.required_functions([Map, REnum])
@@ -27,20 +29,20 @@ defmodule RMap.Ruby do
   # ✔ eql?
   # ✔ except
   # ✔ fetch_values
-  # flatten
+  # ✔ flatten
   # ✔ has_value?
   # hash TODO: Low priority
   # × initialize_copy
   # ✔ inspect
-  # invert
+  # ✔ invert
   # ✔ keep_if
   # ✔ key
   # ✔ key?
   # ✔ length
   # ✔ rassoc
   # × rehash
-  # shift
-  # store
+  # ✔ shift
+  # ✔ store
   # ✔ to_hash
   # × to_proc
   # ✔ to_s
@@ -263,6 +265,47 @@ defmodule RMap.Ruby do
         func.(key)
       end
     end)
+  end
+
+  @doc """
+  ## Examples
+      iex> RMap.flatten(%{1=> "one", 2 => [2,"two"], 3 => "three"})
+      [1, "one", 2, 2, "two", 3, "three"]
+
+      iex> RMap.flatten(%{1 => "one", 2 => %{a: 1, b: %{c: 3}}})
+      [1, "one", 2, :a, 1, :b, :c, 3]
+  """
+  def flatten(map) do
+    deep_to_list(map) |> List.flatten()
+  end
+
+  @doc """
+  ## Examples
+      iex> RMap.invert(%{"a" => 0, "b" => 100, "c" => 200, "d" => 300, "e" => 300})
+      %{0 => "a", 100 => "b", 200 => "c", 300 => "e"}
+
+      iex> RMap.invert(%{a: 1, b: 1, c: %{d: 2}})
+      %{1 => :b, %{d: 2} => :c}
+  """
+  def invert(map) do
+    map
+    |> Enum.map(fn {k, v} ->
+      {v, k}
+    end)
+    |> Map.new()
+  end
+
+  @doc """
+  ## Examples
+      iex> RMap.shift(%{a: 1, b: 2, c: 3})
+      {{:a, 1}, %{b: 2, c: 3}}
+
+      iex> RMap.shift(%{})
+      {nil, %{}}
+  """
+  def shift(map) do
+    {result, list} = map |> Enum.split(1)
+    {List.last(result), Map.new(list)}
   end
 
   defdelegate delete_if(map, func), to: __MODULE__, as: :reject
