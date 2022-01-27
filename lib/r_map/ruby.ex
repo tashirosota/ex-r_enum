@@ -25,8 +25,8 @@ defmodule RMap.Ruby do
   # ✔ each_pair
   # ✔ each_value
   # ✔ eql?
-  # except
-  # fetch_values
+  # ✔ except
+  # ✔ fetch_values
   # flatten
   # ✔ has_value?
   # hash TODO: Low priority
@@ -104,18 +104,6 @@ defmodule RMap.Ruby do
     Enum.each(map, fn {key, _} ->
       func.(key)
     end)
-  end
-
-  @doc """
-  ## Examples
-      iex> RMap.eql?(%{a: 1, b: 2, c: 3}, %{a: 1, b: 2, c: 3})
-      true
-
-      iex> RMap.eql?(%{a: 1, b: 2, c: 3}, %{a: 1, b: 2, c: 4})
-      false
-  """
-  def eql?(map1, map2) do
-    map1 == map2
   end
 
   @doc """
@@ -233,6 +221,50 @@ defmodule RMap.Ruby do
     |> Map.new()
   end
 
+  @doc """
+  ## Examples
+      iex> RMap.except(%{a: 1, b: 2, c: 3}, [:a, :b])
+      %{c: 3}
+  """
+  def except(map, keys) do
+    delete_if(map, fn {key, _} ->
+      key in keys
+    end)
+  end
+
+  @doc """
+  ## Examples
+      iex> RMap.fetch_values(%{ "cat" => "feline", "dog" => "canine", "cow" => "bovine" }, ["cow", "cat"])
+      ["bovine", "feline"]
+
+      iex> RMap.fetch_values(%{ "cat" => "feline", "dog" => "canine", "cow" => "bovine" }, ["cow", "bird"])
+      ** (MapKeyError) key not found: bird
+  """
+  def fetch_values(map, keys) do
+    Enum.map(keys, fn key ->
+      if(value = map |> Map.get(key)) do
+        value
+      else
+        raise MapKeyError, "key not found: #{key}"
+      end
+    end)
+  end
+
+  @doc """
+  ## Examples
+      iex> RMap.fetch_values(%{ "cat" => "feline", "dog" => "canine", "cow" => "bovine" }, ["cow", "bird"], &(String.upcase(&1)))
+      ["bovine", "BIRD"]
+  """
+  def fetch_values(map, keys, func) do
+    Enum.map(keys, fn key ->
+      if(value = map |> Map.get(key)) do
+        value
+      else
+        func.(key)
+      end
+    end)
+  end
+
   defdelegate delete_if(map, func), to: __MODULE__, as: :reject
   defdelegate keep_if(map, func), to: __MODULE__, as: :filter
   defdelegate select(map, func), to: __MODULE__, as: :filter
@@ -245,4 +277,9 @@ defmodule RMap.Ruby do
   defdelegate key?(map, key), to: Map, as: :has_key?
   defdelegate has_value?(map, value), to: __MODULE__, as: :value?
   defdelegate store(map, key, value), to: Map, as: :put
+  defdelegate eql?(map1, map2), to: Map, as: :equal?
+end
+
+defmodule MapKeyError do
+  defexception [:message]
 end
