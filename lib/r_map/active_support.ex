@@ -22,13 +22,13 @@ defmodule RMap.ActiveSupport do
   # ✔ deep_symbolize_keys
   # ✔ deep_transform_keys
   # ✔ deep_transform_values
-  # extractable_options?
-  # reverse_merge
+  # × extractable_options?
+  # × reverse_merge
   # ✔ stringify_keys
   # ✔ symbolize_keys
   # to_query
   # to_xml
-  # with_indifferent_access
+  # with_indifferent_access TODO: Low priority
 
   @doc """
   ## Examples
@@ -41,6 +41,7 @@ defmodule RMap.ActiveSupport do
       iex> RMap.assert_valid_keys(%{name: "Rob", age: "28"}, [:name, :age])
       :ok
   """
+  @spec assert_valid_keys(map(), list()) :: :ok
   def assert_valid_keys(map, keys) do
     valid_keys_str = keys |> Enum.map(&IO.inspect(&1)) |> Enum.join(", ")
 
@@ -56,6 +57,7 @@ defmodule RMap.ActiveSupport do
       iex> RMap.stringify_keys(%{name: "Rob", years: "28", nested: %{ a: 1 }})
       %{"name" => "Rob", "nested" => %{a: 1}, "years" => "28"}
   """
+  @spec stringify_keys(map()) :: map()
   def stringify_keys(map) do
     map
     |> Enum.map(fn {k, v} ->
@@ -69,6 +71,7 @@ defmodule RMap.ActiveSupport do
       iex> RMap.deep_stringify_keys(%{name: "Rob", years: "28", nested: %{ a: 1 }})
       %{"name" => "Rob", "nested" => %{"a" => 1}, "years" => "28"}
   """
+  @spec deep_stringify_keys(map()) :: map()
   def deep_stringify_keys(map) do
     map
     |> Enum.map(fn {k, v} ->
@@ -82,6 +85,7 @@ defmodule RMap.ActiveSupport do
       iex> RMap.symbolize_keys(%{"name" => "Rob", "years" => "28", "nested" => %{ "a" => 1 }})
       %{name: "Rob", nested: %{"a" => 1}, years: "28"}
   """
+  @spec symbolize_keys(map()) :: map()
   def symbolize_keys(map) do
     map
     |> Enum.map(fn {k, v} ->
@@ -95,6 +99,7 @@ defmodule RMap.ActiveSupport do
       iex> RMap.deep_symbolize_keys(%{"name" => "Rob", "years" => "28", "nested" => %{ "a" => 1 }})
       %{name: "Rob", nested: %{a: 1}, years: "28"}
   """
+  @spec deep_symbolize_keys(map()) :: map()
   def deep_symbolize_keys(map) do
     map
     |> Enum.map(fn {k, v} ->
@@ -108,6 +113,7 @@ defmodule RMap.ActiveSupport do
       iex> RMap.deep_transform_keys(%{a: %{b: %{c: 1}}}, &to_string(&1))
       %{"a" => %{"b" => %{"c" => 1}}}
   """
+  @spec deep_transform_keys(map(), function()) :: map()
   def deep_transform_keys(map, func) do
     map
     |> Enum.map(fn {k, v} ->
@@ -119,8 +125,9 @@ defmodule RMap.ActiveSupport do
   @doc """
   ## Examples
       iex> RMap.deep_transform_values(%{a: %{b: %{c: 1}}, d: 2}, &inspect(&1))
-       %{a: %{b: %{c: "1"}}, d: "2"}
+      %{a: %{b: %{c: "1"}}, d: "2"}
   """
+  @spec deep_transform_values(map(), function()) :: map()
   def deep_transform_values(map, func) do
     Enum.map(map, fn {k, v} ->
       if is_map(v), do: {k, deep_transform_values(v, func)}, else: {k, func.(v)}
