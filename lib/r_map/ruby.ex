@@ -15,15 +15,15 @@ defmodule RMap.Ruby do
   # [:any?, :assoc, :clear, :compact, :compact!, :compare_by_identity, :compare_by_identity?, :deconstruct_keys, :delete, :delete_if, :dig, :each, :each_key, :each_pair, :each_value, :empty?, :eql?, :except, :fetch, :fetch_values, :filter, :filter!, :flatten, :has_key?, :has_value?, :hash, :include?, :initialize_copy, :inspect, :invert, :keep_if, :key, :key?, :keys, :length, :member?, :merge, :merge!, :rassoc, :rehash, :reject, :reject!, :replace, :select, :select!, :shift, :size, :slice, :store, :to_a, :to_h, :to_hash, :to_proc, :to_s, :transform_keys, :transform_keys!, :transform_values, :transform_values!, :update, :value?, :values, :values_at]
   # |> RUtils.required_functions([Map, REnum])
   # assoc
-  # clear
+  # ✔ clear
   # compare_by_identity
   # compare_by_identity?
   # deconstruct_keys
   # ✔ delete_if
   # dig
-  # each_key
-  # each_pair
-  # each_value
+  # ✔ each_key
+  # ✔ each_pair
+  # ✔ each_value
   # eql?
   # except
   # fetch_values
@@ -49,20 +49,69 @@ defmodule RMap.Ruby do
   # value?
   # values_at
 
-  def fillter(map, func) do
+  @doc """
+  ## Examples
+      iex> RMap.filter(%{a: 1, b: 2, c: 3}, fn {_, v} -> v > 1 end)
+      %{b: 2, c: 3}
+  """
+  def filter(map, func) do
     Enum.filter(map, func)
     |> Map.new()
   end
 
+  @doc """
+  ## Examples
+      iex> RMap.reject(%{a: 1, b: 2, c: 3}, fn {_, v} -> v > 1 end)
+      %{a: 1}
+  """
   def reject(map, func) do
     Enum.reject(map, func)
     |> Map.new()
+  end
+
+  @doc """
+  ## Examples
+      iex> RMap.clear(%{a: 1, b: 2, c: 3})
+      %{}
+  """
+  def clear(_) do
+    %{}
+  end
+
+  @doc """
+  ## Examples
+      iex> RMap.each_value(%{a: 1, b: 2, c: 3}, &IO.inspect(&1))
+      # 1
+      # 2
+      # 3
+      :ok
+  """
+  def each_value(map, func) do
+    Enum.each(map, fn {_, value} ->
+      func.(value)
+    end)
+  end
+
+  @doc """
+  ## Examples
+      iex> RMap.each_key(%{a: 1, b: 2, c: 3}, &IO.inspect(&1))
+      # :a
+      # :b
+      # :c
+      :ok
+  """
+  def each_key(map, func) do
+    Enum.each(map, fn {key, _} ->
+      func.(key)
+    end)
   end
 
   defdelegate delete_if(map, func), to: __MODULE__, as: :reject
   defdelegate keep_if(map, func), to: __MODULE__, as: :filter
   defdelegate select(map, func), to: __MODULE__, as: :filter
   defdelegate length(map), to: Enum, as: :count
-  defdelegate to_s(list), to: Kernel, as: :inspect
-  defdelegate inspect(list), to: Kernel, as: :inspect
+  defdelegate size(map), to: Enum, as: :count
+  defdelegate to_s(map), to: Kernel, as: :inspect
+  defdelegate inspect(map), to: Kernel, as: :inspect
+  defdelegate each_pair(map, func), to: Enum, as: :each
 end
