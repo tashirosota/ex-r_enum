@@ -16,9 +16,9 @@ defmodule RMap.Ruby do
   # |> RUtils.required_functions([Map, REnum])
   # ✔ assoc
   # ✔ clear
-  # compare_by_identity
-  # compare_by_identity?
-  # deconstruct_keys
+  # × compare_by_identity
+  # × compare_by_identity?
+  # × deconstruct_keys
   # ✔ delete_if
   # ✔ dig
   # ✔ each_key
@@ -30,7 +30,7 @@ defmodule RMap.Ruby do
   # flatten
   # ✔ has_value?
   # hash TODO: Low priority
-  # initialize_copy
+  # × initialize_copy
   # ✔ inspect
   # invert
   # ✔ keep_if
@@ -38,14 +38,14 @@ defmodule RMap.Ruby do
   # ✔ key?
   # ✔ length
   # ✔ rassoc
-  # rehash
+  # × rehash
   # shift
   # store
   # ✔ to_hash
   # × to_proc
   # ✔ to_s
-  # transform_keys
-  # transform_values
+  # ✔ transform_keys
+  # ✔ transform_values
   # ✔ value?
   # ✔ values_at
 
@@ -201,6 +201,36 @@ defmodule RMap.Ruby do
     Enum.find_value(map, fn {k, v} ->
       if v == value, do: {k, v}
     end)
+  end
+
+  @doc """
+  ## Examples
+      iex> RMap.transform_keys(%{a: 1, b: 2, c: 3}, &to_string(&1))
+      %{"a" => 1, "b" => 2, "c" => 3}
+
+      iex> RMap.transform_keys(%{a: %{b: %{c: 1}}}, &to_string(&1))
+      %{"a" => %{b: %{c: 1}}}
+  """
+  def transform_keys(map, func) do
+    Enum.map(map, fn {key, value} ->
+      {func.(key), value}
+    end)
+    |> Map.new()
+  end
+
+  @doc """
+  ## Examples
+      iex> RMap.transform_values(%{a: 1, b: 2, c: 3}, &inspect(&1))
+      %{a: "1", b: "2", c: "3"}
+
+      iex> RMap.transform_values(%{a: %{b: %{c: 1}}}, &inspect(&1))
+      %{a: "%{b: %{c: 1}}"}
+  """
+  def transform_values(map, func) do
+    Enum.map(map, fn {key, value} ->
+      {key, func.(value)}
+    end)
+    |> Map.new()
   end
 
   defdelegate delete_if(map, func), to: __MODULE__, as: :reject
