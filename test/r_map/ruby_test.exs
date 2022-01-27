@@ -76,5 +76,11 @@ defmodule RMap.RubyTest do
       assert RMap.key?(map, :a) == Map.has_key?(map, :a)
       assert RMap.key?(%{}, :a) == Map.has_key?(%{}, :a)
     end
+
+    test "has_value?/2" do
+      map = %{a: 1, b: 2, c: 3}
+      assert RMap.value?(map, :a) == RMap.has_value?(map, :a)
+      assert RMap.value?(%{}, :a) == RMap.has_value?(%{}, :a)
+    end
   end
 end

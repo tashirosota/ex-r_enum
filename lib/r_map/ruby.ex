@@ -118,6 +118,20 @@ defmodule RMap.Ruby do
     map1 == map2
   end
 
+  @doc """
+  ## Examples
+      iex> RMap.value?(%{a: 1, b: 2, c: 3}, 3)
+      true
+
+      iex> RMap.value?(%{a: 1, b: 2, c: 3}, 4)
+      false
+  """
+  def value?(map, value) do
+    Enum.any?(map, fn {_, v} ->
+      v == value
+    end)
+  end
+
   defdelegate delete_if(map, func), to: __MODULE__, as: :reject
   defdelegate keep_if(map, func), to: __MODULE__, as: :filter
   defdelegate select(map, func), to: __MODULE__, as: :filter
@@ -128,4 +142,5 @@ defmodule RMap.Ruby do
   defdelegate each_pair(map, func), to: Enum, as: :each
   defdelegate key(map, key, default \\ nil), to: Map, as: :get
   defdelegate key?(map, key), to: Map, as: :has_key?
+  defdelegate has_value?(map, value), to: __MODULE__, as: :value?
 end
