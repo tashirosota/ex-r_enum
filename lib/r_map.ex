@@ -1,4 +1,5 @@
 defmodule RMap do
+  @specific_undelegate_functions [:select, :filter, :reject]
   @moduledoc """
   Entry point of Map extensions, and can use all of RMap.* and REnum functions.
   See also.
@@ -8,5 +9,8 @@ defmodule RMap do
   use RMap.Native
   use RMap.Ruby
   use RMap.ActiveSupport
-  use REnum, undelegate_functions: Map.module_info()[:exports] |> Keyword.keys()
+
+  use REnum,
+    undelegate_functions:
+      (Map.module_info()[:exports] |> Keyword.keys()) ++ @specific_undelegate_functions
 end

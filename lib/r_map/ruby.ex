@@ -19,7 +19,7 @@ defmodule RMap.Ruby do
   # compare_by_identity
   # compare_by_identity?
   # deconstruct_keys
-  # delete_if
+  # ✔ delete_if
   # dig
   # each_key
   # each_pair
@@ -29,23 +29,40 @@ defmodule RMap.Ruby do
   # fetch_values
   # flatten
   # has_value?
-  # hash
+  # hash TODO: Low priority
   # initialize_copy
-  # inspect
+  # ✔ inspect
   # invert
-  # keep_if
+  # ✔ keep_if
   # key
   # key?
-  # length
+  # ✔ length
   # rassoc
   # rehash
   # shift
   # store
   # to_hash
   # to_proc
-  # to_s
+  # ✔ to_s
   # transform_keys
   # transform_values
   # value?
   # values_at
+
+  def fillter(map, func) do
+    Enum.filter(map, func)
+    |> Map.new()
+  end
+
+  def reject(map, func) do
+    Enum.reject(map, func)
+    |> Map.new()
+  end
+
+  defdelegate delete_if(map, func), to: __MODULE__, as: :reject
+  defdelegate keep_if(map, func), to: __MODULE__, as: :filter
+  defdelegate select(map, func), to: __MODULE__, as: :filter
+  defdelegate length(map), to: Enum, as: :count
+  defdelegate to_s(list), to: Kernel, as: :inspect
+  defdelegate inspect(list), to: Kernel, as: :inspect
 end
