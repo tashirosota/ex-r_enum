@@ -20,7 +20,7 @@ defmodule RMap.Ruby do
   # compare_by_identity?
   # deconstruct_keys
   # ✔ delete_if
-  # dig
+  # ✔ dig
   # ✔ each_key
   # ✔ each_pair
   # ✔ each_value
@@ -28,7 +28,7 @@ defmodule RMap.Ruby do
   # except
   # fetch_values
   # flatten
-  # has_value?
+  # ✔ has_value?
   # hash TODO: Low priority
   # initialize_copy
   # ✔ inspect
@@ -41,13 +41,13 @@ defmodule RMap.Ruby do
   # rehash
   # shift
   # store
-  # to_hash
-  # to_proc
+  # ✔ to_hash
+  # × to_proc
   # ✔ to_s
   # transform_keys
   # transform_values
-  # value?
-  # values_at
+  # ✔ value?
+  # ✔ values_at
 
   @doc """
   ## Examples
@@ -130,6 +130,41 @@ defmodule RMap.Ruby do
     Enum.any?(map, fn {_, v} ->
       v == value
     end)
+  end
+
+  @doc """
+  ## Examples
+      iex> RMap.values_at(%{a: 1, b: 2, c: 3}, [:a, :b, :d])
+      [1, 2, nil]
+  """
+  def values_at(map, keys) do
+    Enum.map(keys, &Map.get(map, &1))
+  end
+
+  @doc """
+  ## Examples
+      iex> RMap.to_hash(%{a: 1, b: 2, c: 3})
+      %{a: 1, b: 2, c: 3}
+  """
+  def to_hash(map) do
+    map
+  end
+
+  @doc """
+  ## Examples
+      iex> RMap.dig(%{a: %{b: %{c: 1}}}, [:a, :b, :c])
+      1
+
+      iex> RMap.dig(%{a: %{b: %{c: 1}}}, [:a, :c, :b])
+      nil
+  """
+  def dig(nil, _), do: nil
+  def dig(result, []), do: result
+
+  def dig(map, keys) do
+    [key | tail_keys] = keys
+    result = Map.get(map, key)
+    dig(result, tail_keys)
   end
 
   defdelegate delete_if(map, func), to: __MODULE__, as: :reject
