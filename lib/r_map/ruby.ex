@@ -14,7 +14,7 @@ defmodule RMap.Ruby do
   # https://ruby-doc.org/core-3.1.0/Hash.html
   # [:any?, :assoc, :clear, :compact, :compact!, :compare_by_identity, :compare_by_identity?, :deconstruct_keys, :delete, :delete_if, :dig, :each, :each_key, :each_pair, :each_value, :empty?, :eql?, :except, :fetch, :fetch_values, :filter, :filter!, :flatten, :has_key?, :has_value?, :hash, :include?, :initialize_copy, :inspect, :invert, :keep_if, :key, :key?, :keys, :length, :member?, :merge, :merge!, :rassoc, :rehash, :reject, :reject!, :replace, :select, :select!, :shift, :size, :slice, :store, :to_a, :to_h, :to_hash, :to_proc, :to_s, :transform_keys, :transform_keys!, :transform_values, :transform_values!, :update, :value?, :values, :values_at]
   # |> RUtils.required_functions([Map, REnum])
-  # assoc
+  # ✔ assoc
   # ✔ clear
   # compare_by_identity
   # compare_by_identity?
@@ -37,7 +37,7 @@ defmodule RMap.Ruby do
   # ✔ key
   # ✔ key?
   # ✔ length
-  # rassoc
+  # ✔ rassoc
   # rehash
   # shift
   # store
@@ -165,6 +165,42 @@ defmodule RMap.Ruby do
     [key | tail_keys] = keys
     result = Map.get(map, key)
     dig(result, tail_keys)
+  end
+
+  @doc """
+  ## Examples
+      iex> RMap.assoc(%{a: 1, b: 2, c: 3}, :a)
+      {:a, 1}
+
+      iex> RMap.assoc(%{a: 1, b: 2, c: 3}, :d)
+      nil
+
+      iex> RMap.assoc(%{a: %{b: %{c: 1}}}, :a)
+      {:a, %{b: %{c: 1}}}
+  """
+  def assoc(map, key) do
+    if(value = Map.get(map, key)) do
+      {key, value}
+    else
+      nil
+    end
+  end
+
+  @doc """
+  ## Examples
+      iex> RMap.rassoc(%{a: 1, b: 2, c: 3}, 1)
+      {:a, 1}
+
+      iex> RMap.rassoc(%{a: 1, b: 2, c: 3}, 4)
+      nil
+
+      iex> RMap.rassoc(%{a: %{b: %{c: 1}}}, %{b: %{c: 1}})
+      {:a, %{b: %{c: 1}}}
+  """
+  def rassoc(map, value) do
+    Enum.find_value(map, fn {k, v} ->
+      if v == value, do: {k, v}
+    end)
   end
 
   defdelegate delete_if(map, func), to: __MODULE__, as: :reject
