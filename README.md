@@ -128,7 +128,7 @@ See **[hexdocs](https://hexdocs.pm/r_enum)**.
   - RList.Ruby
 - [x] 0.5.0
   - RList.ActiveSupport
-- [ ] 0.6.0
+- [x] 0.6.0
   - RMap.Ruby
   - RMap.ActiveSupport
 - [ ] 0.7.0
@@ -148,6 +148,6 @@ See **[hexdocs](https://hexdocs.pm/r_enum)**.
 | ------- | ------------- | ---------------- | :----: | :--: | :-----------: |
 | REnum   | Enum          | Enumerable       |   ✅   |  ✅  |      ✅       |
 | RList   | List          | Array            |   ✅   |  ✅  |      ✅       |
-| RMap    | Map           | Hash             |   ✅   | TODO |     TODO      |
+| RMap    | Map           | Hash             |   ✅   |  ✅  |      ✅       |
 | RRange  | Range         | Range            |   ✅   | TODO |     TODO      |
 | RStream | Stream        | Enumerator::Lazy |   ✅   | TODO |     TODO      |
