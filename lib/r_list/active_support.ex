@@ -186,11 +186,9 @@ defmodule RList.ActiveSupport do
   end
 
   @doc """
-  Converts the list to a comma-separated sentence where the last element is
-  joined by the connector word.
+  Converts the list to a comma-separated sentence where the last element is joined by the connector word.
 
-  You can pass the following options to change the default behavior. If you
-  pass an option key that doesn't exist in the list below, it will raise an
+  You can pass the following options to change the default behavior. If you pass an option key that doesn't exist in the list below, it will raise an
 
   ** Options **
   * `:words_connector` - The sign or word used to join all but the last
