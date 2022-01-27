@@ -82,5 +82,11 @@ defmodule RMap.RubyTest do
       assert RMap.value?(map, :a) == RMap.has_value?(map, :a)
       assert RMap.value?(%{}, :a) == RMap.has_value?(%{}, :a)
     end
+
+    test "store/3" do
+      map = %{a: 1, b: 2, c: 3}
+      assert RMap.store(map, :d, 4) == Map.put(map, :d, 4)
+      assert RMap.store(%{}, :a, 1) == Map.put(%{}, :a, 1)
+    end
   end
 end

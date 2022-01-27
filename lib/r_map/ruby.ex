@@ -244,4 +244,5 @@ defmodule RMap.Ruby do
   defdelegate key(map, key, default \\ nil), to: Map, as: :get
   defdelegate key?(map, key), to: Map, as: :has_key?
   defdelegate has_value?(map, value), to: __MODULE__, as: :value?
+  defdelegate store(map, key, value), to: Map, as: :put
 end
