@@ -24,7 +24,7 @@ defmodule RMap.Ruby do
   # ✔ each_key
   # ✔ each_pair
   # ✔ each_value
-  # eql?
+  # ✔ eql?
   # except
   # fetch_values
   # flatten
@@ -34,8 +34,8 @@ defmodule RMap.Ruby do
   # ✔ inspect
   # invert
   # ✔ keep_if
-  # key
-  # key?
+  # ✔ key
+  # ✔ key?
   # ✔ length
   # rassoc
   # rehash
@@ -106,6 +106,18 @@ defmodule RMap.Ruby do
     end)
   end
 
+  @doc """
+  ## Examples
+      iex> RMap.eql?(%{a: 1, b: 2, c: 3}, %{a: 1, b: 2, c: 3})
+      true
+
+      iex> RMap.eql?(%{a: 1, b: 2, c: 3}, %{a: 1, b: 2, c: 4})
+      false
+  """
+  def eql?(map1, map2) do
+    map1 == map2
+  end
+
   defdelegate delete_if(map, func), to: __MODULE__, as: :reject
   defdelegate keep_if(map, func), to: __MODULE__, as: :filter
   defdelegate select(map, func), to: __MODULE__, as: :filter
@@ -114,4 +126,6 @@ defmodule RMap.Ruby do
   defdelegate to_s(map), to: Kernel, as: :inspect
   defdelegate inspect(map), to: Kernel, as: :inspect
   defdelegate each_pair(map, func), to: Enum, as: :each
+  defdelegate key(map, key, default \\ nil), to: Map, as: :get
+  defdelegate key?(map, key), to: Map, as: :has_key?
 end
