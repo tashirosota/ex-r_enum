@@ -39,7 +39,7 @@ In addition to REnum, modules such as RList, RMap, RRange can also be used.
     - [except/2](#except2)
     - [invert/1](#invert1)
     - [values_at/2](#values_at2)
-    - [deep_atomlize_keys/1](#deep_atomlize_keys1)
+    - [deep_atomize_keys/1](#deep_atomize_keys1)
     - [deep_transform_keys/2](#deep_transform_keys2)
   - [About RRange](#about-rrange)
   - [About RUtils](#about-rutils)
@@ -496,16 +496,16 @@ iex> RMap.values_at(%{a: 1, b: 2, c: 3}, [:a, :b, :d])
 [1, 2, nil]
 ```
 
-### deep_atomlize_keys/1
+### deep_atomize_keys/1
 
 Returns a list with all keys converted to atom.
 This includes the keys from the root map and from all nested maps and arrays.
 
 ```elixir
-iex> RMap.deep_atomlize_keys(%{"name" => "Rob", "years" => "28", "nested" => %{ "a" => 1 }})
+iex> RMap.deep_atomize_keys(%{"name" => "Rob", "years" => "28", "nested" => %{ "a" => 1 }})
 %{name: "Rob", nested: %{a: 1}, years: "28"}
 
-iex> RMap.deep_atomlize_keys(%{"a" => %{"b" => %{"c" => 1}, "d" => [%{"a" => 1, "b" => %{"c" => 2}}]}})
+iex> RMap.deep_atomize_keys(%{"a" => %{"b" => %{"c" => 1}, "d" => [%{"a" => 1, "b" => %{"c" => 2}}]}})
 %{a: %{b: %{c: 1}, d: [%{a: 1, b: %{c: 2}}]}}
 # See also RList.ActiveSupport.deep_symbolize_keys, RList.ActiveSupport.symbolize_keys, RList.ActiveSupport.deep_stringify_keys, RList.ActiveSupport.stringify_keys,
 ```
