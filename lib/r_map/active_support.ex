@@ -150,6 +150,10 @@ defmodule RMap.ActiveSupport do
     |> Map.new()
   end
 
+  @deprecated "Use atomize_keys/1 instead"
+  @deprecated "Use deep_atomize_keys/1 instead"
+  defdelegate atomlize_keys(map), to: __MODULE__, as: :symbolize_keys
+  defdelegate deep_atomlize_keys(map), to: __MODULE__, as: :deep_symbolize_keys
   defdelegate atomize_keys(map), to: __MODULE__, as: :symbolize_keys
   defdelegate deep_atomize_keys(map), to: __MODULE__, as: :deep_symbolize_keys
 end
