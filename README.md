@@ -174,7 +174,7 @@ false
 iex> REnum.many?([1, 2])
 true
 
-iex>  REnum.many?(%{})
+iex> REnum.many?(%{})
 false
 
 iex> REnum.many?(%{a: 1})
