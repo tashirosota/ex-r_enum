@@ -2,6 +2,14 @@
 
 # Changelog
 
+## v0.6.1 (2022-1-28)
+
+### Breaking changes
+
+- `RMap.atomlize_keys/1` is deprecated. Use atomize_keys/1 instead.
+- `RMap.deep_atomlize_keys/1` is deprecated. Use deep_atomize_keys/1 instead.
+
+
 ## v0.6.0 (2022-2-x)
 
 ### Features
