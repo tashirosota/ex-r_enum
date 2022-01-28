@@ -8,6 +8,7 @@
 
 - RMap.Ruby
 - RMap.ActiveSupport
+- Update readme
 
 ## v0.5.0 (2022-1-26)
 
