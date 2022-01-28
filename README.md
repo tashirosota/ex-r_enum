@@ -538,7 +538,7 @@ Some useful functions.
 ### blank?(map)
 
 Return true if object is blank, false, empty, or a whitespace string.
-For example, +nil+, '', ' ', [], {}, and +false+ are all blank.
+For example, +nil+, '', '   ', [], {}, and +false+ are all blank.
 
 ```elixir
 iex>  RUtils.blank?(%{})
