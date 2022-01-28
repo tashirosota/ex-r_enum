@@ -556,7 +556,7 @@ true
 Returns true if not `RUtils.blank?`
 
 ```elixir
-iex>  RUtils.present?(%{})
+iex> RUtils.present?(%{})
 false
 
 iex> RUtils.present?([1])
