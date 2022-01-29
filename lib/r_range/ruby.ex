@@ -28,19 +28,59 @@ defmodule RRange.Ruby do
   # ✔ step
   # ✔ to_s
 
+  @doc """
+  Returns true if list1 == list2.
+  ## Examples
+      iex> 1..3
+      iex> |> RList.eql?(1..3)
+      true
+
+      iex> 1..3
+      iex> |> RList.eql?(1..4)
+      false
+  """
+  @spec eql?(Range.t(), Range.t()) :: boolean()
   def eql?(range1, range2) do
     range1 == range2
   end
 
+  @doc """
+  Returns the first element of range.
+  ## Examples
+      iex> RList.begin(1..3)
+      1
+  """
+  @spec begin(Range.t()) :: integer()
   def begin(begin.._) do
     begin
   end
 
+  @doc """
+  Returns Stream that from given range split into by given step.
+  ## Examples
+      iex> RList.step(1..10, 2)
+      iex> |> Enum.to_list()
+      [1, 3, 5, 7, 9]
+  """
+  @spec step(Range.t(), integer()) :: Enum.t()
   def step(begin..last, step) do
     begin..last//step
     |> REnum.Ruby.lazy()
   end
 
+  @doc """
+  Executes `Enum.each` to g given range split into by given step.
+  ## Examples
+      iex> RList.step(1..10, 2, &IO.inspect(&1))
+      iex> |> Enum.to_list()
+      # 1
+      # 3
+      # 5
+      # 7
+      # 9
+      :ok
+  """
+  @spec step(Range.t(), integer(), function()) :: :ok
   def step(begin..last, step, func) do
     begin..last//step
     |> Enum.each(func)

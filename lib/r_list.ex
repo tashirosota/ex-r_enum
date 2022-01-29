@@ -5,6 +5,7 @@ defmodule RList do
    - [RList.Native](https://hexdocs.pm/r_enum/RList.Native.html#content)
    - [RList.Ruby](https://hexdocs.pm/r_enum/RList.Ruby.html#content)
    - [RList.ActiveSupport](https://hexdocs.pm/r_enum/RList.ActiveSupport.html#content)
+   - [RList.Support](https://hexdocs.pm/r_enum/RList.SupportSupport.html#content)
    - [REnum](https://hexdocs.pm/r_enum/REnum.html#content)
   """
   use RList.Native

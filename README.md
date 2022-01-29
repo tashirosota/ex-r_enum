@@ -42,8 +42,11 @@ In addition to REnum, modules such as RList, RMap, RRange can also be used.
     - [deep_atomize_keys/1](#deep_atomize_keys1)
     - [deep_transform_keys/2](#deep_transform_keys2)
   - [About RRange](#about-rrange)
+    - [begin/1](#begin1)
+    - [step/2](#step2)
+    - [overlaps?/2](#overlaps2)
   - [About RUtils](#about-rutils)
-    - [blank?(map)](#blankmap)
+    - [blank?/1](#blank1)
     - [present?/1](#present1)
     - [define_all_functions!/2](#define_all_functions2)
   - [Progress](#progress)
@@ -529,13 +532,48 @@ iex> RMap.deep_transform_keys(%{a: %{b: %{c: 1}, d: [%{a: 1, b: %{c: 2}}]}}, &in
 **All the functions are available defined in**
 
 - [Range](https://hexdocs.pm/r_enum/RRange.Native.html)
+- [RRange.Ruby](https://hexdocs.pm/r_enum/RRange.Ruby.html)
+- [RRange.ActiveSupport](https://hexdocs.pm/r_enum/RRange.ActiveSupport.html)
 - [REnum](https://hexdocs.pm/r_enum/REnum.html)
+
+### begin/1
+
+Returns the first element of range.
+
+```elixir
+iex> RList.begin(1..3)
+1
+# See also RRange.Ruby.end
+```
+
+### step/2
+
+Returns Stream that from given range split into by given step.
+
+```elixir
+iex> RList.step(1..10, 2)
+iex> |> Enum.to_list()
+[1, 3, 5, 7, 9]
+"""
+```
+
+### overlaps?/2
+
+Compare two ranges and see if they overlap each other.
+
+```elixir
+iex> RList.overlaps?(1..5, 4..6)
+true
+
+iex> RList.overlaps?(1..5, 7..9)
+false
+```
 
 ## About [RUtils](https://hexdocs.pm/r_enum/RUtils.html)
 
 Some useful functions.
 
-### blank?(map)
+### blank?/1
 
 Return true if object is blank, false, empty, or a whitespace string.
 For example, +nil+, '', '   ', [], {}, and +false+ are all blank.
