@@ -20,7 +20,7 @@
 - [x] 0.6.0
   - RMap.Ruby
   - RMap.ActiveSupport
-- [ ] 0.7.0
+- [x] 0.7.0
   - RRange.Ruby
   - RRange.ActiveSupport
 - [ ] 0.8.0

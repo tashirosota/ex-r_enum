@@ -3,6 +3,8 @@ defmodule RRange do
   Entry point of Range extensions, and can use all of RRange.* and REnum functions.
   See also.
    - [RRange.Native](https://hexdocs.pm/r_enum/RRange.Native.html#content)
+   - [RRange.Ruby](https://hexdocs.pm/r_enum/RRange.Ruby.html#content)
+   - [RRange.ActiveSupport](https://hexdocs.pm/r_enum/RRange.ActiveSupport.html#content)
    - [REnum](https://hexdocs.pm/r_enum/REnum.html#content)
   """
   use RRange.Native
