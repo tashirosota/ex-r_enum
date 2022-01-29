@@ -2,6 +2,17 @@
 
 # Changelog
 
+## v0.7.0 (2022-1-29)
+
+### Features
+
+- RRange.Ruby
+- RRange.ActiveSupport
+### Breaking changes
+
+- Remove `RMap.atomlize_keys/1`
+- Remove `RMap.deep_atomlize_keys/1`
+
 ## v0.6.1 (2022-1-28)
 
 ### Deprecated

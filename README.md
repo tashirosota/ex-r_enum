@@ -594,5 +594,5 @@ iex> B.test
 | REnum   | Enum          | Enumerable       |   ✅   |  ✅  |      ✅       |
 | RList   | List          | Array            |   ✅   |  ✅  |      ✅       |
 | RMap    | Map           | Hash             |   ✅   |  ✅  |      ✅       |
-| RRange  | Range         | Range            |   ✅   | TODO |     TODO      |
+| RRange  | Range         | Range            |   ✅   |  ✅  |      ✅       |
 | RStream | Stream        | Enumerator::Lazy |   ✅   | TODO |     TODO      |
