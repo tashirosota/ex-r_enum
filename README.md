@@ -11,44 +11,44 @@ In addition to REnum, modules such as RList, RMap, RRange can also be used.
 - [REnum](#renum)
   - [Installation](#installation)
   - [About REnum](#about-renum)
-    - [compact/1](#compact1)
-    - [each_slice/2](#each_slice2)
-    - [grep/2](#grep2)
-    - [reverse_each/2](#reverse_each2)
-    - [pluck/2](#pluck2)
-    - [exclude?/2](#exclude2)
-    - [without/2](#without2)
-    - [many?/2](#many2)
-    - [list_and_not_keyword?/](#list_and_not_keyword)
-    - [map_and_not_range?/1](#map_and_not_range1)
+    - [compact/1](#compact-1)
+    - [each_slice/2](#each_slice-2)
+    - [grep/2](#grep-2)
+    - [reverse_each/2](#reverse_each-2)
+    - [pluck/2](#pluck-2)
+    - [exclude?/2](#exclude-2)
+    - [without/2](#without-2)
+    - [many?/2](#many-2)
+    - [list_and_not_keyword?/1](#list_and_not_keyword-1)
+    - [map_and_not_range?/1](#map_and_not_range-1)
   - [About RList](#about-rlist)
-    - [push/2](#push2)
-    - [combination/2](#combination2)
-    - [fill/3](#fill3)
-    - [dig/3](#dig3)
-    - [intersection/2](#intersection2)
-    - [sample/2](#sample2)
-    - [values_at/1](#values_at1)
-    - [second/1](#second1)
-    - [from/2](#from2)
-    - [to_sentence/2](#to_sentence2)
-    - [new/2](#new2)
+    - [push/2](#push-2)
+    - [combination/2](#combination-2)
+    - [fill/3](#fill-3)
+    - [dig/3](#dig-3)
+    - [intersection/2](#intersection-2)
+    - [sample/2](#sample-2)
+    - [values_at/1](#values_at-1)
+    - [second/1](#second-1)
+    - [from/2](#from-2)
+    - [to_sentence/2](#to_sentence-2)
+    - [new/2](#new-2)
   - [About RMap](#about-rmap)
-    - [dig/2](#dig2)
-    - [each_key/2](#each_key2)
-    - [except/2](#except2)
-    - [invert/1](#invert1)
-    - [values_at/2](#values_at2)
-    - [deep_atomize_keys/1](#deep_atomize_keys1)
-    - [deep_transform_keys/2](#deep_transform_keys2)
+    - [dig/2](#dig-2)
+    - [each_key/2](#each_key-2)
+    - [except/2](#except-2)
+    - [invert/1](#invert-1)
+    - [values_at/2](#values_at-2)
+    - [deep_atomize_keys/1](#deep_atomize_keys-1)
+    - [deep_transform_keys/2](#deep_transform_keys-2)
   - [About RRange](#about-rrange)
-    - [begin/1](#begin1)
-    - [step/2](#step2)
-    - [overlaps?/2](#overlaps2)
+    - [begin/1](#begin-1)
+    - [step/2](#step-2)
+    - [overlaps?/2](#overlaps-2)
   - [About RUtils](#about-rutils)
-    - [blank?/1](#blank1)
-    - [present?/1](#present1)
-    - [define_all_functions!/2](#define_all_functions2)
+    - [blank?/1](#blank-1)
+    - [present?/1](#present-1)
+    - [define_all_functions!/2](#define_all_functions-2)
   - [Progress](#progress)
 
 ## Installation
@@ -187,7 +187,7 @@ iex> REnum.many?(%{a: 1, b: 2})
 true
 ```
 
-### list_and_not_keyword?/
+### list_and_not_keyword?/1
 
 Returns true if argument is list and not keyword list.
 
@@ -392,7 +392,7 @@ Converts the list to a comma-separated sentence where the last element is joined
 
 You can pass the following options to change the default behavior. If you pass an option key that doesn't exist in the list below, it will raise an
 
-** Options **
+**Options**
 
 - `:words_connector` - The sign or word used to join all but the last
   element in lists with three or more elements (default: ", ").

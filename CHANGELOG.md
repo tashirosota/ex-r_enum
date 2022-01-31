@@ -2,6 +2,12 @@
 
 # Changelog
 
+## v0.7.1 (2022-1-31)
+
+### Bugfix
+
+- TOC link
+
 ## v0.7.0 (2022-1-29)
 
 ### Features
