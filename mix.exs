@@ -1,12 +1,12 @@
 defmodule REnum.MixProject do
   use Mix.Project
-  @versoin "0.7.1"
+  @version "0.7.1"
   @source_url "https://github.com/tashirosota/ex-r_enum"
   @description "REnum is Enum extended with convenient functions inspired by Ruby and Rails ActiveSupport."
   def project do
     [
       app: :r_enum,
-      version: @versoin,
+      version: @version,
       elixir: "~> 1.10",
       start_permanent: Mix.env() == :prod,
       description: @description,
