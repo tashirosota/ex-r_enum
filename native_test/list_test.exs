@@ -1,4 +1,4 @@
-defmodule RList.NavtieTest do
+defmodule Navtie.RListTest do
   use ExUnit.Case, async: true
 
   doctest RList

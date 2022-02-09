@@ -101,15 +101,18 @@ defmodule REnum.Ruby do
     end
   end
 
-  @doc """
-  Returns leading elements.
-  ## Examples
-      iex> REnum.first([1, 2, 3], 2)
-      [1, 2]
+  if(VersionManager.support_version?()) do
+    @doc """
+    Returns leading elements.
+    ## Examples
+        iex> REnum.first([1, 2, 3], 2)
+        [1, 2]
 
-      iex> REnum.first(%{a: 1, b: 2}, 2)
-      [{:a, 1}, {:b, 2}]
-  """
+        iex> REnum.first(%{a: 1, b: 2}, 2)
+        [{:a, 1}, {:b, 2}]
+    """
+  end
+
   @spec first(type_enumerable, non_neg_integer()) :: type_enumerable()
   def first(enumerable, n) do
     0..(n - 1)

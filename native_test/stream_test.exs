@@ -1,4 +1,4 @@
-defmodule RStream.NativeTest do
+defmodule Native.RStreamTest do
   use ExUnit.Case, async: true
 
   doctest RStream.Native
@@ -1070,8 +1070,7 @@ defmodule RStream.NativeTest do
     stream = RStream.take(1..100, -5)
     assert lazy?(stream)
 
-    stream =
-      RStream.each(stream, &Process.put(:stream_each, [&1 | Process.get(:stream_each)]))
+    stream = RStream.each(stream, &Process.put(:stream_each, [&1 | Process.get(:stream_each)]))
 
     assert Enum.to_list(stream) == [96, 97, 98, 99, 100]
     assert Process.get(:stream_each) == [100, 99, 98, 97, 96]
