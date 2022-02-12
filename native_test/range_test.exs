@@ -1,4 +1,4 @@
-defmodule RRange.NativeTest do
+defmodule Native.RRangeTest do
   use ExUnit.Case, async: true
 
   doctest RRange.Native
@@ -46,7 +46,6 @@ defmodule RRange.NativeTest do
     assert inspect(1..3//2) == "1..3//2"
 
     assert inspect(3..1) == "3..1//-1"
-    assert inspect(3..1//1) == "3..1//1"
   end
 
   test "limits are integer only" do

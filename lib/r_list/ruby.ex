@@ -465,22 +465,25 @@ defmodule RList.Ruby do
     end
   end
 
-  @doc """
-  Fills the list with the provided value. The filler can be either a function or a fixed value.
+  if(VersionManager.support_version?()) do
+    @doc """
+    Fills the list with the provided value. The filler can be either a function or a fixed value.
 
-  ## Examples
-      iex> RList.fill(~w[a b c d], "x")
-      ["x", "x", "x", "x"]
+    ## Examples
+        iex> RList.fill(~w[a b c d], "x")
+        ["x", "x", "x", "x"]
 
-      iex> RList.fill(~w[a b c d], "x", 0..1)
-      ["x", "x", "c", "d"]
+        iex> RList.fill(~w[a b c d], "x", 0..1)
+        ["x", "x", "c", "d"]
 
-      iex> RList.fill(~w[a b c d], fn _, i -> i * i end)
-      [0, 1, 4, 9]
+        iex> RList.fill(~w[a b c d], fn _, i -> i * i end)
+        [0, 1, 4, 9]
 
-      iex> RList.fill(~w[a b c d], fn _, i -> i * 2 end, 0..1)
-      [0, 2, "c", "d"]
-  """
+        iex> RList.fill(~w[a b c d], fn _, i -> i * 2 end, 0..1)
+        [0, 2, "c", "d"]
+    """
+  end
+
   @spec fill(list(), any) :: list()
   def fill(list, filler_fun) when is_function(filler_fun) do
     Enum.with_index(list, filler_fun)

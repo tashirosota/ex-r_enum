@@ -1,4 +1,4 @@
-defmodule RMap.NativeTest do
+defmodule Native.RMapTest do
   use ExUnit.Case, async: true
 
   doctest RMap.Native
@@ -234,7 +234,7 @@ defmodule RMap.NativeTest do
              pop_first: 3,
              pop_values: 2,
              validate: 2,
-             validate!: 2
+             validate!: 2,
            ]
   end
 
@@ -259,24 +259,6 @@ defmodule RMap.NativeTest do
   end
 
   defp empty_map(), do: %{}
-
-  test "structs" do
-    assert %ExternalUser{} == %{__struct__: ExternalUser, name: "john", age: 27}
-
-    assert %ExternalUser{name: "meg"} == %{__struct__: ExternalUser, name: "meg", age: 27}
-
-    user = %ExternalUser{}
-    assert %ExternalUser{user | name: "meg"} == %{__struct__: ExternalUser, name: "meg", age: 27}
-
-    %ExternalUser{name: name} = %ExternalUser{}
-    assert name == "john"
-
-    assert_raise BadStructError,
-                 "expected a struct named RMap.NativeTest.ExternalUser, got: %{}",
-                 fn ->
-                   %ExternalUser{empty_map() | name: "meg"}
-                 end
-  end
 
   describe "structs with variable name" do
     test "extracts the struct module" do

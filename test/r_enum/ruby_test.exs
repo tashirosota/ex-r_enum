@@ -100,14 +100,16 @@ defmodule REnum.RubyTest do
       assert REnum.first([1, 2, 3]) == 1
       assert REnum.first(%{}) == nil
       assert REnum.first(%{a: 1, b: 2}) == {:a, 1}
-      assert REnum.first(%{a: 1, b: 2}, 2) == [{:a, 1}, {:b, 2}]
     end
 
-    test "first/2" do
-      assert REnum.first([], 2) == []
-      assert REnum.first([1, 2, 3], 2) == [1, 2]
-      assert REnum.first(%{}, 2) == []
-      assert REnum.first(%{a: 1, b: 2}, 2) == [{:a, 1}, {:b, 2}]
+    if(VersionManager.support_version?()) do
+      test "first/2" do
+        assert REnum.first([], 2) == []
+        assert REnum.first([1, 2, 3], 2) == [1, 2]
+        assert REnum.first(%{}, 2) == []
+
+        assert REnum.first(%{a: 1, b: 2}, 2) == [{:a, 1}, {:b, 2}]
+      end
     end
   end
 
@@ -366,8 +368,10 @@ defmodule REnum.RubyTest do
     assert REnum.each_with_index([1, 2, 3]) == Enum.with_index([1, 2, 3])
     assert REnum.each_with_index([1, 2, 3], 10) == Enum.with_index([1, 2, 3], 10)
 
-    assert REnum.each_with_index([1, 2, 3], fn element, index -> {index, element} end) ==
-             Enum.with_index([1, 2, 3], fn element, index -> {index, element} end)
+    if(VersionManager.support_version?()) do
+      assert REnum.each_with_index([1, 2, 3], fn element, index -> {index, element} end) ==
+               Enum.with_index([1, 2, 3], fn element, index -> {index, element} end)
+    end
   end
 
   describe "minmax" do
@@ -412,43 +416,47 @@ defmodule REnum.RubyTest do
       end
     end
 
-    test "min_max_by/3" do
-      assert REnum.minmax_by(["aaa", "a", "aa"], fn x -> String.length(x) end, fn -> nil end) ==
-               Enum.min_max_by(["aaa", "a", "aa"], fn x -> String.length(x) end, fn -> nil end)
+    if(VersionManager.support_version?()) do
+      test "min_max_by/3" do
+        assert REnum.minmax_by(["aaa", "a", "aa"], fn x -> String.length(x) end, fn -> nil end) ==
+                 Enum.min_max_by(["aaa", "a", "aa"], fn x -> String.length(x) end, fn -> nil end)
 
-      assert REnum.minmax_by([], fn x -> String.length(x) end, fn -> {:no_min, :no_max} end) ==
-               Enum.min_max_by([], fn x -> String.length(x) end, fn -> {:no_min, :no_max} end)
+        assert REnum.minmax_by([], fn x -> String.length(x) end, fn -> {:no_min, :no_max} end) ==
+                 Enum.min_max_by([], fn x -> String.length(x) end, fn -> {:no_min, :no_max} end)
 
-      assert REnum.minmax_by(%{}, fn x -> String.length(x) end, fn -> {:no_min, :no_max} end) ==
-               Enum.min_max_by(%{}, fn x -> String.length(x) end, fn -> {:no_min, :no_max} end)
+        assert REnum.minmax_by(%{}, fn x -> String.length(x) end, fn -> {:no_min, :no_max} end) ==
+                 Enum.min_max_by(%{}, fn x -> String.length(x) end, fn -> {:no_min, :no_max} end)
 
-      assert REnum.minmax_by(["aaa", "a", "aa"], fn x -> String.length(x) end, &>/2) ==
-               Enum.min_max_by(["aaa", "a", "aa"], fn x -> String.length(x) end, &>/2)
-    end
+        assert REnum.minmax_by(["aaa", "a", "aa"], fn x -> String.length(x) end, &>/2) ==
+                 Enum.min_max_by(["aaa", "a", "aa"], fn x -> String.length(x) end, &>/2)
+      end
 
-    test "min_max_by/4" do
-      users = [%{id: 1, date: ~D[2019-01-01]}, %{id: 2, date: ~D[2020-01-01]}]
+      test "min_max_by/4" do
+        users = [%{id: 1, date: ~D[2019-01-01]}, %{id: 2, date: ~D[2020-01-01]}]
 
-      assert REnum.minmax_by(users, & &1.date, Date) == Enum.min_max_by(users, & &1.date, Date)
+        assert REnum.minmax_by(users, & &1.date, Date) == Enum.min_max_by(users, & &1.date, Date)
 
-      assert REnum.minmax_by(["aaa", "a", "aa"], fn x -> String.length(x) end, &>/2, fn ->
-               nil
-             end) ==
-               Enum.min_max_by(["aaa", "a", "aa"], fn x -> String.length(x) end, &>/2, fn ->
+        assert REnum.minmax_by(["aaa", "a", "aa"], fn x -> String.length(x) end, &>/2, fn ->
                  nil
-               end)
+               end) ==
+                 Enum.min_max_by(["aaa", "a", "aa"], fn x -> String.length(x) end, &>/2, fn ->
+                   nil
+                 end)
 
-      assert REnum.minmax_by([], fn x -> String.length(x) end, &>/2, fn -> {:no_min, :no_max} end) ==
-               Enum.min_max_by([], fn x -> String.length(x) end, &>/2, fn ->
+        assert REnum.minmax_by([], fn x -> String.length(x) end, &>/2, fn ->
                  {:no_min, :no_max}
-               end)
+               end) ==
+                 Enum.min_max_by([], fn x -> String.length(x) end, &>/2, fn ->
+                   {:no_min, :no_max}
+                 end)
 
-      assert REnum.minmax_by(%{}, fn x -> String.length(x) end, &>/2, fn ->
-               {:no_min, :no_max}
-             end) ==
-               Enum.min_max_by(%{}, fn x -> String.length(x) end, &>/2, fn ->
+        assert REnum.minmax_by(%{}, fn x -> String.length(x) end, &>/2, fn ->
                  {:no_min, :no_max}
-               end)
+               end) ==
+                 Enum.min_max_by(%{}, fn x -> String.length(x) end, &>/2, fn ->
+                   {:no_min, :no_max}
+                 end)
+      end
     end
   end
 

@@ -1,4 +1,4 @@
-defmodule REnum.NativeTest do
+defmodule Native.REnumTest do
   use ExUnit.Case, async: true
   doctest REnum.Native
 
@@ -117,7 +117,7 @@ defmodule REnum.NativeTest do
 
   test "chunk_by/2" do
     assert REnum.chunk_by([1, 2, 2, 3, 4, 4, 6, 7, 7], &(rem(&1, 2) == 1)) ==
-             [[1], [2, 2], [3], [4, 4, 6], [7, 7]]
+              [[1], [2, 2], [3], [4, 4, 6], [7, 7]]
 
     assert REnum.chunk_by([1, 2, 3, 4], fn _ -> true end) == [[1, 2, 3, 4]]
     assert REnum.chunk_by([], fn _ -> true end) == []
@@ -144,16 +144,16 @@ defmodule REnum.NativeTest do
     end
 
     assert REnum.chunk_while([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], [], chunk_fun, after_fun) ==
-             [[1, 2], [3, 4], [5, 6], [7, 8], [9, 10]]
+              [[1, 2], [3, 4], [5, 6], [7, 8], [9, 10]]
 
     assert REnum.chunk_while(0..9, [], chunk_fun, after_fun) ==
-             [[0], [1, 2], [3, 4], [5, 6], [7, 8], [9]]
+              [[0], [1, 2], [3, 4], [5, 6], [7, 8], [9]]
 
     assert REnum.chunk_while(0..10, [], chunk_fun, after_fun) ==
-             [[0], [1, 2], [3, 4], [5, 6], [7, 8], [9, 10]]
+              [[0], [1, 2], [3, 4], [5, 6], [7, 8], [9, 10]]
 
     assert REnum.chunk_while(0..11, [], chunk_fun, after_fun) ==
-             [[0], [1, 2], [3, 4], [5, 6], [7, 8], [9, 10]]
+              [[0], [1, 2], [3, 4], [5, 6], [7, 8], [9, 10]]
 
     assert REnum.chunk_while([5, 7, 9, 11], [], chunk_fun, after_fun) == [[5, 7, 9]]
 
@@ -238,7 +238,7 @@ defmodule REnum.NativeTest do
 
   test "dedup_by/2" do
     assert REnum.dedup_by([{1, :x}, {2, :y}, {2, :z}, {1, :x}], fn {x, _} -> x end) ==
-             [{1, :x}, {2, :y}, {1, :x}]
+              [{1, :x}, {2, :y}, {1, :x}]
 
     assert REnum.dedup_by([5, 1, 2, 3, 2, 1], fn x -> x > 2 end) == [5, 1, 3, 2]
   end
@@ -424,16 +424,16 @@ defmodule REnum.NativeTest do
 
   test "map_every/3" do
     assert REnum.map_every([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 2, fn x -> x * 2 end) ==
-             [2, 2, 6, 4, 10, 6, 14, 8, 18, 10]
+              [2, 2, 6, 4, 10, 6, 14, 8, 18, 10]
 
     assert REnum.map_every([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 3, fn x -> x * 2 end) ==
-             [2, 2, 3, 8, 5, 6, 14, 8, 9, 20]
+              [2, 2, 3, 8, 5, 6, 14, 8, 9, 20]
 
     assert REnum.map_every([], 2, fn x -> x * 2 end) == []
     assert REnum.map_every([1, 2], 2, fn x -> x * 2 end) == [2, 2]
 
     assert REnum.map_every([1, 2, 3], 0, fn _x -> raise "should not be invoked" end) ==
-             [1, 2, 3]
+              [1, 2, 3]
 
     assert REnum.map_every(1..3, 1, fn x -> x * 2 end) == [2, 4, 6]
 
@@ -446,13 +446,13 @@ defmodule REnum.NativeTest do
     end
 
     assert REnum.map_every([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 9, fn x -> x + 1000 end) ==
-             [1001, 2, 3, 4, 5, 6, 7, 8, 9, 1010]
+              [1001, 2, 3, 4, 5, 6, 7, 8, 9, 1010]
 
     assert REnum.map_every([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 10, fn x -> x + 1000 end) ==
-             [1001, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+              [1001, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
     assert REnum.map_every([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 100, fn x -> x + 1000 end) ==
-             [1001, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+              [1001, 2, 3, 4, 5, 6, 7, 8, 9, 10]
   end
 
   test "map_intersperse/3" do
@@ -540,10 +540,10 @@ defmodule REnum.NativeTest do
 
   test "max_by/4" do
     assert REnum.max_by(["a", "aa", "aaa"], fn x -> String.length(x) end, &>=/2, fn -> nil end) ==
-             "aaa"
+              "aaa"
 
     assert REnum.max_by([], fn x -> String.length(x) end, &>=/2, fn -> :empty_value end) ==
-             :empty_value
+              :empty_value
 
     assert REnum.max_by(%{}, & &1, &>=/2, fn -> :empty_value end) == :empty_value
     assert REnum.max_by(%{}, & &1, &>=/2, fn -> {:a, :tuple} end) == {:a, :tuple}
@@ -624,10 +624,10 @@ defmodule REnum.NativeTest do
 
   test "min_by/4" do
     assert REnum.min_by(["a", "aa", "aaa"], fn x -> String.length(x) end, &<=/2, fn -> nil end) ==
-             "a"
+              "a"
 
     assert REnum.min_by([], fn x -> String.length(x) end, &<=/2, fn -> :empty_value end) ==
-             :empty_value
+              :empty_value
 
     assert REnum.min_by(%{}, & &1, &<=/2, fn -> :empty_value end) == :empty_value
     assert REnum.min_by(%{}, & &1, &<=/2, fn -> {:a, :tuple} end) == {:a, :tuple}
@@ -672,16 +672,16 @@ defmodule REnum.NativeTest do
 
   test "min_max_by/3" do
     assert REnum.min_max_by(["aaa", "a", "aa"], fn x -> String.length(x) end, fn -> nil end) ==
-             {"a", "aaa"}
+              {"a", "aaa"}
 
     assert REnum.min_max_by([], fn x -> String.length(x) end, fn -> {:no_min, :no_max} end) ==
-             {:no_min, :no_max}
+              {:no_min, :no_max}
 
     assert REnum.min_max_by(%{}, fn x -> String.length(x) end, fn -> {:no_min, :no_max} end) ==
-             {:no_min, :no_max}
+              {:no_min, :no_max}
 
     assert REnum.min_max_by(["aaa", "a", "aa"], fn x -> String.length(x) end, &>/2) ==
-             {"aaa", "a"}
+              {"aaa", "a"}
 
     assert_runs_enumeration_only_once(&REnum.min_max_by(&1, fn x -> x end, fn -> nil end))
   end
@@ -690,20 +690,20 @@ defmodule REnum.NativeTest do
     users = [%{id: 1, date: ~D[2019-01-01]}, %{id: 2, date: ~D[2020-01-01]}]
 
     assert REnum.min_max_by(users, & &1.date, Date) ==
-             {%{id: 1, date: ~D[2019-01-01]}, %{id: 2, date: ~D[2020-01-01]}}
+              {%{id: 1, date: ~D[2019-01-01]}, %{id: 2, date: ~D[2020-01-01]}}
 
     assert REnum.min_max_by(["aaa", "a", "aa"], fn x -> String.length(x) end, &>/2, fn ->
-             nil
-           end) ==
-             {"aaa", "a"}
+              nil
+            end) ==
+              {"aaa", "a"}
 
     assert REnum.min_max_by([], fn x -> String.length(x) end, &>/2, fn -> {:no_min, :no_max} end) ==
-             {:no_min, :no_max}
+              {:no_min, :no_max}
 
     assert REnum.min_max_by(%{}, fn x -> String.length(x) end, &>/2, fn ->
-             {:no_min, :no_max}
-           end) ==
-             {:no_min, :no_max}
+              {:no_min, :no_max}
+            end) ==
+              {:no_min, :no_max}
 
     assert_runs_enumeration_only_once(
       &REnum.min_max_by(&1, fn x -> x end, fn a, b -> a > b end, fn -> nil end)
@@ -721,10 +721,10 @@ defmodule REnum.NativeTest do
     assert REnum.split_with(%{}, fn x -> rem(x, 2) == 0 end) == {[], []}
 
     assert REnum.split_with(%{a: 1, b: 2, c: 3}, fn {_k, v} -> rem(v, 2) == 0 end) ==
-             {[b: 2], [a: 1, c: 3]}
+              {[b: 2], [a: 1, c: 3]}
 
     assert REnum.split_with(%{b: 2, d: 4, f: 6}, fn {_k, v} -> rem(v, 2) == 0 end) ==
-             {[b: 2, d: 4, f: 6], []}
+              {[b: 2, d: 4, f: 6], []}
   end
 
   test "random/1" do
@@ -800,179 +800,6 @@ defmodule REnum.NativeTest do
     assert REnum.reverse_slice([1, 2, 3], 0, 20_000_000) == [3, 2, 1]
     assert REnum.reverse_slice([1, 2, 3], 100, 2) == [1, 2, 3]
     assert REnum.reverse_slice([1, 2, 3], 10, 10) == [1, 2, 3]
-  end
-
-  describe "slide/3" do
-    test "on an empty enum produces an empty list" do
-      for enum <- [[], %{}, 0..-1//1, MapSet.new()] do
-        assert REnum.slide(enum, 0..0, 0) == []
-      end
-    end
-
-    test "on a single-element enumerable is the same as transforming to list" do
-      for enum <- [["foo"], [1], [%{foo: "bar"}], %{foo: :bar}, MapSet.new(["foo"]), 1..1] do
-        assert REnum.slide(enum, 0..0, 0) == REnum.to_list(enum)
-      end
-    end
-
-    test "moves a single element" do
-      for zero_to_20 <- [0..20, REnum.to_list(0..20)] do
-        expected_numbers = REnum.flat_map([0..7, [14], 8..13, 15..20], &REnum.to_list/1)
-        assert REnum.slide(zero_to_20, 14..14, 8) == expected_numbers
-      end
-
-      assert REnum.slide([:a, :b, :c, :d, :e, :f], 3..3, 2) == [:a, :b, :d, :c, :e, :f]
-      assert REnum.slide([:a, :b, :c, :d, :e, :f], 3, 3) == [:a, :b, :c, :d, :e, :f]
-    end
-
-    test "on a subsection of a list reorders the range correctly" do
-      for zero_to_20 <- [0..20, REnum.to_list(0..20)] do
-        expected_numbers = REnum.flat_map([0..7, 14..18, 8..13, 19..20], &REnum.to_list/1)
-        assert REnum.slide(zero_to_20, 14..18, 8) == expected_numbers
-      end
-
-      assert REnum.slide([:a, :b, :c, :d, :e, :f], 3..4, 2) == [:a, :b, :d, :e, :c, :f]
-    end
-
-    test "handles negative indices" do
-      make_negative_range = fn first..last, length ->
-        (first - length)..(last - length)//1
-      end
-
-      test_specs = [
-        {[], 0..0, 0},
-        {[1], 0..0, 0},
-        {[-2, 1], 1..1, 1},
-        {[4, -3, 2, -1], 3..3, 2},
-        {[-5, -3, 4, 4, 5], 0..2, 3},
-        {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 4..7, 9},
-        {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 4..7, 0}
-      ]
-
-      for {list, range, insertion_point} <- test_specs do
-        negative_range = make_negative_range.(range, length(list))
-
-        assert REnum.slide(list, negative_range, insertion_point) ==
-                 REnum.slide(list, range, insertion_point)
-      end
-    end
-
-    test "handles mixed positive and negative indices" do
-      for zero_to_20 <- [0..20, REnum.to_list(0..20)] do
-        assert REnum.slide(zero_to_20, -6..-1, 8) ==
-                 REnum.slide(zero_to_20, 15..20, 8)
-
-        assert REnum.slide(zero_to_20, 15..-1//1, 8) ==
-                 REnum.slide(zero_to_20, 15..20, 8)
-
-        assert REnum.slide(zero_to_20, -6..20, 8) ==
-                 REnum.slide(zero_to_20, 15..20, 8)
-      end
-    end
-
-    test "raises an error when the step is not exactly 1" do
-      slide_ranges_that_should_fail = [2..10//2, 8..-1, 10..2//-1, 10..4//-2, -1..-8//-1]
-
-      for zero_to_20 <- [0..20, REnum.to_list(0..20)],
-          range_that_should_fail <- slide_ranges_that_should_fail do
-        assert_raise(ArgumentError, fn ->
-          REnum.slide(zero_to_20, range_that_should_fail, 1)
-        end)
-      end
-    end
-
-    test "doesn't change the order when the first and middle indices match" do
-      for zero_to_20 <- [0..20, REnum.to_list(0..20)] do
-        assert REnum.slide(zero_to_20, 8..18, 8) == REnum.to_list(0..20)
-      end
-
-      assert REnum.slide([:a, :b, :c, :d, :e, :f], 1..3, 1) == [:a, :b, :c, :d, :e, :f]
-    end
-
-    test "on the whole of an enumerable reorders it correctly" do
-      for zero_to_20 <- [0..20, REnum.to_list(0..20)] do
-        expected_numbers = REnum.flat_map([10..20, 0..9], &REnum.to_list/1)
-        assert REnum.slide(zero_to_20, 10..20, 0) == expected_numbers
-      end
-
-      assert REnum.slide([:a, :b, :c, :d, :e, :f], 4..5, 0) == [:e, :f, :a, :b, :c, :d]
-    end
-
-    test "raises when the insertion point is inside the range" do
-      for zero_to_20 <- [0..20, REnum.to_list(0..20)] do
-        assert_raise RuntimeError, fn ->
-          REnum.slide(zero_to_20, 10..18, 14)
-        end
-      end
-    end
-
-    test "accepts range starts that are off the end of the enum, returning the input list" do
-      assert REnum.slide([], 1..5, 0) == []
-
-      for zero_to_20 <- [0..20, REnum.to_list(0..20)] do
-        assert REnum.slide(zero_to_20, 21..25, 3) == REnum.to_list(0..20)
-      end
-    end
-
-    test "accepts range ends that are off the end of the enum, truncating the moved range" do
-      for zero_to_10 <- [0..10, REnum.to_list(0..10)] do
-        assert REnum.slide(zero_to_10, 8..15, 4) == REnum.slide(zero_to_10, 8..10, 4)
-      end
-    end
-
-    test "matches behavior for lists vs. ranges" do
-      range = 0..20
-      list = REnum.to_list(range)
-      # Below 32 elements, the map implementation currently sticks values in order.
-      # If ever the MapSet implementation changes, this will fail (not affecting the correctness
-      # of slide). I figured it'd be worth testing this for the time being just to have
-      # another enumerable (aside from range) testing the generic implementation.
-      set = MapSet.new(list)
-
-      test_specs = [
-        {0..0, 0},
-        {0..0, 20},
-        {11..11, 14},
-        {11..11, 3},
-        {4..8, 19},
-        {4..8, 0},
-        {4..8, 2},
-        {10..20, 0}
-      ]
-
-      for {slide_range, insertion_point} <- test_specs do
-        slide = &REnum.slide(&1, slide_range, insertion_point)
-        assert slide.(list) == slide.(set)
-        assert slide.(list) == slide.(range)
-      end
-    end
-
-    test "inserts at negative indices" do
-      for zero_to_5 <- [0..5, REnum.to_list(0..5)] do
-        assert REnum.slide(zero_to_5, 0, -1) == [1, 2, 3, 4, 5, 0]
-        assert REnum.slide(zero_to_5, 1, -1) == [0, 2, 3, 4, 5, 1]
-        assert REnum.slide(zero_to_5, 1..2, -2) == [0, 3, 4, 1, 2, 5]
-        assert REnum.slide(zero_to_5, -5..-4//1, -2) == [0, 3, 4, 1, 2, 5]
-      end
-
-      assert REnum.slide([:a, :b, :c, :d, :e, :f], -5..-3//1, -2) ==
-               REnum.slide([:a, :b, :c, :d, :e, :f], 1..3, 4)
-    end
-
-    test "raises when insertion index would fall inside the range" do
-      for zero_to_5 <- [0..5, REnum.to_list(0..5)] do
-        assert_raise RuntimeError, fn ->
-          REnum.slide(zero_to_5, 2..3, -3)
-        end
-      end
-
-      for zero_to_10 <- [0..10, REnum.to_list(0..10)],
-          insertion_idx <- 3..5 do
-        assert_raise RuntimeError, fn ->
-          assert REnum.slide(zero_to_10, 2..5, insertion_idx)
-        end
-      end
-    end
   end
 
   test "scan/2" do
@@ -1070,13 +897,13 @@ defmodule REnum.NativeTest do
 
   test "sort/2 with module" do
     assert REnum.sort([~D[2020-01-01], ~D[2018-01-01], ~D[2019-01-01]], Date) ==
-             [~D[2018-01-01], ~D[2019-01-01], ~D[2020-01-01]]
+              [~D[2018-01-01], ~D[2019-01-01], ~D[2020-01-01]]
 
     assert REnum.sort([~D[2020-01-01], ~D[2018-01-01], ~D[2019-01-01]], {:asc, Date}) ==
-             [~D[2018-01-01], ~D[2019-01-01], ~D[2020-01-01]]
+              [~D[2018-01-01], ~D[2019-01-01], ~D[2020-01-01]]
 
     assert REnum.sort([~D[2020-01-01], ~D[2018-01-01], ~D[2019-01-01]], {:desc, Date}) ==
-             [~D[2020-01-01], ~D[2019-01-01], ~D[2018-01-01]]
+              [~D[2020-01-01], ~D[2019-01-01], ~D[2018-01-01]]
   end
 
   test "sort_by/3" do
@@ -1121,31 +948,31 @@ defmodule REnum.NativeTest do
 
     # Stable sorting
     assert REnum.sort_by(collection, & &1[:other_data]) == [
-             [other_data: 1, sorted_data: 5],
-             [other_data: 2, sorted_data: 4],
-             [other_data: 2, sorted_data: 2],
-             [other_data: 3, sorted_data: 1],
-             [other_data: 4, sorted_data: 3]
-           ]
+              [other_data: 1, sorted_data: 5],
+              [other_data: 2, sorted_data: 4],
+              [other_data: 2, sorted_data: 2],
+              [other_data: 3, sorted_data: 1],
+              [other_data: 4, sorted_data: 3]
+            ]
 
     assert REnum.sort_by(collection, & &1[:other_data]) ==
-             REnum.sort_by(collection, & &1[:other_data], :asc)
+              REnum.sort_by(collection, & &1[:other_data], :asc)
 
     assert REnum.sort_by(collection, & &1[:other_data], &</2) == [
-             [other_data: 1, sorted_data: 5],
-             [other_data: 2, sorted_data: 2],
-             [other_data: 2, sorted_data: 4],
-             [other_data: 3, sorted_data: 1],
-             [other_data: 4, sorted_data: 3]
-           ]
+              [other_data: 1, sorted_data: 5],
+              [other_data: 2, sorted_data: 2],
+              [other_data: 2, sorted_data: 4],
+              [other_data: 3, sorted_data: 1],
+              [other_data: 4, sorted_data: 3]
+            ]
 
     assert REnum.sort_by(collection, & &1[:other_data], :desc) == [
-             [other_data: 4, sorted_data: 3],
-             [other_data: 3, sorted_data: 1],
-             [other_data: 2, sorted_data: 4],
-             [other_data: 2, sorted_data: 2],
-             [other_data: 1, sorted_data: 5]
-           ]
+              [other_data: 4, sorted_data: 3],
+              [other_data: 3, sorted_data: 1],
+              [other_data: 2, sorted_data: 4],
+              [other_data: 2, sorted_data: 2],
+              [other_data: 1, sorted_data: 5]
+            ]
   end
 
   test "sort_by/3 with module" do
@@ -1158,23 +985,23 @@ defmodule REnum.NativeTest do
     ]
 
     assert REnum.sort_by(collection, & &1[:sorted_data], Date) == [
-             [sorted_data: ~D[2010-01-01]],
-             [sorted_data: ~D[2010-01-02]],
-             [sorted_data: ~D[2010-01-03]],
-             [sorted_data: ~D[2010-01-04]],
-             [sorted_data: ~D[2010-01-05]]
-           ]
+              [sorted_data: ~D[2010-01-01]],
+              [sorted_data: ~D[2010-01-02]],
+              [sorted_data: ~D[2010-01-03]],
+              [sorted_data: ~D[2010-01-04]],
+              [sorted_data: ~D[2010-01-05]]
+            ]
 
     assert REnum.sort_by(collection, & &1[:sorted_data], Date) ==
-             assert(REnum.sort_by(collection, & &1[:sorted_data], {:asc, Date}))
+              assert(REnum.sort_by(collection, & &1[:sorted_data], {:asc, Date}))
 
     assert REnum.sort_by(collection, & &1[:sorted_data], {:desc, Date}) == [
-             [sorted_data: ~D[2010-01-05]],
-             [sorted_data: ~D[2010-01-04]],
-             [sorted_data: ~D[2010-01-03]],
-             [sorted_data: ~D[2010-01-02]],
-             [sorted_data: ~D[2010-01-01]]
-           ]
+              [sorted_data: ~D[2010-01-05]],
+              [sorted_data: ~D[2010-01-04]],
+              [sorted_data: ~D[2010-01-03]],
+              [sorted_data: ~D[2010-01-02]],
+              [sorted_data: ~D[2010-01-01]]
+            ]
   end
 
   test "sort_by/3 with module and stable sorting" do
@@ -1188,23 +1015,23 @@ defmodule REnum.NativeTest do
 
     # Stable sorting
     assert REnum.sort_by(collection, & &1[:other_data], Date) == [
-             [other_data: ~D[2010-01-01], sorted_data: 5],
-             [other_data: ~D[2010-01-02], sorted_data: 4],
-             [other_data: ~D[2010-01-02], sorted_data: 2],
-             [other_data: ~D[2010-01-03], sorted_data: 1],
-             [other_data: ~D[2010-01-04], sorted_data: 3]
-           ]
+              [other_data: ~D[2010-01-01], sorted_data: 5],
+              [other_data: ~D[2010-01-02], sorted_data: 4],
+              [other_data: ~D[2010-01-02], sorted_data: 2],
+              [other_data: ~D[2010-01-03], sorted_data: 1],
+              [other_data: ~D[2010-01-04], sorted_data: 3]
+            ]
 
     assert REnum.sort_by(collection, & &1[:other_data], Date) ==
-             REnum.sort_by(collection, & &1[:other_data], {:asc, Date})
+              REnum.sort_by(collection, & &1[:other_data], {:asc, Date})
 
     assert REnum.sort_by(collection, & &1[:other_data], {:desc, Date}) == [
-             [other_data: ~D[2010-01-04], sorted_data: 3],
-             [other_data: ~D[2010-01-03], sorted_data: 1],
-             [other_data: ~D[2010-01-02], sorted_data: 4],
-             [other_data: ~D[2010-01-02], sorted_data: 2],
-             [other_data: ~D[2010-01-01], sorted_data: 5]
-           ]
+              [other_data: ~D[2010-01-04], sorted_data: 3],
+              [other_data: ~D[2010-01-03], sorted_data: 1],
+              [other_data: ~D[2010-01-02], sorted_data: 4],
+              [other_data: ~D[2010-01-02], sorted_data: 2],
+              [other_data: ~D[2010-01-01], sorted_data: 5]
+            ]
   end
 
   test "split/2" do
@@ -1386,7 +1213,7 @@ defmodule REnum.NativeTest do
     assert REnum.with_index([1, 2, 3], 10) == [{1, 10}, {2, 11}, {3, 12}]
 
     assert REnum.with_index([1, 2, 3], fn element, index -> {index, element} end) ==
-             [{0, 1}, {1, 2}, {2, 3}]
+              [{0, 1}, {1, 2}, {2, 3}]
   end
 
   test "zip/2" do
@@ -1403,13 +1230,13 @@ defmodule REnum.NativeTest do
     assert REnum.zip([[:a, :b], [1, 2], ["foo", "bar"]]) == [{:a, 1, "foo"}, {:b, 2, "bar"}]
 
     assert REnum.zip([[:a, :b], [1, 2, 3, 4], ["foo", "bar", "baz", "qux"]]) ==
-             [{:a, 1, "foo"}, {:b, 2, "bar"}]
+              [{:a, 1, "foo"}, {:b, 2, "bar"}]
 
     assert REnum.zip([[:a, :b, :c, :d], [1, 2], ["foo", "bar", "baz", "qux"]]) ==
-             [{:a, 1, "foo"}, {:b, 2, "bar"}]
+              [{:a, 1, "foo"}, {:b, 2, "bar"}]
 
     assert REnum.zip([[:a, :b, :c, :d], [1, 2, 3, 4], ["foo", "bar"]]) ==
-             [{:a, 1, "foo"}, {:b, 2, "bar"}]
+              [{:a, 1, "foo"}, {:b, 2, "bar"}]
 
     assert REnum.zip([1..10, ["foo", "bar"]]) == [{1, "foo"}, {2, "bar"}]
 
@@ -1454,7 +1281,8 @@ defmodule REnum.NativeTest do
     colour_1 = %{r: 176, g: 175, b: 255}
     colour_2 = %{r: 12, g: 176, b: 176}
 
-    result = REnum.zip_with(colour_1, colour_2, fn {k, left}, {k, right} -> {k, left + right} end)
+    result =
+      REnum.zip_with(colour_1, colour_2, fn {k, left}, {k, right} -> {k, left + right} end)
 
     assert result == [b: 431, g: 351, r: 188]
   end
@@ -1468,13 +1296,13 @@ defmodule REnum.NativeTest do
     assert lots == [{:a, 1, "foo", {:a, :b}}, {:b, 2, "bar", {:c, :d}}]
 
     assert REnum.zip_with([[:a, :b], [1, 2, 3, 4], ["foo", "bar", "baz", "qux"]], zip_fun) ==
-             [{:a, 1, "foo"}, {:b, 2, "bar"}]
+              [{:a, 1, "foo"}, {:b, 2, "bar"}]
 
     assert REnum.zip_with([[:a, :b, :c, :d], [1, 2], ["foo", "bar", "baz", "qux"]], zip_fun) ==
-             [{:a, 1, "foo"}, {:b, 2, "bar"}]
+              [{:a, 1, "foo"}, {:b, 2, "bar"}]
 
     assert REnum.zip_with([[:a, :b, :c, :d], [1, 2, 3, 4], ["foo", "bar"]], zip_fun) ==
-             [{:a, 1, "foo"}, {:b, 2, "bar"}]
+              [{:a, 1, "foo"}, {:b, 2, "bar"}]
 
     assert REnum.zip_with([1..10, ["foo", "bar"]], zip_fun) == [{1, "foo"}, {2, "bar"}]
     assert REnum.zip_with([], zip_fun) == []
@@ -1489,9 +1317,9 @@ defmodule REnum.NativeTest do
     assert REnum.zip_with([[1, 2, 5, 6], 3..4], fn [a, b] -> a + b end) == [4, 6]
 
     assert REnum.zip_with([fn _, _ -> {:cont, [1, 2]} end, 3..4], fn [a, b] -> a + b end) == [
-             4,
-             6
-           ]
+              4,
+              6
+            ]
 
     assert REnum.zip_with([1..1, 0..0], fn [a, b] -> a + b end) == [1]
 
@@ -1519,9 +1347,9 @@ defmodule REnum.NativeTest do
     assert result == [b: 431, g: 351, r: 188]
 
     assert REnum.zip_with([%{a: :b, c: :d}, %{e: :f, g: :h}], & &1) == [
-             [a: :b, e: :f],
-             [c: :d, g: :h]
-           ]
+              [a: :b, e: :f],
+              [c: :d, g: :h]
+            ]
   end
 end
 

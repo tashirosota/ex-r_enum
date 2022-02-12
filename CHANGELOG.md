@@ -2,6 +2,11 @@
 
 # Changelog
 
+## 0.8.0(2022-02-08)
+
+### Breaking changes
+ - Updates Elixir support version to 1.12
+
 ## v0.7.1 (2022-1-31)
 
 ### Bugfix
